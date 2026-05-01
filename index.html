@@ -25,7 +25,7 @@ textarea{height:75px;resize:vertical}
 .mods{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
 .mod{border:1px solid #ddd;border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;background:#fff;font-size:12px;color:#555}
 .mod.on{border-color:#cc1c1c;background:#fff5f5;color:#cc1c1c;font-weight:700}
-.btn{width:100%;padding:12px;border-radius:10px;border:none;font-size:15px;font-weight:700;cursor:pointer;background:#cc1c1c;color:#fff}
+.btn{width:100%;padding:12px;border-radius:10px;border:none;font-size:15px;font-weight:700;cursor:pointer;background:#cc1c1c;color:#fff;margin-bottom:8px}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
 .result{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;border-left:4px solid #cc1c1c;display:none}
 .rlbl{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;margin-top:14px}
@@ -35,9 +35,11 @@ textarea{height:75px;resize:vertical}
 .cbtn{padding:7px 14px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:12px;color:#555;cursor:pointer}
 .err{color:#cc1c1c;font-size:13px;margin-bottom:10px;padding:8px;background:#fff5f5;border-radius:6px;display:none}
 .step{background:#f8f8f8;border-radius:8px;padding:10px;margin-bottom:8px;font-size:13px;line-height:1.7;border-left:3px solid #cc1c1c}
-.img-box{width:100%;border-radius:10px;margin-top:10px;display:none}
-.img-loading{text-align:center;padding:20px;color:#888;font-size:13px;display:none}
-.img-download{display:none;margin-top:8px;padding:8px 16px;border-radius:8px;border:1px solid #cc1c1c;background:#fff;color:#cc1c1c;font-size:12px;font-weight:700;cursor:pointer;width:100%}
+.img-wrap{margin-top:12px;text-align:center}
+.img-wrap img{width:100%;max-width:500px;border-radius:12px;border:1px solid #eee}
+.img-loading{background:#f0f0f0;border-radius:12px;padding:30px;text-align:center;color:#888;font-size:13px;margin-top:12px}
+.img-btn{width:100%;padding:10px;border-radius:10px;border:none;font-size:14px;font-weight:700;cursor:pointer;background:#1a7cc9;color:#fff;margin-top:8px}
+.img-btn:disabled{opacity:0.5}
 </style>
 </head>
 <body>
@@ -59,7 +61,7 @@ textarea{height:75px;resize:vertical}
 
     <span class="lbl">Qué querés generar</span>
     <div class="mods">
-      <div class="mod on" id="modPost">📝<br>Post + Imagen</div>
+      <div class="mod on" id="modPost">📝<br>Post</div>
       <div class="mod" id="modReel">🎬<br>Reel</div>
       <div class="mod" id="modCanva">🖼️<br>Guía Canva</div>
     </div>
@@ -104,9 +106,12 @@ textarea{height:75px;resize:vertical}
     <div class="rlbl">Caption</div><div class="rtext" id="outCaption"></div>
     <div class="rlbl">Hashtags</div><div class="rtext" id="outHash"></div>
     <div class="rlbl">Imagen generada con IA</div>
-    <div class="img-loading" id="imgLoading">⏳ Generando imagen...</div>
-    <img class="img-box" id="imgGenerada" alt="Imagen generada">
-    <button class="img-download" id="imgDownload">⬇️ Descargar imagen</button>
+    <div class="img-loading" id="imgLoading" style="display:none">⏳ Generando imagen...</div>
+    <div class="img-wrap" id="imgWrap" style="display:none">
+      <img id="imgGenerada" alt="Imagen generada">
+      <a id="imgDescargar" download="imagen_post.jpg" style="display:block;margin-top:8px;text-align:center;font-size:13px;color:#cc1c1c">⬇️ Descargar imagen</a>
+    </div>
+    <button class="img-btn" id="btnGenerarImg" style="display:none">🖼️ Generar imagen con IA</button>
     <div class="btns">
       <button class="cbtn" onclick="copiarEl('outCaption',this)">Copiar caption</button>
       <button class="cbtn" onclick="copiarEl('outHash',this)">Copiar hashtags</button>
@@ -122,6 +127,13 @@ textarea{height:75px;resize:vertical}
     <div style="background:#fff8e1;border-radius:8px;padding:10px;margin-top:10px;font-size:13px;color:#7a5500">
       💡 <strong>Tip CapCut:</strong> <span id="outCapcutTip"></span>
     </div>
+    <div class="rlbl">Imagen de portada generada con IA</div>
+    <div class="img-loading" id="imgLoadingReel" style="display:none">⏳ Generando imagen de portada...</div>
+    <div class="img-wrap" id="imgWrapReel" style="display:none">
+      <img id="imgGeneradaReel" alt="Portada del Reel">
+      <a id="imgDescargarReel" download="portada_reel.jpg" style="display:block;margin-top:8px;text-align:center;font-size:13px;color:#cc1c1c">⬇️ Descargar portada</a>
+    </div>
+    <button class="img-btn" id="btnGenerarImgReel" style="display:none">🖼️ Generar portada con IA</button>
     <div class="btns">
       <button class="cbtn" onclick="copiarEl('outReelCaption',this)">Copiar caption</button>
       <button class="cbtn" onclick="copiarEl('outReelHash',this)">Copiar hashtags</button>
@@ -141,6 +153,7 @@ textarea{height:75px;resize:vertical}
 <script>
 var red='Instagram', modulo='post', tono='Dinámico';
 var WORKER='https://dawn-flower-2029.lili-kos28.workers.dev';
+var lastImgPrompt='';
 
 function $(id){return document.getElementById(id);}
 
@@ -151,3 +164,180 @@ document.querySelectorAll('#redChips .chip').forEach(function(c){
     c.className='chip on';
   };
 });
+
+document.querySelectorAll('#tonoTags .tag').forEach(function(t){
+  t.onclick=function(){
+    document.querySelectorAll('#tonoTags .tag').forEach(function(x){x.className='tag';});
+    t.className='tag on';
+    tono=t.textContent.trim();
+  };
+});
+
+$('modPost').onclick=function(){selMod('post');};
+$('modReel').onclick=function(){selMod('reel');};
+$('modCanva').onclick=function(){selMod('canva');};
+$('genBtn').onclick=generar;
+$('btnGenerarImg').onclick=function(){generarImagen('post');};
+$('btnGenerarImgReel').onclick=function(){generarImagen('reel');};
+
+function selMod(m){
+  modulo=m;
+  $('modPost').className='mod'+(m==='post'?' on':'');
+  $('modReel').className='mod'+(m==='reel'?' on':'');
+  $('modCanva').className='mod'+(m==='canva'?' on':'');
+}
+
+function parseJSON(raw){
+  raw=raw.replace(/```json|```/g,'').trim();
+  try{return JSON.parse(raw);}catch(e){}
+  try{
+    var clean=raw.replace(/[\u0000-\u001F]/g,' ').replace(/\n/g,' ').replace(/\r/g,'').replace(/\t/g,' ');
+    return JSON.parse(clean);
+  }catch(e){}
+  var result={};
+  ['caption','hashtags','imagen','capcut_tip'].forEach(function(f){
+    var m=raw.match(new RegExp('"'+f+'"\\s*:\\s*"([\\s\\S]*?)"(?=\\s*[,}])'));
+    if(m)result[f]=m[1];
+  });
+  return result;
+}
+
+function generarImagen(tipo){
+  var negocio=$('negocio').value.trim()||'negocio local';
+  var producto=$('producto').value.trim();
+  var caption=tipo==='post'?$('outCaption').textContent:$('outReelCaption').textContent;
+  
+  var imgPrompt='professional advertising photo for '+negocio+', '+
+    (producto?producto+', ':'')+
+    'product showcase, clean modern design, red and white brand colors, '+
+    'high quality commercial photography, Argentine market, no text';
+
+  var loadingEl=tipo==='post'?$('imgLoading'):$('imgLoadingReel');
+  var wrapEl=tipo==='post'?$('imgWrap'):$('imgWrapReel');
+  var imgEl=tipo==='post'?$('imgGenerada'):$('imgGeneradaReel');
+  var descEl=tipo==='post'?$('imgDescargar'):$('imgDescargarReel');
+  var btnEl=tipo==='post'?$('btnGenerarImg'):$('btnGenerarImgReel');
+
+  loadingEl.style.display='block';
+  wrapEl.style.display='none';
+  btnEl.disabled=true;
+
+  var seed=Math.floor(Math.random()*99999);
+  var url='https://image.pollinations.ai/prompt/'+encodeURIComponent(imgPrompt)+'?width=1080&height=1080&seed='+seed+'&nologo=true';
+  
+  var img=new Image();
+  img.onload=function(){
+    loadingEl.style.display='none';
+    imgEl.src=url;
+    descEl.href=url;
+    wrapEl.style.display='block';
+    btnEl.disabled=false;
+    btnEl.textContent='🔄 Regenerar imagen';
+  };
+  img.onerror=function(){
+    loadingEl.style.display='none';
+    loadingEl.textContent='No se pudo generar la imagen. Intentá de nuevo.';
+    loadingEl.style.display='block';
+    btnEl.disabled=false;
+  };
+  
+  setTimeout(function(){img.src=url;},500);
+}
+
+function generar(){
+  var tipo=$('tipo').value;
+  var negocio=$('negocio').value.trim()||'mi negocio';
+  var ciudad=$('ciudad').value.trim()||'Argentina';
+  if(!tipo){showErr('Elegí un tipo de contenido primero.');return;}
+  hideErr();
+
+  var producto=$('producto').value.trim();
+  var prompt='';
+
+  if(modulo==='post'){
+    prompt='Sos un community manager argentino experto. Crea contenido para '+red+' para el negocio "'+negocio+'" ubicado en '+ciudad+'.\n'
+      +'Tipo de publicacion: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
+      +'IMPORTANTE: Responde UNICAMENTE con un objeto JSON valido. Sin texto adicional, sin explicaciones.\n'
+      +'Formato exacto:\n'
+      +'{"caption":"texto del caption aqui con emojis y llamada a la accion en espanol argentino","hashtags":"#hashtag1 #hashtag2 #hashtag3 #hashtag4 #hashtag5","imagen":"descripcion breve de imagen sugerida"}';
+  } else if(modulo==='reel'){
+    prompt='Sos un experto en contenido para redes sociales. Crea un guion de Reel para '+red+' para "'+negocio+'" en '+ciudad+'.\n'
+      +'Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
+      +'IMPORTANTE: Responde UNICAMENTE con JSON valido. Sin texto adicional.\n'
+      +'Formato exacto:\n'
+      +'{"escenas":[{"numero":1,"duracion":"0-3s","texto_pantalla":"texto corto","visual":"descripcion visual","audio":"musica sugerida"},{"numero":2,"duracion":"3-8s","texto_pantalla":"texto","visual":"descripcion","audio":"musica"},{"numero":3,"duracion":"8-15s","texto_pantalla":"texto","visual":"descripcion","audio":"musica"}],"caption":"caption del post en espanol argentino con emojis","hashtags":"#tag1 #tag2 #tag3 #tag4 #tag5","capcut_tip":"consejo especifico para producir en CapCut"}';
+  } else {
+    prompt='Sos un experto en Canva. Crea una guia paso a paso para crear una imagen en Canva para "'+negocio+'" ('+red+'). Tipo: '+tipo+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
+      +'IMPORTANTE: Responde UNICAMENTE con JSON valido. Sin texto adicional.\n'
+      +'Formato exacto:\n'
+      +'{"pasos":[{"numero":1,"titulo":"Abrir Canva","detalle":"instruccion detallada"},{"numero":2,"titulo":"Elegir plantilla","detalle":"instruccion"},{"numero":3,"titulo":"Editar texto","detalle":"instruccion"},{"numero":4,"titulo":"Agregar imagen","detalle":"instruccion"},{"numero":5,"titulo":"Descargar","detalle":"instruccion"}],"consejo":"tip final importante"}';
+  }
+
+  var btn=$('genBtn');
+  btn.disabled=true; btn.textContent='Generando…';
+  ['resultPost','resultReel','resultCanva'].forEach(function(id){$(id).style.display='none';});
+  $('imgWrap').style.display='none';
+  $('imgWrapReel').style.display='none';
+  $('imgLoading').style.display='none';
+  $('imgLoadingReel').style.display='none';
+
+  fetch(WORKER,{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({prompt:prompt})
+  })
+  .then(function(r){return r.json();})
+  .then(function(data){
+    if(data.error){showErr('Error: '+data.error);return;}
+    var p=parseJSON(data.result);
+    if(modulo==='post'){
+      $('outCaption').textContent=p.caption||'';
+      $('outHash').textContent=p.hashtags||'';
+      $('btnGenerarImg').style.display='block';
+      $('btnGenerarImg').textContent='🖼️ Generar imagen con IA';
+      $('resultPost').style.display='block';
+    } else if(modulo==='reel'){
+      var sb=$('storyboard'); sb.innerHTML='';
+      (p.escenas||[]).forEach(function(e){
+        var d=document.createElement('div'); d.className='step';
+        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Escena '+e.numero+' — '+e.duracion+'</strong><br>'
+          +'<b>Texto:</b> '+e.texto_pantalla+'<br><b>Visual:</b> '+e.visual+'<br><b>Audio:</b> '+e.audio;
+        sb.appendChild(d);
+      });
+      $('outReelCaption').textContent=p.caption||'';
+      $('outReelHash').textContent=p.hashtags||'';
+      $('outCapcutTip').textContent=p.capcut_tip||'';
+      $('btnGenerarImgReel').style.display='block';
+      $('btnGenerarImgReel').textContent='🖼️ Generar portada con IA';
+      $('resultReel').style.display='block';
+    } else {
+      var cs=$('canvaSteps'); cs.innerHTML='';
+      (p.pasos||[]).forEach(function(paso){
+        var d=document.createElement('div'); d.className='step';
+        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Paso '+paso.numero+': '+paso.titulo+'</strong><br>'+paso.detalle;
+        cs.appendChild(d);
+      });
+      if(p.consejo){
+        var tip=document.createElement('div');
+        tip.style.cssText='background:#fff8e1;border-radius:8px;padding:10px;margin-top:8px;font-size:13px;color:#7a5500';
+        tip.innerHTML='💡 <b>Consejo:</b> '+p.consejo;
+        cs.appendChild(tip);
+      }
+      $('resultCanva').style.display='block';
+    }
+  })
+  .catch(function(e){showErr('Error de conexion: '+e.message);})
+  .finally(function(){btn.disabled=false;btn.textContent='Generar contenido';});
+}
+
+function showErr(msg){var e=$('err');e.textContent=msg;e.style.display='block';}
+function hideErr(){$('err').style.display='none';}
+
+function copiarEl(id,btn){
+  navigator.clipboard.writeText($(id).textContent);
+  var orig=btn.textContent; btn.textContent='Copiado!';
+  setTimeout(function(){btn.textContent=orig;},1500);
+}
+</script>
+</body>
+</html>
