@@ -35,6 +35,9 @@ textarea{height:75px;resize:vertical}
 .cbtn{padding:7px 14px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:12px;color:#555;cursor:pointer}
 .err{color:#cc1c1c;font-size:13px;margin-bottom:10px;padding:8px;background:#fff5f5;border-radius:6px;display:none}
 .step{background:#f8f8f8;border-radius:8px;padding:10px;margin-bottom:8px;font-size:13px;line-height:1.7;border-left:3px solid #cc1c1c}
+.img-box{width:100%;border-radius:10px;margin-top:10px;display:none}
+.img-loading{text-align:center;padding:20px;color:#888;font-size:13px;display:none}
+.img-download{display:none;margin-top:8px;padding:8px 16px;border-radius:8px;border:1px solid #cc1c1c;background:#fff;color:#cc1c1c;font-size:12px;font-weight:700;cursor:pointer;width:100%}
 </style>
 </head>
 <body>
@@ -56,7 +59,7 @@ textarea{height:75px;resize:vertical}
 
     <span class="lbl">Qué querés generar</span>
     <div class="mods">
-      <div class="mod on" id="modPost">📝<br>Post</div>
+      <div class="mod on" id="modPost">📝<br>Post + Imagen</div>
       <div class="mod" id="modReel">🎬<br>Reel</div>
       <div class="mod" id="modCanva">🖼️<br>Guía Canva</div>
     </div>
@@ -100,7 +103,10 @@ textarea{height:75px;resize:vertical}
   <div class="result" id="resultPost">
     <div class="rlbl">Caption</div><div class="rtext" id="outCaption"></div>
     <div class="rlbl">Hashtags</div><div class="rtext" id="outHash"></div>
-    <div class="rlbl">Sugerencia de imagen</div><div class="rtext" id="outImg"></div>
+    <div class="rlbl">Imagen generada con IA</div>
+    <div class="img-loading" id="imgLoading">⏳ Generando imagen...</div>
+    <img class="img-box" id="imgGenerada" alt="Imagen generada">
+    <button class="img-download" id="imgDownload">⬇️ Descargar imagen</button>
     <div class="btns">
       <button class="cbtn" onclick="copiarEl('outCaption',this)">Copiar caption</button>
       <button class="cbtn" onclick="copiarEl('outHash',this)">Copiar hashtags</button>
@@ -145,137 +151,3 @@ document.querySelectorAll('#redChips .chip').forEach(function(c){
     c.className='chip on';
   };
 });
-
-document.querySelectorAll('#tonoTags .tag').forEach(function(t){
-  t.onclick=function(){
-    document.querySelectorAll('#tonoTags .tag').forEach(function(x){x.className='tag';});
-    t.className='tag on';
-    tono=t.textContent.trim();
-  };
-});
-
-$('modPost').onclick=function(){selMod('post');};
-$('modReel').onclick=function(){selMod('reel');};
-$('modCanva').onclick=function(){selMod('canva');};
-$('genBtn').onclick=generar;
-
-function selMod(m){
-  modulo=m;
-  $('modPost').className='mod'+(m==='post'?' on':'');
-  $('modReel').className='mod'+(m==='reel'?' on':'');
-  $('modCanva').className='mod'+(m==='canva'?' on':'');
-}
-
-function parseJSON(raw) {
-  raw = raw.replace(/```json|```/g,'').trim();
-  // Intentar parse directo
-  try { return JSON.parse(raw); } catch(e) {}
-  // Limpiar y reintentar
-  try {
-    var clean = raw
-      .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ')
-      .replace(/\n/g, ' ')
-      .replace(/\r/g, '')
-      .replace(/\t/g, ' ');
-    return JSON.parse(clean);
-  } catch(e) {}
-  // Extraer campos manualmente
-  var result = {};
-  var fields = ['caption','hashtags','imagen','capcut_tip'];
-  fields.forEach(function(f) {
-    var m = raw.match(new RegExp('"'+f+'"\\s*:\\s*"([\\s\\S]*?)"(?=\\s*[,}])'));
-    if(m) result[f] = m[1];
-  });
-  return result;
-}
-
-function generar(){
-  var tipo=$('tipo').value;
-  var negocio=$('negocio').value.trim()||'mi negocio';
-  var ciudad=$('ciudad').value.trim()||'Argentina';
-  if(!tipo){showErr('Elegí un tipo de contenido primero.');return;}
-  hideErr();
-
-  var producto=$('producto').value.trim();
-  var prompt='';
-
-  if(modulo==='post'){
-    prompt='Sos un community manager argentino experto. Crea contenido para '+red+' para el negocio "'+negocio+'" ubicado en '+ciudad+'.\n'
-      +'Tipo de publicacion: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
-      +'IMPORTANTE: Responde UNICAMENTE con un objeto JSON valido. Sin texto adicional, sin explicaciones, sin comillas especiales dentro de los valores. Usa solo comillas dobles estandar.\n'
-      +'Formato exacto:\n'
-      +'{"caption":"texto del caption aqui con emojis y llamada a la accion","hashtags":"#hashtag1 #hashtag2 #hashtag3","imagen":"descripcion breve de la imagen sugerida"}';
-  } else if(modulo==='reel'){
-    prompt='Sos un experto en contenido para redes sociales. Crea un guion de Reel para '+red+' para "'+negocio+'" en '+ciudad+'.\n'
-      +'Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
-      +'IMPORTANTE: Responde UNICAMENTE con JSON valido. Sin texto adicional. Sin comillas especiales.\n'
-      +'Formato exacto:\n'
-      +'{"escenas":[{"numero":1,"duracion":"0-3s","texto_pantalla":"texto","visual":"descripcion","audio":"musica sugerida"},{"numero":2,"duracion":"3-8s","texto_pantalla":"texto","visual":"descripcion","audio":"musica"}],"caption":"caption del post","hashtags":"#tag1 #tag2","capcut_tip":"consejo especifico para CapCut"}';
-  } else {
-    prompt='Sos un experto en Canva. Crea una guia paso a paso para crear una imagen en Canva para "'+negocio+'" ('+red+'). Tipo: '+tipo+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
-      +'IMPORTANTE: Responde UNICAMENTE con JSON valido. Sin texto adicional.\n'
-      +'Formato exacto:\n'
-      +'{"pasos":[{"numero":1,"titulo":"nombre del paso","detalle":"instruccion detallada"},{"numero":2,"titulo":"nombre","detalle":"instruccion"}],"consejo":"tip final importante"}';
-  }
-
-  var btn=$('genBtn');
-  btn.disabled=true; btn.textContent='Generando…';
-  ['resultPost','resultReel','resultCanva'].forEach(function(id){$(id).style.display='none';});
-
-  fetch(WORKER,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({prompt:prompt})
-  })
-  .then(function(r){return r.json();})
-  .then(function(data){
-    if(data.error){showErr('Error: '+data.error);return;}
-    var p=parseJSON(data.result);
-    if(modulo==='post'){
-      $('outCaption').textContent=p.caption||'';
-      $('outHash').textContent=p.hashtags||'';
-      $('outImg').textContent=p.imagen||'';
-      $('resultPost').style.display='block';
-    } else if(modulo==='reel'){
-      var sb=$('storyboard'); sb.innerHTML='';
-      (p.escenas||[]).forEach(function(e){
-        var d=document.createElement('div'); d.className='step';
-        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Escena '+e.numero+' — '+e.duracion+'</strong><br>'
-          +'<b>Texto:</b> '+e.texto_pantalla+'<br><b>Visual:</b> '+e.visual+'<br><b>Audio:</b> '+e.audio;
-        sb.appendChild(d);
-      });
-      $('outReelCaption').textContent=p.caption||'';
-      $('outReelHash').textContent=p.hashtags||'';
-      $('outCapcutTip').textContent=p.capcut_tip||'';
-      $('resultReel').style.display='block';
-    } else {
-      var cs=$('canvaSteps'); cs.innerHTML='';
-      (p.pasos||[]).forEach(function(paso){
-        var d=document.createElement('div'); d.className='step';
-        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Paso '+paso.numero+': '+paso.titulo+'</strong><br>'+paso.detalle;
-        cs.appendChild(d);
-      });
-      if(p.consejo){
-        var tip=document.createElement('div');
-        tip.style.cssText='background:#fff8e1;border-radius:8px;padding:10px;margin-top:8px;font-size:13px;color:#7a5500';
-        tip.innerHTML='💡 <b>Consejo:</b> '+p.consejo;
-        cs.appendChild(tip);
-      }
-      $('resultCanva').style.display='block';
-    }
-  })
-  .catch(function(e){showErr('Error de conexion: '+e.message);})
-  .finally(function(){btn.disabled=false;btn.textContent='Generar contenido';});
-}
-
-function showErr(msg){var e=$('err');e.textContent=msg;e.style.display='block';}
-function hideErr(){$('err').style.display='none';}
-
-function copiarEl(id,btn){
-  navigator.clipboard.writeText($(id).textContent);
-  var orig=btn.textContent; btn.textContent='Copiado!';
-  setTimeout(function(){btn.textContent=orig;},1500);
-}
-</script>
-</body>
-</html>
