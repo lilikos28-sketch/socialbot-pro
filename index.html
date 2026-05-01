@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>SocialBot Pro — Robot Community Manager</title>
+<title>SocialBot Pro</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding:16px}
 .wrap{max-width:680px;margin:0 auto}
 .header{display:flex;align-items:center;gap:12px;margin-bottom:20px;background:#cc1c1c;padding:14px 16px;border-radius:12px}
-.logo{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#cc1c1c}
-.header h1{color:#fff;font-size:18px}
+.logo{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#cc1c1c;flex-shrink:0}
+.header h1{color:#fff;font-size:18px;font-weight:700}
 .header p{color:rgba(255,255,255,.8);font-size:12px}
 .card{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .lbl{font-size:12px;color:#666;margin-bottom:6px;font-weight:700;display:block}
 .chips{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
 .chip{padding:5px 14px;border-radius:20px;border:1px solid #ccc;background:#fff;color:#555;font-size:12px;cursor:pointer}
 .chip.on{background:#cc1c1c;color:#fff;border-color:#cc1c1c}
-select,textarea{width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:14px;font-family:Arial,sans-serif}
+select,textarea,input[type=text]{width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:14px;font-family:Arial,sans-serif;background:#fff}
 textarea{height:75px;resize:vertical}
 .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .tag{padding:5px 12px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#555;font-size:12px;cursor:pointer}
@@ -67,22 +67,22 @@ textarea{height:75px;resize:vertical}
       <option>Promoción de producto</option>
       <option>Lanzamiento de producto</option>
       <option>Oferta del día</option>
-      <option>Entrega en el día (Posadas)</option>
-      <option>Testimonio / reseña de cliente</option>
+      <option>Entrega en el día</option>
+      <option>Testimonio de cliente</option>
       <option>Sorteo / concurso</option>
-      <option>Tip tecnológico</option>
+      <option>Tip o consejo</option>
       <option>Presentación del negocio</option>
       <option>Contenido de valor</option>
     </select>
 
     <span class="lbl">Nombre del negocio</span>
-    <input type="text" id="negocio" placeholder="Ej: OfertasOnline, Ropa Bella, Burger House..." style="width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:14px">
+    <input type="text" id="negocio" placeholder="Ej: OfertasOnline, Ropa Bella...">
 
     <span class="lbl">Ciudad</span>
-    <input type="text" id="ciudad" placeholder="Ej: Posadas, Córdoba, Buenos Aires..." style="width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:14px">
+    <input type="text" id="ciudad" placeholder="Ej: Posadas, Córdoba...">
 
     <span class="lbl">Producto o tema (opcional)</span>
-    <textarea id="producto" placeholder="Ej: Samsung Galaxy A55, vestido floral, combo especial..."></textarea>
+    <textarea id="producto" placeholder="Ej: Samsung Galaxy A55, vestido floral..."></textarea>
 
     <span class="lbl">Tono</span>
     <div class="tags" id="tonoTags">
@@ -166,6 +166,29 @@ function selMod(m){
   $('modCanva').className='mod'+(m==='canva'?' on':'');
 }
 
+function parseJSON(raw) {
+  raw = raw.replace(/```json|```/g,'').trim();
+  // Intentar parse directo
+  try { return JSON.parse(raw); } catch(e) {}
+  // Limpiar y reintentar
+  try {
+    var clean = raw
+      .replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ')
+      .replace(/\n/g, ' ')
+      .replace(/\r/g, '')
+      .replace(/\t/g, ' ');
+    return JSON.parse(clean);
+  } catch(e) {}
+  // Extraer campos manualmente
+  var result = {};
+  var fields = ['caption','hashtags','imagen','capcut_tip'];
+  fields.forEach(function(f) {
+    var m = raw.match(new RegExp('"'+f+'"\\s*:\\s*"([\\s\\S]*?)"(?=\\s*[,}])'));
+    if(m) result[f] = m[1];
+  });
+  return result;
+}
+
 function generar(){
   var tipo=$('tipo').value;
   var negocio=$('negocio').value.trim()||'mi negocio';
@@ -177,19 +200,22 @@ function generar(){
   var prompt='';
 
   if(modulo==='post'){
-    prompt='Sos community manager argentino de "'+negocio+'" en '+ciudad+'.\n'
-      +'Creá contenido para '+red+'. Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Producto: '+producto+'.':'')+'\n'
-      +'El caption menciona el nombre del negocio y la ciudad. Estilo profesional y atractivo para redes sociales argentinas.\n'
-      +'Respondé SOLO JSON sin backticks: {"caption":"...","hashtags":"...","imagen":"..."}';
+    prompt='Sos un community manager argentino experto. Crea contenido para '+red+' para el negocio "'+negocio+'" ubicado en '+ciudad+'.\n'
+      +'Tipo de publicacion: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
+      +'IMPORTANTE: Responde UNICAMENTE con un objeto JSON valido. Sin texto adicional, sin explicaciones, sin comillas especiales dentro de los valores. Usa solo comillas dobles estandar.\n'
+      +'Formato exacto:\n'
+      +'{"caption":"texto del caption aqui con emojis y llamada a la accion","hashtags":"#hashtag1 #hashtag2 #hashtag3","imagen":"descripcion breve de la imagen sugerida"}';
   } else if(modulo==='reel'){
-    prompt='Sos experto en video para redes de "'+negocio+'" en '+ciudad+'.\n'
-      +'Guión Reel 15-30s para '+red+'. Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Producto: '+producto+'.':'')+'\n'
-      +'Llamada a la acción al final. Tip específico para producir en CapCut.\n'
-      +'Respondé SOLO JSON sin backticks: {"escenas":[{"numero":1,"duracion":"0-3s","texto_pantalla":"...","visual":"...","audio":"..."}],"caption":"...","hashtags":"...","capcut_tip":"..."}';
+    prompt='Sos un experto en contenido para redes sociales. Crea un guion de Reel para '+red+' para "'+negocio+'" en '+ciudad+'.\n'
+      +'Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
+      +'IMPORTANTE: Responde UNICAMENTE con JSON valido. Sin texto adicional. Sin comillas especiales.\n'
+      +'Formato exacto:\n'
+      +'{"escenas":[{"numero":1,"duracion":"0-3s","texto_pantalla":"texto","visual":"descripcion","audio":"musica sugerida"},{"numero":2,"duracion":"3-8s","texto_pantalla":"texto","visual":"descripcion","audio":"musica"}],"caption":"caption del post","hashtags":"#tag1 #tag2","capcut_tip":"consejo especifico para CapCut"}';
   } else {
-    prompt='Guía paso a paso muy detallada para crear imagen en Canva (gratis) para "'+negocio+'" ('+red+'). Tipo: '+tipo+'.'+(producto?' Producto: '+producto+'.':'')+'\n'
-      +'Indicá exactamente qué plantilla buscar, qué colores, textos y disposición usar.\n'
-      +'Respondé SOLO JSON sin backticks: {"pasos":[{"numero":1,"titulo":"...","detalle":"..."}],"consejo":"..."}';
+    prompt='Sos un experto en Canva. Crea una guia paso a paso para crear una imagen en Canva para "'+negocio+'" ('+red+'). Tipo: '+tipo+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
+      +'IMPORTANTE: Responde UNICAMENTE con JSON valido. Sin texto adicional.\n'
+      +'Formato exacto:\n'
+      +'{"pasos":[{"numero":1,"titulo":"nombre del paso","detalle":"instruccion detallada"},{"numero":2,"titulo":"nombre","detalle":"instruccion"}],"consejo":"tip final importante"}';
   }
 
   var btn=$('genBtn');
@@ -204,8 +230,7 @@ function generar(){
   .then(function(r){return r.json();})
   .then(function(data){
     if(data.error){showErr('Error: '+data.error);return;}
-    var raw=data.result.replace(/```json|```/g,'').trim();
-    var p=JSON.parse(raw);
+    var p=parseJSON(data.result);
     if(modulo==='post'){
       $('outCaption').textContent=p.caption||'';
       $('outHash').textContent=p.hashtags||'';
@@ -215,7 +240,8 @@ function generar(){
       var sb=$('storyboard'); sb.innerHTML='';
       (p.escenas||[]).forEach(function(e){
         var d=document.createElement('div'); d.className='step';
-        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Escena '+e.numero+' — '+e.duracion+'</strong><br><b>Texto:</b> '+e.texto_pantalla+'<br><b>Visual:</b> '+e.visual+'<br><b>Audio:</b> '+e.audio;
+        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Escena '+e.numero+' — '+e.duracion+'</strong><br>'
+          +'<b>Texto:</b> '+e.texto_pantalla+'<br><b>Visual:</b> '+e.visual+'<br><b>Audio:</b> '+e.audio;
         sb.appendChild(d);
       });
       $('outReelCaption').textContent=p.caption||'';
@@ -238,7 +264,7 @@ function generar(){
       $('resultCanva').style.display='block';
     }
   })
-  .catch(function(e){showErr('Error: '+e.message);})
+  .catch(function(e){showErr('Error de conexion: '+e.message);})
   .finally(function(){btn.disabled=false;btn.textContent='Generar contenido';});
 }
 
