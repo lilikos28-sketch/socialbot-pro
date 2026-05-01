@@ -451,7 +451,7 @@ function generar(){
       +'Respondé SOLO JSON sin backticks: {"pasos":[{"numero":1,"titulo":"...","detalle":"..."}],"consejo":"..."}';
   }
 
-  fetch('https://api.groq.com/openai/v1/chat/completions',{
+  fetch(https://dawn-flower-2029.lili-kos28.workers.dev',{
     method:'POST',
     headers:{'Content-Type':'application/json','Authorization':'Bearer '+APIKEY},
     body:JSON.stringify({model:'llama-3.1-8b-instant',max_tokens:1500,messages:[{role:'user',content:prompt}]})
