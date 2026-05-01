@@ -6,31 +6,28 @@
 <title>SocialBot Pro — Robot Community Manager</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222;min-height:100vh}
-.wrap{max-width:680px;margin:0 auto;padding:16px}
+body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding:16px}
+.wrap{max-width:680px;margin:0 auto}
 .header{display:flex;align-items:center;gap:12px;margin-bottom:20px;background:#cc1c1c;padding:14px 16px;border-radius:12px}
-.logo{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#cc1c1c;flex-shrink:0}
-.header-txt{color:#fff}
-.header-txt h1{font-size:17px;font-weight:700}
-.header-txt p{font-size:12px;opacity:.85}
+.logo{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#cc1c1c}
+.header h1{color:#fff;font-size:18px}
+.header p{color:rgba(255,255,255,.8);font-size:12px}
 .card{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
 .lbl{font-size:12px;color:#666;margin-bottom:6px;font-weight:700;display:block}
 .chips{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.chip{padding:5px 14px;border-radius:20px;border:1px solid #ccc;background:#fff;color:#555;font-size:12px;cursor:pointer;transition:all .15s}
+.chip{padding:5px 14px;border-radius:20px;border:1px solid #ccc;background:#fff;color:#555;font-size:12px;cursor:pointer}
 .chip.on{background:#cc1c1c;color:#fff;border-color:#cc1c1c}
-select,textarea,input{width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:14px;font-family:Arial,sans-serif;background:#fff}
+select,textarea{width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:14px;font-family:Arial,sans-serif}
 textarea{height:75px;resize:vertical}
 .tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
 .tag{padding:5px 12px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#555;font-size:12px;cursor:pointer}
 .tag.on{background:#fff3cd;border-color:#e6a817;color:#7a5500}
-.modulos{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
-.mod{border:1px solid #ddd;border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;background:#fff;font-size:12px;color:#555;transition:all .15s}
+.mods{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.mod{border:1px solid #ddd;border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;background:#fff;font-size:12px;color:#555}
 .mod.on{border-color:#cc1c1c;background:#fff5f5;color:#cc1c1c;font-weight:700}
-.btn{width:100%;padding:12px;border-radius:10px;border:none;font-size:15px;font-weight:700;cursor:pointer;color:#fff;transition:opacity .15s}
+.btn{width:100%;padding:12px;border-radius:10px;border:none;font-size:15px;font-weight:700;cursor:pointer;background:#cc1c1c;color:#fff}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
-.btn-rojo{background:#cc1c1c}
-.btn-gris{background:#888}
-.result{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;border-left:4px solid #cc1c1c;box-shadow:0 1px 4px rgba(0,0,0,.06);display:none}
+.result{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;border-left:4px solid #cc1c1c;display:none}
 .rlbl{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;margin-top:14px}
 .rlbl:first-child{margin-top:0}
 .rtext{font-size:14px;color:#222;line-height:1.7;white-space:pre-wrap}
@@ -38,525 +35,220 @@ textarea{height:75px;resize:vertical}
 .cbtn{padding:7px 14px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:12px;color:#555;cursor:pointer}
 .err{color:#cc1c1c;font-size:13px;margin-bottom:10px;padding:8px;background:#fff5f5;border-radius:6px;display:none}
 .step{background:#f8f8f8;border-radius:8px;padding:10px;margin-bottom:8px;font-size:13px;line-height:1.7;border-left:3px solid #cc1c1c}
-
-/* LOGIN / REGISTRO */
-.auth-box{background:#fff;border-radius:16px;padding:24px;max-width:400px;margin:60px auto;box-shadow:0 2px 12px rgba(0,0,0,.1)}
-.auth-box h2{font-size:20px;color:#cc1c1c;margin-bottom:6px;text-align:center}
-.auth-box p{font-size:13px;color:#888;text-align:center;margin-bottom:20px}
-.auth-tabs{display:flex;gap:0;margin-bottom:20px;border-radius:8px;overflow:hidden;border:1px solid #ddd}
-.auth-tab{flex:1;padding:8px;text-align:center;cursor:pointer;font-size:13px;background:#f5f5f5;color:#555;border:none}
-.auth-tab.on{background:#cc1c1c;color:#fff;font-weight:700}
-.badge-free{display:inline-block;background:#e6a817;color:#fff;font-size:11px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:6px}
-
-/* SETUP */
-.setup-step{display:none}
-.setup-step.active{display:block}
-.color-preview{width:100%;height:40px;border-radius:8px;margin-bottom:14px;border:1px solid #ddd}
-
-/* NAV */
-.navtabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
-.navtab{padding:7px 14px;border-radius:8px;border:1px solid #ddd;font-size:13px;cursor:pointer;background:#fff;color:#555}
-.navtab.on{background:#222;color:#fff;border-color:#222}
-
-.hist-item{border-left:3px solid #cc1c1c;padding:10px 12px;margin-bottom:10px;background:#f8f8f8;border-radius:0 8px 8px 0}
-.plan-box{background:#fff3cd;border:1px solid #e6a817;border-radius:10px;padding:12px;margin-bottom:14px;font-size:13px;color:#7a5500;text-align:center}
 </style>
 </head>
 <body>
-
-<!-- PANTALLA LOGIN -->
-<div id="screenAuth" class="wrap">
-  <div class="auth-box">
-    <div style="text-align:center;margin-bottom:16px">
-      <div style="width:56px;height:56px;border-radius:50%;background:#cc1c1c;display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:700;margin:0 auto 8px">S</div>
-      <h2>SocialBot Pro</h2>
-      <p>Tu robot community manager con IA <span class="badge-free">7 días gratis</span></p>
-    </div>
-    <div class="auth-tabs">
-      <button class="auth-tab on" onclick="showAuth('login')">Ingresar</button>
-      <button class="auth-tab" onclick="showAuth('registro')">Registrarme</button>
-    </div>
-    <div id="formLogin">
-      <span class="lbl">Email</span>
-      <input type="email" id="loginEmail" placeholder="tu@email.com">
-      <span class="lbl">Contraseña</span>
-      <input type="password" id="loginPass" placeholder="••••••••">
-      <div class="err" id="loginErr"></div>
-      <button class="btn btn-rojo" onclick="login()">Ingresar</button>
-    </div>
-    <div id="formRegistro" style="display:none">
-      <span class="lbl">Nombre del negocio</span>
-      <input type="text" id="regNegocio" placeholder="Ej: Ropa Bella, Burger House…">
-      <span class="lbl">Email</span>
-      <input type="email" id="regEmail" placeholder="tu@email.com">
-      <span class="lbl">Contraseña</span>
-      <input type="password" id="regPass" placeholder="••••••••">
-      <div class="err" id="regErr"></div>
-      <button class="btn btn-rojo" onclick="registro()">Empezar 7 días gratis</button>
-      <p style="font-size:11px;color:#aaa;text-align:center;margin-top:10px">Sin tarjeta de crédito. Cancelá cuando quieras.</p>
-    </div>
-  </div>
-</div>
-
-<!-- PANTALLA SETUP (primera vez) -->
-<div id="screenSetup" class="wrap" style="display:none">
-  <div class="card">
-    <h2 style="font-size:17px;color:#cc1c1c;margin-bottom:6px">Configurá tu negocio</h2>
-    <p style="font-size:13px;color:#888;margin-bottom:16px">Solo la primera vez. Después el robot usa estos datos automáticamente.</p>
-
-    <div class="setup-step active" id="setup1">
-      <span class="lbl">¿A qué se dedica tu negocio?</span>
-      <textarea id="setupDesc" placeholder="Ej: tienda de ropa femenina en Córdoba, delivery de comida en Rosario, peluquería en Buenos Aires…"></textarea>
-      <span class="lbl">¿En qué ciudad estás?</span>
-      <input type="text" id="setupCiudad" placeholder="Ej: Córdoba, Rosario, Mendoza…">
-      <span class="lbl">WhatsApp de contacto</span>
-      <input type="text" id="setupWsp" placeholder="Ej: 3515 123456">
-      <span class="lbl">Sitio web (opcional)</span>
-      <input type="text" id="setupWeb" placeholder="Ej: www.minegocio.com.ar">
-      <button class="btn btn-rojo" onclick="setupNext()">Siguiente →</button>
-    </div>
-
-    <div class="setup-step" id="setup2">
-      <span class="lbl">Color principal de tu marca</span>
-      <input type="color" id="setupColor" value="#cc1c1c" style="height:50px;padding:4px;cursor:pointer">
-      <span class="lbl" style="margin-top:8px">Color secundario</span>
-      <input type="color" id="setupColor2" value="#e6a817" style="height:50px;padding:4px;cursor:pointer">
-      <span class="lbl" style="margin-top:8px">Tono de comunicación</span>
-      <div class="tags" id="setupTonoTags">
-        <span class="tag on" onclick="selSetupTono(this)">Dinámico</span>
-        <span class="tag" onclick="selSetupTono(this)">Profesional</span>
-        <span class="tag" onclick="selSetupTono(this)">Cercano</span>
-        <span class="tag" onclick="selSetupTono(this)">Urgente</span>
-        <span class="tag" onclick="selSetupTono(this)">Informativo</span>
-      </div>
-      <button class="btn btn-rojo" style="margin-top:8px" onclick="setupFin()">¡Empezar! 🚀</button>
-    </div>
-  </div>
-</div>
-
-<!-- PANTALLA PRINCIPAL -->
-<div id="screenApp" class="wrap" style="display:none">
+<div class="wrap">
   <div class="header">
-    <div class="logo" id="appLogo">S</div>
-    <div class="header-txt">
-      <h1 id="appNombre">SocialBot Pro</h1>
-      <p id="appDesc">Robot Community Manager con IA</p>
-    </div>
-    <button onclick="cerrarSesion()" style="margin-left:auto;background:rgba(255,255,255,.2);border:none;color:#fff;padding:6px 12px;border-radius:8px;font-size:12px;cursor:pointer">Salir</button>
-  </div>
-
-  <div class="plan-box" id="planBox"></div>
-
-  <div class="navtabs">
-    <button class="navtab on" id="navGen" onclick="showPanel('gen')">Generar</button>
-    <button class="navtab" id="navHist" onclick="showPanel('hist')">Historial <span id="histCount">0</span></button>
-    <button class="navtab" id="navConfig" onclick="showPanel('config')">Mi negocio</button>
-  </div>
-
-  <!-- PANEL GENERAR -->
-  <div id="panelGen">
-    <div class="card">
-      <span class="lbl">Red social</span>
-      <div class="chips" id="redChips">
-        <button class="chip on" data-red="Instagram">Instagram</button>
-        <button class="chip" data-red="Facebook">Facebook</button>
-      </div>
-      <span class="lbl">Qué querés generar</span>
-      <div class="modulos">
-        <div class="mod on" id="modPost" onclick="selMod('post')">📝<br>Post</div>
-        <div class="mod" id="modReel" onclick="selMod('reel')">🎬<br>Reel</div>
-        <div class="mod" id="modCanva" onclick="selMod('canva')">🖼️<br>Guía Canva</div>
-      </div>
-      <span class="lbl">Tipo de contenido</span>
-      <select id="tipo">
-        <option value="">— elegí uno —</option>
-        <option>Promoción de producto</option>
-        <option>Lanzamiento de producto</option>
-        <option>Oferta del día</option>
-        <option>Testimonio / reseña de cliente</option>
-        <option>Sorteo / concurso</option>
-        <option>Tip / consejo</option>
-        <option>Presentación del negocio</option>
-        <option>Contenido de valor</option>
-      </select>
-      <span class="lbl">Producto o tema (opcional)</span>
-      <textarea id="producto" placeholder="Ej: vestido floral, hamburguesa doble, corte de cabello…"></textarea>
-      <div class="err" id="err"></div>
-      <button class="btn btn-rojo" id="genBtn" onclick="generar()">Generar contenido</button>
-    </div>
-
-    <div class="result" id="resultPost">
-      <div class="rlbl">Caption</div><div class="rtext" id="outCaption"></div>
-      <div class="rlbl">Hashtags</div><div class="rtext" id="outHash"></div>
-      <div class="rlbl">Sugerencia de imagen</div><div class="rtext" id="outImg"></div>
-      <div class="btns">
-        <button class="cbtn" onclick="copiarEl('outCaption',this)">Copiar caption</button>
-        <button class="cbtn" onclick="copiarEl('outHash',this)">Copiar hashtags</button>
-        <button class="cbtn" onclick="guardar('post')">Guardar</button>
-        <button class="cbtn" onclick="generar()">Regenerar</button>
-      </div>
-    </div>
-
-    <div class="result" id="resultReel">
-      <div class="rlbl">Guión del Reel</div>
-      <div id="storyboard"></div>
-      <div class="rlbl">Caption</div><div class="rtext" id="outReelCaption"></div>
-      <div class="rlbl">Hashtags</div><div class="rtext" id="outReelHash"></div>
-      <div style="background:#fff8e1;border-radius:8px;padding:10px;margin-top:10px;font-size:13px;color:#7a5500">
-        💡 <strong>Tip CapCut:</strong> <span id="outCapcutTip"></span>
-      </div>
-      <div class="btns">
-        <button class="cbtn" onclick="copiarEl('outReelCaption',this)">Copiar caption</button>
-        <button class="cbtn" onclick="copiarEl('outReelHash',this)">Copiar hashtags</button>
-        <button class="cbtn" onclick="guardar('reel')">Guardar</button>
-        <button class="cbtn" onclick="generar()">Regenerar</button>
-      </div>
-    </div>
-
-    <div class="result" id="resultCanva">
-      <div class="rlbl">Guía paso a paso — Canva</div>
-      <div id="canvaSteps"></div>
-      <div class="btns">
-        <button class="cbtn" onclick="guardar('canva')">Guardar</button>
-        <button class="cbtn" onclick="generar()">Regenerar</button>
-      </div>
+    <div class="logo">S</div>
+    <div>
+      <h1>SocialBot Pro</h1>
+      <p>Robot Community Manager con IA</p>
     </div>
   </div>
 
-  <!-- PANEL HISTORIAL -->
-  <div id="panelHist" style="display:none">
-    <div class="card">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-        <span style="font-size:14px;font-weight:700">Contenidos guardados</span>
-        <button class="cbtn" style="color:#cc1c1c;border-color:#cc1c1c" onclick="limpiarHist()">Borrar todo</button>
-      </div>
-      <div id="histLista"><div style="text-align:center;color:#aaa;padding:30px 0">Todavía no guardaste contenidos.</div></div>
+  <div class="card">
+    <span class="lbl">Red social</span>
+    <div class="chips" id="redChips">
+      <button class="chip on" data-red="Instagram">Instagram</button>
+      <button class="chip" data-red="Facebook">Facebook</button>
+    </div>
+
+    <span class="lbl">Qué querés generar</span>
+    <div class="mods">
+      <div class="mod on" id="modPost">📝<br>Post</div>
+      <div class="mod" id="modReel">🎬<br>Reel</div>
+      <div class="mod" id="modCanva">🖼️<br>Guía Canva</div>
+    </div>
+
+    <span class="lbl">Tipo de contenido</span>
+    <select id="tipo">
+      <option value="">— elegí uno —</option>
+      <option>Promoción de producto</option>
+      <option>Lanzamiento de producto</option>
+      <option>Oferta del día</option>
+      <option>Entrega en el día (Posadas)</option>
+      <option>Testimonio / reseña de cliente</option>
+      <option>Sorteo / concurso</option>
+      <option>Tip tecnológico</option>
+      <option>Presentación del negocio</option>
+      <option>Contenido de valor</option>
+    </select>
+
+    <span class="lbl">Nombre del negocio</span>
+    <input type="text" id="negocio" placeholder="Ej: OfertasOnline, Ropa Bella, Burger House..." style="width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:14px">
+
+    <span class="lbl">Ciudad</span>
+    <input type="text" id="ciudad" placeholder="Ej: Posadas, Córdoba, Buenos Aires..." style="width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:14px">
+
+    <span class="lbl">Producto o tema (opcional)</span>
+    <textarea id="producto" placeholder="Ej: Samsung Galaxy A55, vestido floral, combo especial..."></textarea>
+
+    <span class="lbl">Tono</span>
+    <div class="tags" id="tonoTags">
+      <span class="tag on">Dinámico</span>
+      <span class="tag">Profesional</span>
+      <span class="tag">Cercano</span>
+      <span class="tag">Urgente</span>
+      <span class="tag">Informativo</span>
+    </div>
+
+    <div class="err" id="err"></div>
+    <button class="btn" id="genBtn">Generar contenido</button>
+  </div>
+
+  <div class="result" id="resultPost">
+    <div class="rlbl">Caption</div><div class="rtext" id="outCaption"></div>
+    <div class="rlbl">Hashtags</div><div class="rtext" id="outHash"></div>
+    <div class="rlbl">Sugerencia de imagen</div><div class="rtext" id="outImg"></div>
+    <div class="btns">
+      <button class="cbtn" onclick="copiarEl('outCaption',this)">Copiar caption</button>
+      <button class="cbtn" onclick="copiarEl('outHash',this)">Copiar hashtags</button>
+      <button class="cbtn" onclick="generar()">Regenerar</button>
     </div>
   </div>
 
-  <!-- PANEL CONFIG -->
-  <div id="panelConfig" style="display:none">
-    <div class="card">
-      <h3 style="font-size:15px;font-weight:700;margin-bottom:14px">Datos de mi negocio</h3>
-      <span class="lbl">Descripción del negocio</span>
-      <textarea id="cfgDesc"></textarea>
-      <span class="lbl">Ciudad</span>
-      <input type="text" id="cfgCiudad">
-      <span class="lbl">WhatsApp</span>
-      <input type="text" id="cfgWsp">
-      <span class="lbl">Sitio web</span>
-      <input type="text" id="cfgWeb">
-      <span class="lbl">Color principal</span>
-      <input type="color" id="cfgColor" style="height:50px;padding:4px;cursor:pointer">
-      <button class="btn btn-rojo" style="margin-top:8px" onclick="guardarConfig()">Guardar cambios</button>
+  <div class="result" id="resultReel">
+    <div class="rlbl">Guión del Reel</div>
+    <div id="storyboard"></div>
+    <div class="rlbl">Caption</div><div class="rtext" id="outReelCaption"></div>
+    <div class="rlbl">Hashtags</div><div class="rtext" id="outReelHash"></div>
+    <div style="background:#fff8e1;border-radius:8px;padding:10px;margin-top:10px;font-size:13px;color:#7a5500">
+      💡 <strong>Tip CapCut:</strong> <span id="outCapcutTip"></span>
+    </div>
+    <div class="btns">
+      <button class="cbtn" onclick="copiarEl('outReelCaption',this)">Copiar caption</button>
+      <button class="cbtn" onclick="copiarEl('outReelHash',this)">Copiar hashtags</button>
+      <button class="cbtn" onclick="generar()">Regenerar</button>
+    </div>
+  </div>
+
+  <div class="result" id="resultCanva">
+    <div class="rlbl">Guía paso a paso — Canva</div>
+    <div id="canvaSteps"></div>
+    <div class="btns">
+      <button class="cbtn" onclick="generar()">Regenerar</button>
     </div>
   </div>
 </div>
 
 <script>
-var APIKEY='PEGA_AQUI_TU_CLAVE_GROQ'; // reemplazá con tugsk_Fkljw4d8klyVirhksLbiWGdyb3FYv43LCKvlQvrQLYewfK8GMNgU
-var usuarios=JSON.parse(localStorage.getItem('sb_usuarios')||'{}');
-var sesion=JSON.parse(localStorage.getItem('sb_sesion')||'null');
-var historial=[];
-var red='Instagram', modulo='post';
-var config={};
+var red='Instagram', modulo='post', tono='Dinámico';
+var WORKER='https://dawn-flower-2029.lili-kos28.workers.dev';
 
 function $(id){return document.getElementById(id);}
-
-// ===== AUTH =====
-function showAuth(tab){
-  $('formLogin').style.display=tab==='login'?'block':'none';
-  $('formRegistro').style.display=tab==='registro'?'block':'none';
-  document.querySelectorAll('.auth-tab').forEach(function(t,i){
-    t.className='auth-tab'+(i===(tab==='login'?0:1)?' on':'');
-  });
-}
-
-function registro(){
-  var neg=$('regNegocio').value.trim();
-  var email=$('regEmail').value.trim();
-  var pass=$('regPass').value;
-  if(!neg||!email||!pass){mostrarErr('regErr','Completá todos los campos.');return;}
-  if(usuarios[email]){mostrarErr('regErr','Ya existe una cuenta con ese email.');return;}
-  var user={email:email,pass:pass,negocio:neg,fechaReg:Date.now(),config:{},historial:[]};
-  usuarios[email]=user;
-  localStorage.setItem('sb_usuarios',JSON.stringify(usuarios));
-  sesion={email:email};
-  localStorage.setItem('sb_sesion',JSON.stringify(sesion));
-  iniciarApp(user,true);
-}
-
-function login(){
-  var email=$('loginEmail').value.trim();
-  var pass=$('loginPass').value;
-  var user=usuarios[email];
-  if(!user||user.pass!==pass){mostrarErr('loginErr','Email o contraseña incorrectos.');return;}
-  sesion={email:email};
-  localStorage.setItem('sb_sesion',JSON.stringify(sesion));
-  var tieneConfig=user.config&&user.config.desc;
-  iniciarApp(user,!tieneConfig);
-}
-
-function cerrarSesion(){
-  localStorage.removeItem('sb_sesion');
-  location.reload();
-}
-
-function mostrarErr(id,msg){
-  var el=$(id); el.textContent=msg; el.style.display='block';
-  setTimeout(function(){el.style.display='none';},3000);
-}
-
-// ===== SETUP =====
-var setupTono='Dinámico';
-function selSetupTono(el){
-  document.querySelectorAll('#setupTonoTags .tag').forEach(function(t){t.className='tag';});
-  el.className='tag on'; setupTono=el.textContent.trim();
-}
-
-function setupNext(){
-  var desc=$('setupDesc').value.trim();
-  var ciudad=$('setupCiudad').value.trim();
-  if(!desc||!ciudad){alert('Completá la descripción y la ciudad.');return;}
-  $('setup1').className='setup-step';
-  $('setup2').className='setup-step active';
-}
-
-function setupFin(){
-  var user=usuarios[sesion.email];
-  user.config={
-    desc:$('setupDesc').value.trim(),
-    ciudad:$('setupCiudad').value.trim(),
-    wsp:$('setupWsp').value.trim(),
-    web:$('setupWeb').value.trim(),
-    color:$('setupColor').value,
-    color2:$('setupColor2').value,
-    tono:setupTono
-  };
-  usuarios[sesion.email]=user;
-  localStorage.setItem('sb_usuarios',JSON.stringify(usuarios));
-  iniciarApp(user,false);
-}
-
-// ===== APP =====
-function iniciarApp(user,primerVez){
-  $('screenAuth').style.display='none';
-  if(primerVez){
-    $('screenSetup').style.display='block';
-    return;
-  }
-  $('screenSetup').style.display='none';
-  $('screenApp').style.display='block';
-  config=user.config||{};
-  historial=user.historial||[];
-  $('appNombre').textContent=user.negocio||'Mi Negocio';
-  $('appLogo').textContent=(user.negocio||'S').charAt(0).toUpperCase();
-  $('appLogo').style.background='#fff';
-  $('appLogo').style.color=config.color||'#cc1c1c';
-  $('appDesc').textContent='Robot Community Manager con IA';
-  $('genBtn').style.background=config.color||'#cc1c1c';
-  $('histCount').textContent=historial.length;
-  var dias=Math.floor((Date.now()-user.fechaReg)/(1000*60*60*24));
-  var restantes=7-dias;
-  $('planBox').innerHTML=restantes>0
-    ?'🎁 Prueba gratis: te quedan <strong>'+restantes+' días</strong>. <a href="#" style="color:#7a5500">Suscribirme</a>'
-    :'⚠️ Tu prueba gratis venció. <a href="#" style="color:#7a5500">Activar suscripción</a>';
-  cargarConfig();
-}
-
-function cargarConfig(){
-  if($('cfgDesc'))$('cfgDesc').value=config.desc||'';
-  if($('cfgCiudad'))$('cfgCiudad').value=config.ciudad||'';
-  if($('cfgWsp'))$('cfgWsp').value=config.wsp||'';
-  if($('cfgWeb'))$('cfgWeb').value=config.web||'';
-  if($('cfgColor'))$('cfgColor').value=config.color||'#cc1c1c';
-}
-
-function guardarConfig(){
-  config.desc=$('cfgDesc').value.trim();
-  config.ciudad=$('cfgCiudad').value.trim();
-  config.wsp=$('cfgWsp').value.trim();
-  config.web=$('cfgWeb').value.trim();
-  config.color=$('cfgColor').value;
-  var user=usuarios[sesion.email];
-  user.config=config;
-  localStorage.setItem('sb_usuarios',JSON.stringify(usuarios));
-  $('genBtn').style.background=config.color;
-  alert('¡Guardado!');
-}
-
-// ===== NAVEGACIÓN =====
-function showPanel(p){
-  $('panelGen').style.display=p==='gen'?'block':'none';
-  $('panelHist').style.display=p==='hist'?'block':'none';
-  $('panelConfig').style.display=p==='config'?'block':'none';
-  ['navGen','navHist','navConfig'].forEach(function(id,i){
-    var panels=['gen','hist','config'];
-    $(id).className='navtab'+(panels[i]===p?' on':'');
-  });
-  if(p==='hist')renderHist();
-}
-
-function selMod(m){
-  modulo=m;
-  var col=config.color||'#cc1c1c';
-  ['post','reel','canva'].forEach(function(x){
-    $('mod'+x.charAt(0).toUpperCase()+x.slice(1)).className='mod'+(m===x?' on':'');
-    if(m===x){$('mod'+x.charAt(0).toUpperCase()+x.slice(1)).style.color=col;$('mod'+x.charAt(0).toUpperCase()+x.slice(1)).style.borderColor=col;}
-    else{$('mod'+x.charAt(0).toUpperCase()+x.slice(1)).style.color='';$('mod'+x.charAt(0).toUpperCase()+x.slice(1)).style.borderColor='';}
-  });
-}
 
 document.querySelectorAll('#redChips .chip').forEach(function(c){
   c.onclick=function(){
     red=c.dataset.red;
-    document.querySelectorAll('#redChips .chip').forEach(function(x){x.className='chip';x.style.background='';x.style.color='';x.style.borderColor='';});
-    c.className='chip on'; c.style.background=config.color||'#cc1c1c'; c.style.borderColor=config.color||'#cc1c1c'; c.style.color='#fff';
+    document.querySelectorAll('#redChips .chip').forEach(function(x){x.className='chip';});
+    c.className='chip on';
   };
 });
 
-// ===== GENERAR =====
+document.querySelectorAll('#tonoTags .tag').forEach(function(t){
+  t.onclick=function(){
+    document.querySelectorAll('#tonoTags .tag').forEach(function(x){x.className='tag';});
+    t.className='tag on';
+    tono=t.textContent.trim();
+  };
+});
+
+$('modPost').onclick=function(){selMod('post');};
+$('modReel').onclick=function(){selMod('reel');};
+$('modCanva').onclick=function(){selMod('canva');};
+$('genBtn').onclick=generar;
+
+function selMod(m){
+  modulo=m;
+  $('modPost').className='mod'+(m==='post'?' on':'');
+  $('modReel').className='mod'+(m==='reel'?' on':'');
+  $('modCanva').className='mod'+(m==='canva'?' on':'');
+}
+
 function generar(){
   var tipo=$('tipo').value;
-  if(!tipo){var e=$('err');e.textContent='Elegí un tipo de contenido primero.';e.style.display='block';return;}
-  $('err').style.display='none';
+  var negocio=$('negocio').value.trim()||'mi negocio';
+  var ciudad=$('ciudad').value.trim()||'Argentina';
+  if(!tipo){showErr('Elegí un tipo de contenido primero.');return;}
+  hideErr();
 
-  var dias=Math.floor((Date.now()-usuarios[sesion.email].fechaReg)/(1000*60*60*24));
-  if(dias>=7){alert('Tu prueba gratis venció. Activá tu suscripción para continuar.');return;}
-
-  var btn=$('genBtn'); btn.disabled=true; btn.textContent='Generando…';
   var producto=$('producto').value.trim();
-  var negocio=usuarios[sesion.email].negocio||'Mi negocio';
-  var col=config.color||'#cc1c1c';
-  var desc=config.desc||'negocio local argentino';
-  var ciudad=config.ciudad||'Argentina';
-  var wsp=config.wsp||'';
-  var web=config.web||'';
-  var tono=config.tono||'Dinámico';
   var prompt='';
 
   if(modulo==='post'){
-    prompt='Sos community manager argentino de "'+negocio+'": '+desc+' en '+ciudad+'.'+(wsp?' WhatsApp: '+wsp+'.':'')+(web?' Web: '+web+'.':'')+'\n'
-      +'Creá contenido para '+red+'. Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Producto/tema: '+producto+'.':'')+'\n'
-      +'El caption menciona el nombre del negocio y la ciudad. Estilo profesional y atractivo.\n'
+    prompt='Sos community manager argentino de "'+negocio+'" en '+ciudad+'.\n'
+      +'Creá contenido para '+red+'. Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Producto: '+producto+'.':'')+'\n'
+      +'El caption menciona el nombre del negocio y la ciudad. Estilo profesional y atractivo para redes sociales argentinas.\n'
       +'Respondé SOLO JSON sin backticks: {"caption":"...","hashtags":"...","imagen":"..."}';
   } else if(modulo==='reel'){
-    prompt='Sos experto en video para redes de "'+negocio+'": '+desc+' en '+ciudad+'.\n'
+    prompt='Sos experto en video para redes de "'+negocio+'" en '+ciudad+'.\n'
       +'Guión Reel 15-30s para '+red+'. Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Producto: '+producto+'.':'')+'\n'
-      +'Llamada a la acción al final'+(wsp?', WhatsApp: '+wsp:'')+'. Tip para CapCut.\n'
+      +'Llamada a la acción al final. Tip específico para producir en CapCut.\n'
       +'Respondé SOLO JSON sin backticks: {"escenas":[{"numero":1,"duracion":"0-3s","texto_pantalla":"...","visual":"...","audio":"..."}],"caption":"...","hashtags":"...","capcut_tip":"..."}';
   } else {
-    prompt='Guía paso a paso para crear imagen en Canva para "'+negocio+'" ('+red+'). Tipo: '+tipo+'.'+(producto?' Producto: '+producto+'.':'')+'\n'
-      +'Color principal: '+col+'. Estilo profesional.\n'
+    prompt='Guía paso a paso muy detallada para crear imagen en Canva (gratis) para "'+negocio+'" ('+red+'). Tipo: '+tipo+'.'+(producto?' Producto: '+producto+'.':'')+'\n'
+      +'Indicá exactamente qué plantilla buscar, qué colores, textos y disposición usar.\n'
       +'Respondé SOLO JSON sin backticks: {"pasos":[{"numero":1,"titulo":"...","detalle":"..."}],"consejo":"..."}';
   }
 
-  fetch(https://dawn-flower-2029.lili-kos28.workers.dev',{
+  var btn=$('genBtn');
+  btn.disabled=true; btn.textContent='Generando…';
+  ['resultPost','resultReel','resultCanva'].forEach(function(id){$(id).style.display='none';});
+
+  fetch(WORKER,{
     method:'POST',
-    headers:{'Content-Type':'application/json','Authorization':'Bearer '+APIKEY},
-    body:JSON.stringify({model:'llama-3.1-8b-instant',max_tokens:1500,messages:[{role:'user',content:prompt}]})
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({prompt:prompt})
   })
   .then(function(r){return r.json();})
   .then(function(data){
-    if(data.error){var e=$('err');e.textContent='Error: '+data.error.message;e.style.display='block';return;}
-    var raw=(data.choices&&data.choices[0]&&data.choices[0].message?data.choices[0].message.content:'').replace(/```json|```/g,'').trim();
+    if(data.error){showErr('Error: '+data.error);return;}
+    var raw=data.result.replace(/```json|```/g,'').trim();
     var p=JSON.parse(raw);
     if(modulo==='post'){
       $('outCaption').textContent=p.caption||'';
       $('outHash').textContent=p.hashtags||'';
       $('outImg').textContent=p.imagen||'';
       $('resultPost').style.display='block';
-      $('resultReel').style.display='none';
-      $('resultCanva').style.display='none';
     } else if(modulo==='reel'){
       var sb=$('storyboard'); sb.innerHTML='';
       (p.escenas||[]).forEach(function(e){
         var d=document.createElement('div'); d.className='step';
-        d.innerHTML='<strong style="color:'+col+';font-size:11px;text-transform:uppercase">Escena '+e.numero+' — '+e.duracion+'</strong><br><b>Texto:</b> '+e.texto_pantalla+'<br><b>Visual:</b> '+e.visual+'<br><b>Audio:</b> '+e.audio;
+        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Escena '+e.numero+' — '+e.duracion+'</strong><br><b>Texto:</b> '+e.texto_pantalla+'<br><b>Visual:</b> '+e.visual+'<br><b>Audio:</b> '+e.audio;
         sb.appendChild(d);
       });
       $('outReelCaption').textContent=p.caption||'';
       $('outReelHash').textContent=p.hashtags||'';
       $('outCapcutTip').textContent=p.capcut_tip||'';
       $('resultReel').style.display='block';
-      $('resultPost').style.display='none';
-      $('resultCanva').style.display='none';
     } else {
       var cs=$('canvaSteps'); cs.innerHTML='';
       (p.pasos||[]).forEach(function(paso){
         var d=document.createElement('div'); d.className='step';
-        d.innerHTML='<strong style="color:'+col+';font-size:11px;text-transform:uppercase">Paso '+paso.numero+': '+paso.titulo+'</strong><br>'+paso.detalle;
+        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Paso '+paso.numero+': '+paso.titulo+'</strong><br>'+paso.detalle;
         cs.appendChild(d);
       });
-      if(p.consejo){var tip=document.createElement('div');tip.style.cssText='background:#fff8e1;border-radius:8px;padding:10px;margin-top:8px;font-size:13px;color:#7a5500';tip.innerHTML='💡 <b>Consejo:</b> '+p.consejo;cs.appendChild(tip);}
+      if(p.consejo){
+        var tip=document.createElement('div');
+        tip.style.cssText='background:#fff8e1;border-radius:8px;padding:10px;margin-top:8px;font-size:13px;color:#7a5500';
+        tip.innerHTML='💡 <b>Consejo:</b> '+p.consejo;
+        cs.appendChild(tip);
+      }
       $('resultCanva').style.display='block';
-      $('resultPost').style.display='none';
-      $('resultReel').style.display='none';
     }
   })
-  .catch(function(e){var er=$('err');er.textContent='Error: '+e.message;er.style.display='block';})
+  .catch(function(e){showErr('Error: '+e.message);})
   .finally(function(){btn.disabled=false;btn.textContent='Generar contenido';});
 }
 
-// ===== HISTORIAL =====
-function guardar(tipo){
-  var caption=tipo==='post'?$('outCaption').textContent:tipo==='reel'?$('outReelCaption').textContent:'Guía Canva';
-  var hashtags=tipo==='post'?$('outHash').textContent:tipo==='reel'?$('outReelHash').textContent:'';
-  historial.unshift({id:Date.now(),tipo:tipo,red:red,fecha:new Date().toLocaleDateString('es-AR'),caption:caption,hashtags:hashtags});
-  var user=usuarios[sesion.email]; user.historial=historial;
-  localStorage.setItem('sb_usuarios',JSON.stringify(usuarios));
-  $('histCount').textContent=historial.length;
-  alert('Guardado!');
-}
-
-function renderHist(){
-  var lista=$('histLista');
-  if(!historial.length){lista.innerHTML='<div style="text-align:center;color:#aaa;padding:30px 0">Todavía no guardaste contenidos.</div>';return;}
-  lista.innerHTML='';
-  historial.forEach(function(item){
-    var d=document.createElement('div'); d.className='hist-item';
-    d.innerHTML='<div style="font-size:11px;color:#999;margin-bottom:4px">'+item.red+' · '+item.fecha+'</div>'
-      +'<div style="font-size:13px;color:#222;line-height:1.6;margin-bottom:6px">'+item.caption.substring(0,120)+(item.caption.length>120?'…':'')+'</div>'
-      +'<div style="display:flex;gap:6px;flex-wrap:wrap">'
-      +'<button class="cbtn" style="font-size:11px" onclick="copiarTexto(\''+item.id+'\',\'caption\')">Copiar caption</button>'
-      +(item.hashtags?'<button class="cbtn" style="font-size:11px" onclick="copiarTexto(\''+item.id+'\',\'hashtags\')">Copiar hashtags</button>':'')+
-      '<button class="cbtn" style="font-size:11px;color:#cc1c1c" onclick="borrarItem('+item.id+')">Borrar</button></div>';
-    lista.appendChild(d);
-  });
-}
-
-function copiarTexto(id,campo){
-  var item=historial.find(function(h){return h.id==id;});
-  if(item)navigator.clipboard.writeText(item[campo]);
-}
-
-function borrarItem(id){
-  historial=historial.filter(function(h){return h.id!==id;});
-  var user=usuarios[sesion.email]; user.historial=historial;
-  localStorage.setItem('sb_usuarios',JSON.stringify(usuarios));
-  $('histCount').textContent=historial.length;
-  renderHist();
-}
-
-function limpiarHist(){
-  if(confirm('Borrar todo?')){
-    historial=[];
-    var user=usuarios[sesion.email]; user.historial=[];
-    localStorage.setItem('sb_usuarios',JSON.stringify(usuarios));
-    $('histCount').textContent=0; renderHist();
-  }
-}
+function showErr(msg){var e=$('err');e.textContent=msg;e.style.display='block';}
+function hideErr(){$('err').style.display='none';}
 
 function copiarEl(id,btn){
   navigator.clipboard.writeText($(id).textContent);
   var orig=btn.textContent; btn.textContent='Copiado!';
   setTimeout(function(){btn.textContent=orig;},1500);
-}
-
-// ===== INICIO =====
-if(sesion&&usuarios[sesion.email]){
-  var u=usuarios[sesion.email];
-  iniciarApp(u,!(u.config&&u.config.desc));
 }
 </script>
 </body>
