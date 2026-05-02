@@ -28,23 +28,25 @@ textarea{height:75px;resize:vertical}
 .btn{width:100%;padding:12px;border-radius:10px;border:none;font-size:15px;font-weight:700;cursor:pointer;background:#cc1c1c;color:#fff;margin-bottom:8px}
 .btn:disabled{opacity:0.5;cursor:not-allowed}
 .result{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;border-left:4px solid #cc1c1c;display:none}
-.rlbl{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:4px;margin-top:14px}
+.rlbl{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;margin-top:14px}
 .rlbl:first-child{margin-top:0}
 .rtext{font-size:14px;color:#222;line-height:1.7;white-space:pre-wrap}
 .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .cbtn{padding:7px 14px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:12px;color:#555;cursor:pointer}
 .err{color:#cc1c1c;font-size:13px;margin-bottom:10px;padding:8px;background:#fff5f5;border-radius:6px;display:none}
 .step{background:#f8f8f8;border-radius:8px;padding:10px;margin-bottom:8px;font-size:13px;line-height:1.7;border-left:3px solid #cc1c1c}
-.img-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:12px}
-.img-grid img{width:100%;height:120px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:border-color .2s}
+.img-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
+.img-grid img{width:100%;height:110px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:border-color .15s}
 .img-grid img:hover{border-color:#cc1c1c}
-.img-grid img.selected{border-color:#cc1c1c;box-shadow:0 0 0 2px #cc1c1c}
-.img-loading{background:#f0f0f0;border-radius:12px;padding:20px;text-align:center;color:#888;font-size:13px;margin-top:12px}
-.img-btn{width:100%;padding:10px;border-radius:10px;border:none;font-size:14px;font-weight:700;cursor:pointer;background:#1a7cc9;color:#fff;margin-top:8px}
-.img-btn:disabled{opacity:0.5}
-.img-selected-wrap{margin-top:12px;display:none}
-.img-selected-wrap img{width:100%;border-radius:12px;border:1px solid #eee}
+.img-grid img.sel{border-color:#cc1c1c;box-shadow:0 0 0 2px #cc1c1c}
+.img-full{width:100%;border-radius:10px;margin-top:10px;display:none}
 .img-credit{font-size:11px;color:#aaa;text-align:right;margin-top:4px}
+.img-down{display:block;text-align:center;margin-top:6px;font-size:13px;color:#cc1c1c;font-weight:700;text-decoration:none}
+.img-loading{text-align:center;color:#888;font-size:13px;padding:16px;display:none}
+.foto-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
+.foto-btn{padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer}
+.foto-galeria{background:#f0f0f0;color:#333}
+.foto-camara{background:#1a7cc9;color:#fff}
 </style>
 </head>
 <body>
@@ -107,19 +109,25 @@ textarea{height:75px;resize:vertical}
     <button class="btn" id="genBtn">Generar contenido</button>
   </div>
 
+  <!-- RESULTADO POST -->
   <div class="result" id="resultPost">
     <div class="rlbl">Caption</div><div class="rtext" id="outCaption"></div>
     <div class="rlbl">Hashtags</div><div class="rtext" id="outHash"></div>
     <div class="rlbl">📸 Imágenes sugeridas — tocá para seleccionar</div>
-    <div class="img-loading" id="imgLoading" style="display:none">⏳ Buscando imágenes...</div>
-    <div class="img-grid" id="imgGrid"></div>
-    <div class="img-selected-wrap" id="imgSelectedWrap">
-      <div class="rlbl">Imagen seleccionada</div>
-      <img id="imgSelected" alt="Imagen seleccionada">
-      <div class="img-credit">Foto de Unsplash</div>
-      <a id="imgDescargar" download="imagen_post.jpg" style="display:block;margin-top:6px;text-align:center;font-size:13px;color:#cc1c1c;font-weight:700">⬇️ Descargar imagen</a>
+    <div class="img-loading" id="imgLoadPost">⏳ Buscando imágenes...</div>
+    <div class="img-grid" id="imgGridPost"></div>
+    <img id="imgFullPost" class="img-full" alt="Imagen seleccionada">
+    <div class="img-credit" id="imgCreditPost"></div>
+    <a id="imgDownPost" class="img-down" style="display:none" download="imagen_post.jpg">⬇️ Descargar imagen seleccionada</a>
+    <div class="rlbl" style="margin-top:14px">📷 O subí tu propia foto</div>
+    <div class="foto-btns">
+      <button class="foto-btn foto-galeria" onclick="document.getElementById('inputPost').click()">🖼️ Desde galería</button>
+      <button class="foto-btn foto-camara" onclick="document.getElementById('inputCamPost').click()">📷 Tomar foto</button>
     </div>
-    <button class="img-btn" id="btnBuscarImg" style="display:none">🔄 Buscar más imágenes</button>
+    <input type="file" id="inputPost" accept="image/*" style="display:none">
+    <input type="file" id="inputCamPost" accept="image/*" capture="environment" style="display:none">
+    <img id="fotoPost" class="img-full" alt="Tu foto">
+    <a id="fotoDownPost" class="img-down" style="display:none" download="mi_foto.jpg">⬇️ Descargar mi foto</a>
     <div class="btns">
       <button class="cbtn" onclick="copiarEl('outCaption',this)">Copiar caption</button>
       <button class="cbtn" onclick="copiarEl('outHash',this)">Copiar hashtags</button>
@@ -127,6 +135,7 @@ textarea{height:75px;resize:vertical}
     </div>
   </div>
 
+  <!-- RESULTADO REEL -->
   <div class="result" id="resultReel">
     <div class="rlbl">Guión del Reel</div>
     <div id="storyboard"></div>
@@ -135,15 +144,21 @@ textarea{height:75px;resize:vertical}
     <div style="background:#fff8e1;border-radius:8px;padding:10px;margin-top:10px;font-size:13px;color:#7a5500">
       💡 <strong>Tip CapCut:</strong> <span id="outCapcutTip"></span>
     </div>
-    <div class="rlbl">📸 Imágenes para portada — tocá para seleccionar</div>
-    <div class="img-loading" id="imgLoadingReel" style="display:none">⏳ Buscando imágenes...</div>
+    <div class="rlbl">📸 Imagen de portada sugerida</div>
+    <div class="img-loading" id="imgLoadReel">⏳ Buscando imágenes...</div>
     <div class="img-grid" id="imgGridReel"></div>
-    <div class="img-selected-wrap" id="imgSelectedWrapReel">
-      <div class="rlbl">Imagen seleccionada</div>
-      <img id="imgSelectedReel" alt="Portada seleccionada">
-      <div class="img-credit">Foto de Unsplash</div>
-      <a id="imgDescargarReel" download="portada_reel.jpg" style="display:block;margin-top:6px;text-align:center;font-size:13px;color:#cc1c1c;font-weight:700">⬇️ Descargar portada</a>
+    <img id="imgFullReel" class="img-full" alt="Portada seleccionada">
+    <div class="img-credit" id="imgCreditReel"></div>
+    <a id="imgDownReel" class="img-down" style="display:none" download="portada_reel.jpg">⬇️ Descargar imagen seleccionada</a>
+    <div class="rlbl" style="margin-top:14px">📷 O subí tu propia portada</div>
+    <div class="foto-btns">
+      <button class="foto-btn foto-galeria" onclick="document.getElementById('inputReel').click()">🖼️ Desde galería</button>
+      <button class="foto-btn foto-camara" onclick="document.getElementById('inputCamReel').click()">📷 Tomar foto</button>
     </div>
+    <input type="file" id="inputReel" accept="image/*" style="display:none">
+    <input type="file" id="inputCamReel" accept="image/*" capture="environment" style="display:none">
+    <img id="fotoReel" class="img-full" alt="Tu portada">
+    <a id="fotoDownReel" class="img-down" style="display:none" download="mi_portada.jpg">⬇️ Descargar mi portada</a>
     <div class="btns">
       <button class="cbtn" onclick="copiarEl('outReelCaption',this)">Copiar caption</button>
       <button class="cbtn" onclick="copiarEl('outReelHash',this)">Copiar hashtags</button>
@@ -151,6 +166,7 @@ textarea{height:75px;resize:vertical}
     </div>
   </div>
 
+  <!-- RESULTADO CANVA -->
   <div class="result" id="resultCanva">
     <div class="rlbl">Guía paso a paso — Canva</div>
     <div id="canvaSteps"></div>
@@ -163,31 +179,34 @@ textarea{height:75px;resize:vertical}
 <script>
 var red='Instagram', modulo='post', tono='Dinámico';
 var WORKER='https://dawn-flower-2029.lili-kos28.workers.dev';
-var currentSearchTerm='';
 
 function $(id){return document.getElementById(id);}
 
 document.querySelectorAll('#redChips .chip').forEach(function(c){
-  c.onclick=function(){
-    red=c.dataset.red;
-    document.querySelectorAll('#redChips .chip').forEach(function(x){x.className='chip';});
-    c.className='chip on';
-  };
+  c.onclick=function(){red=c.dataset.red;document.querySelectorAll('#redChips .chip').forEach(function(x){x.className='chip';});c.className='chip on';};
 });
-
 document.querySelectorAll('#tonoTags .tag').forEach(function(t){
-  t.onclick=function(){
-    document.querySelectorAll('#tonoTags .tag').forEach(function(x){x.className='tag';});
-    t.className='tag on';
-    tono=t.textContent.trim();
-  };
+  t.onclick=function(){document.querySelectorAll('#tonoTags .tag').forEach(function(x){x.className='tag';});t.className='tag on';tono=t.textContent.trim();};
 });
-
 $('modPost').onclick=function(){selMod('post');};
 $('modReel').onclick=function(){selMod('reel');};
 $('modCanva').onclick=function(){selMod('canva');};
 $('genBtn').onclick=generar;
-$('btnBuscarImg').onclick=function(){buscarImagenes(currentSearchTerm,'post');};
+
+$('inputPost').onchange=function(e){subirFoto(e,'fotoPost','fotoDownPost');};
+$('inputCamPost').onchange=function(e){subirFoto(e,'fotoPost','fotoDownPost');};
+$('inputReel').onchange=function(e){subirFoto(e,'fotoReel','fotoDownReel');};
+$('inputCamReel').onchange=function(e){subirFoto(e,'fotoReel','fotoDownReel');};
+
+function subirFoto(e,imgId,downId){
+  var file=e.target.files[0]; if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    $(imgId).src=ev.target.result; $(imgId).style.display='block';
+    $(downId).href=ev.target.result; $(downId).style.display='block';
+  };
+  reader.readAsDataURL(file);
+}
 
 function selMod(m){
   modulo=m;
@@ -196,63 +215,44 @@ function selMod(m){
   $('modCanva').className='mod'+(m==='canva'?' on':'');
 }
 
+function buscarImagenes(query, gridId, loadId, fullId, creditId, downId){
+  $(loadId).style.display='block';
+  $(gridId).innerHTML='';
+  $(fullId).style.display='none';
+  $(downId).style.display='none';
+  fetch(WORKER+'/images?q='+encodeURIComponent(query))
+  .then(function(r){return r.json();})
+  .then(function(data){
+    $(loadId).style.display='none';
+    (data.images||[]).forEach(function(img){
+      var el=document.createElement('img');
+      el.src=img.thumb; el.alt='Imagen';
+      el.onclick=function(){
+        document.querySelectorAll('#'+gridId+' img').forEach(function(x){x.classList.remove('sel');});
+        el.classList.add('sel');
+        $(fullId).src=img.url; $(fullId).style.display='block';
+        $(creditId).textContent='Foto por '+img.user+' en Pixabay';
+        $(downId).href=img.url; $(downId).style.display='block';
+      };
+      $(gridId).appendChild(el);
+    });
+    if(!data.images||!data.images.length){
+      $(gridId).innerHTML='<p style="font-size:13px;color:#888;grid-column:1/-1">No se encontraron imágenes. Subí tu propia foto.</p>';
+    }
+  })
+  .catch(function(){$(loadId).style.display='none';});
+}
+
 function parseJSON(raw){
   raw=raw.replace(/```json|```/g,'').trim();
   try{return JSON.parse(raw);}catch(e){}
-  try{
-    var clean=raw.replace(/[\u0000-\u001F]/g,' ').replace(/\n/g,' ').replace(/\r/g,'').replace(/\t/g,' ');
-    return JSON.parse(clean);
-  }catch(e){}
-  var result={};
-  ['caption','hashtags','imagen','capcut_tip','keywords'].forEach(function(f){
+  try{return JSON.parse(raw.replace(/[\u0000-\u001F]/g,' ').replace(/\n/g,' '));}catch(e){}
+  var r={};
+  ['caption','hashtags','capcut_tip','keywords'].forEach(function(f){
     var m=raw.match(new RegExp('"'+f+'"\\s*:\\s*"([\\s\\S]*?)"(?=\\s*[,}])'));
-    if(m)result[f]=m[1];
+    if(m)r[f]=m[1];
   });
-  return result;
-}
-
-function buscarImagenes(query, tipo){
-  var gridEl = tipo==='post' ? $('imgGrid') : $('imgGridReel');
-  var loadingEl = tipo==='post' ? $('imgLoading') : $('imgLoadingReel');
-  
-  gridEl.innerHTML='';
-  loadingEl.style.display='block';
-  
-  // Usar múltiples fuentes de imágenes via Unsplash Source
-  var queries = [query, query+' product', query+' professional'];
-  var urls = queries.map(function(q, i) {
-    return 'https://source.unsplash.com/400x400/?' + encodeURIComponent(q) + '&sig=' + (Date.now()+i);
-  });
-  
-  loadingEl.style.display='none';
-  
-  urls.forEach(function(url, i){
-    var img = document.createElement('img');
-    img.src = url;
-    img.alt = 'Imagen ' + (i+1);
-    img.onclick = function(){
-      document.querySelectorAll('#'+gridEl.id+' img').forEach(function(x){x.classList.remove('selected');});
-      img.classList.add('selected');
-      seleccionarImagen(url, tipo);
-    };
-    gridEl.appendChild(img);
-  });
-  
-  if(tipo==='post'){
-    $('btnBuscarImg').style.display='block';
-  }
-}
-
-function seleccionarImagen(url, tipo){
-  if(tipo==='post'){
-    $('imgSelected').src=url;
-    $('imgDescargar').href=url;
-    $('imgSelectedWrap').style.display='block';
-  } else {
-    $('imgSelectedReel').src=url;
-    $('imgDescargarReel').href=url;
-    $('imgSelectedWrapReel').style.display='block';
-  }
+  return r;
 }
 
 function generar(){
@@ -261,38 +261,21 @@ function generar(){
   var ciudad=$('ciudad').value.trim()||'Argentina';
   if(!tipo){showErr('Elegí un tipo de contenido primero.');return;}
   hideErr();
-
   var producto=$('producto').value.trim();
   var prompt='';
 
   if(modulo==='post'){
-    prompt='Sos un community manager argentino experto. Crea contenido para '+red+' para el negocio "'+negocio+'" ubicado en '+ciudad+'.\n'
-      +'Tipo de publicacion: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
-      +'IMPORTANTE: Responde UNICAMENTE con un objeto JSON valido. Sin texto adicional.\n'
-      +'Formato exacto:\n'
-      +'{"caption":"texto del caption con emojis y llamada a la accion en espanol argentino","hashtags":"#hashtag1 #hashtag2 #hashtag3 #hashtag4 #hashtag5","keywords":"2 o 3 palabras en ingles para buscar imagen relacionada"}';
+    prompt='Sos community manager argentino de "'+negocio+'" en '+ciudad+'. Creá contenido para '+red+'. Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\nResponde SOLO JSON: {"caption":"...con emojis y llamada a la accion en espanol argentino...","hashtags":"#tag1 #tag2 #tag3 #tag4 #tag5","keywords":"2-3 palabras en ingles para buscar imagen"}';
   } else if(modulo==='reel'){
-    prompt='Sos un experto en contenido para redes sociales. Crea un guion de Reel para '+red+' para "'+negocio+'" en '+ciudad+'.\n'
-      +'Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
-      +'IMPORTANTE: Responde UNICAMENTE con JSON valido. Sin texto adicional.\n'
-      +'Formato exacto:\n'
-      +'{"escenas":[{"numero":1,"duracion":"0-3s","texto_pantalla":"texto corto","visual":"descripcion visual","audio":"musica sugerida"},{"numero":2,"duracion":"3-8s","texto_pantalla":"texto","visual":"descripcion","audio":"musica"},{"numero":3,"duracion":"8-15s","texto_pantalla":"texto","visual":"descripcion","audio":"musica"}],"caption":"caption en espanol argentino con emojis","hashtags":"#tag1 #tag2 #tag3 #tag4 #tag5","capcut_tip":"consejo para CapCut","keywords":"2 o 3 palabras en ingles para buscar imagen de portada"}';
+    prompt='Sos experto en Reels para "'+negocio+'" en '+ciudad+'. Creá guion para '+red+'. Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\nResponde SOLO JSON: {"escenas":[{"numero":1,"duracion":"0-3s","texto_pantalla":"...","visual":"...","audio":"..."},{"numero":2,"duracion":"3-8s","texto_pantalla":"...","visual":"...","audio":"..."},{"numero":3,"duracion":"8-15s","texto_pantalla":"...","visual":"...","audio":"..."}],"caption":"...con emojis...","hashtags":"#tag1 #tag2 #tag3 #tag4 #tag5","capcut_tip":"...consejo para CapCut...","keywords":"2-3 palabras en ingles para imagen de portada"}';
   } else {
-    prompt='Sos un experto en Canva. Crea una guia paso a paso para crear una imagen en Canva para "'+negocio+'" ('+red+'). Tipo: '+tipo+'.'+(producto?' Sobre: '+producto+'.':'')+'\n'
-      +'IMPORTANTE: Responde UNICAMENTE con JSON valido. Sin texto adicional.\n'
-      +'Formato exacto:\n'
-      +'{"pasos":[{"numero":1,"titulo":"Abrir Canva","detalle":"instruccion detallada"},{"numero":2,"titulo":"Elegir plantilla","detalle":"instruccion"},{"numero":3,"titulo":"Editar texto","detalle":"instruccion"},{"numero":4,"titulo":"Agregar imagen","detalle":"instruccion"},{"numero":5,"titulo":"Descargar","detalle":"instruccion"}],"consejo":"tip final importante"}';
+    prompt='Guia Canva para "'+negocio+'" ('+red+'). Tipo: '+tipo+'.'+(producto?' Sobre: '+producto+'.':'')+'\nResponde SOLO JSON: {"pasos":[{"numero":1,"titulo":"...","detalle":"..."},{"numero":2,"titulo":"...","detalle":"..."},{"numero":3,"titulo":"...","detalle":"..."},{"numero":4,"titulo":"...","detalle":"..."},{"numero":5,"titulo":"...","detalle":"..."}],"consejo":"..."}';
   }
 
-  var btn=$('genBtn');
-  btn.disabled=true; btn.textContent='Generando…';
+  var btn=$('genBtn'); btn.disabled=true; btn.textContent='Generando…';
   ['resultPost','resultReel','resultCanva'].forEach(function(id){$(id).style.display='none';});
 
-  fetch(WORKER,{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({prompt:prompt})
-  })
+  fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt})})
   .then(function(r){return r.json();})
   .then(function(data){
     if(data.error){showErr('Error: '+data.error);return;}
@@ -300,26 +283,21 @@ function generar(){
     if(modulo==='post'){
       $('outCaption').textContent=p.caption||'';
       $('outHash').textContent=p.hashtags||'';
-      $('imgGrid').innerHTML='';
-      $('imgSelectedWrap').style.display='none';
-      currentSearchTerm=p.keywords||(producto||negocio);
-      buscarImagenes(currentSearchTerm,'post');
+      $('fotoPost').style.display='none'; $('fotoDownPost').style.display='none';
+      buscarImagenes(p.keywords||(producto||negocio),'imgGridPost','imgLoadPost','imgFullPost','imgCreditPost','imgDownPost');
       $('resultPost').style.display='block';
     } else if(modulo==='reel'){
       var sb=$('storyboard'); sb.innerHTML='';
       (p.escenas||[]).forEach(function(e){
         var d=document.createElement('div'); d.className='step';
-        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Escena '+e.numero+' — '+e.duracion+'</strong><br>'
-          +'<b>Texto:</b> '+e.texto_pantalla+'<br><b>Visual:</b> '+e.visual+'<br><b>Audio:</b> '+e.audio;
+        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Escena '+e.numero+' — '+e.duracion+'</strong><br><b>Texto:</b> '+e.texto_pantalla+'<br><b>Visual:</b> '+e.visual+'<br><b>Audio:</b> '+e.audio;
         sb.appendChild(d);
       });
       $('outReelCaption').textContent=p.caption||'';
       $('outReelHash').textContent=p.hashtags||'';
       $('outCapcutTip').textContent=p.capcut_tip||'';
-      $('imgGridReel').innerHTML='';
-      $('imgSelectedWrapReel').style.display='none';
-      var reelKeywords=p.keywords||(producto||negocio);
-      buscarImagenes(reelKeywords,'reel');
+      $('fotoReel').style.display='none'; $('fotoDownReel').style.display='none';
+      buscarImagenes(p.keywords||(producto||negocio),'imgGridReel','imgLoadReel','imgFullReel','imgCreditReel','imgDownReel');
       $('resultReel').style.display='block';
     } else {
       var cs=$('canvaSteps'); cs.innerHTML='';
@@ -328,22 +306,16 @@ function generar(){
         d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Paso '+paso.numero+': '+paso.titulo+'</strong><br>'+paso.detalle;
         cs.appendChild(d);
       });
-      if(p.consejo){
-        var tip=document.createElement('div');
-        tip.style.cssText='background:#fff8e1;border-radius:8px;padding:10px;margin-top:8px;font-size:13px;color:#7a5500';
-        tip.innerHTML='💡 <b>Consejo:</b> '+p.consejo;
-        cs.appendChild(tip);
-      }
+      if(p.consejo){var tip=document.createElement('div');tip.style.cssText='background:#fff8e1;border-radius:8px;padding:10px;margin-top:8px;font-size:13px;color:#7a5500';tip.innerHTML='💡 <b>Consejo:</b> '+p.consejo;cs.appendChild(tip);}
       $('resultCanva').style.display='block';
     }
   })
-  .catch(function(e){showErr('Error de conexion: '+e.message);})
+  .catch(function(e){showErr('Error: '+e.message);})
   .finally(function(){btn.disabled=false;btn.textContent='Generar contenido';});
 }
 
 function showErr(msg){var e=$('err');e.textContent=msg;e.style.display='block';}
 function hideErr(){$('err').style.display='none';}
-
 function copiarEl(id,btn){
   navigator.clipboard.writeText($(id).textContent);
   var orig=btn.textContent; btn.textContent='Copiado!';
