@@ -4,73 +4,86 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SocialBot Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:#f5f5f5;color:#222;padding:16px}
-.wrap{max-width:680px;margin:0 auto}
-.header{display:flex;align-items:center;gap:12px;margin-bottom:20px;background:#cc1c1c;padding:14px 16px;border-radius:12px}
-.logo{width:42px;height:42px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:#cc1c1c;flex-shrink:0}
-.header h1{color:#fff;font-size:18px;font-weight:700}
-.header p{color:rgba(255,255,255,.8);font-size:12px}
-.card{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;box-shadow:0 1px 4px rgba(0,0,0,.06)}
-.lbl{font-size:12px;color:#666;margin-bottom:6px;font-weight:700;display:block}
-.chips{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
-.chip{padding:5px 14px;border-radius:20px;border:1px solid #ccc;background:#fff;color:#555;font-size:12px;cursor:pointer}
-.chip.on{background:#cc1c1c;color:#fff;border-color:#cc1c1c}
-select,textarea,input[type=text]{width:100%;padding:9px;border:1px solid #ddd;border-radius:8px;font-size:14px;margin-bottom:14px;font-family:Arial,sans-serif;background:#fff}
-textarea{height:75px;resize:vertical}
-.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
-.tag{padding:5px 12px;border-radius:20px;border:1px solid #ddd;background:#fff;color:#555;font-size:12px;cursor:pointer}
-.tag.on{background:#fff3cd;border-color:#e6a817;color:#7a5500}
-.mods{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
-.mod{border:1px solid #ddd;border-radius:10px;padding:12px 8px;text-align:center;cursor:pointer;background:#fff;font-size:12px;color:#555}
-.mod.on{border-color:#cc1c1c;background:#fff5f5;color:#cc1c1c;font-weight:700}
-.btn{width:100%;padding:12px;border-radius:10px;border:none;font-size:15px;font-weight:700;cursor:pointer;background:#cc1c1c;color:#fff;margin-bottom:8px}
-.btn:disabled{opacity:0.5;cursor:not-allowed}
-.result{background:#fff;border-radius:12px;padding:16px;margin-bottom:12px;border-left:4px solid #cc1c1c;display:none}
-.rlbl{font-size:11px;font-weight:700;color:#999;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px;margin-top:14px}
+body{font-family:'Inter',sans-serif;background:#0d0d1a;color:#fff;min-height:100vh}
+.hero{background:linear-gradient(135deg,#1a0530 0%,#0d1b4b 50%,#1a0a0a 100%);padding:40px 20px 32px;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(204,28,28,.2),transparent 60%),radial-gradient(circle at 20% 70%,rgba(230,168,23,.1),transparent 50%);pointer-events:none}
+.hero-logo{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#cc1c1c,#e6a817);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;margin:0 auto 16px;position:relative;z-index:1;box-shadow:0 0 30px rgba(204,28,28,.4)}
+.hero h1{font-size:34px;font-weight:800;background:linear-gradient(135deg,#fff,#e6a817);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:8px;position:relative;z-index:1}
+.hero p{font-size:15px;color:rgba(255,255,255,.55);position:relative;z-index:1}
+.badge{display:inline-block;background:rgba(204,28,28,.2);border:1px solid rgba(204,28,28,.4);color:#ff6b6b;font-size:12px;font-weight:600;padding:4px 12px;border-radius:20px;margin-bottom:14px;position:relative;z-index:1}
+.wrap{max-width:680px;margin:0 auto;padding:24px 16px}
+.card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;margin-bottom:16px}
+.lbl{font-size:12px;color:rgba(255,255,255,.5);margin-bottom:8px;font-weight:600;display:block;text-transform:uppercase;letter-spacing:.06em}
+.chips{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.chip{padding:6px 16px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.6);font-size:13px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.chip.on{background:linear-gradient(135deg,#cc1c1c,#a01515);color:#fff;border-color:transparent;box-shadow:0 0 20px rgba(204,28,28,.3)}
+.chip:hover{border-color:rgba(255,255,255,.3);color:#fff}
+select,textarea,input[type=text]{width:100%;padding:10px 14px;border:1px solid rgba(255,255,255,.1);border-radius:10px;font-size:14px;margin-bottom:16px;font-family:'Inter',sans-serif;background:rgba(255,255,255,.06);color:#fff;outline:none;transition:border-color .2s}
+select option{background:#1a1a2e;color:#fff}
+select:focus,textarea:focus,input:focus{border-color:rgba(204,28,28,.5)}
+textarea{height:80px;resize:vertical}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.tag{padding:5px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.5);font-size:12px;cursor:pointer;transition:all .2s;font-family:'Inter',sans-serif}
+.tag.on{background:rgba(230,168,23,.15);border-color:rgba(230,168,23,.4);color:#e6a817}
+.mods{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px}
+.mod{border:1px solid rgba(255,255,255,.1);border-radius:12px;padding:14px 8px;text-align:center;cursor:pointer;background:rgba(255,255,255,.03);font-size:12px;color:rgba(255,255,255,.5);transition:all .2s;font-family:'Inter',sans-serif}
+.mod:hover{border-color:rgba(204,28,28,.4);color:#fff}
+.mod.on{border-color:#cc1c1c;background:rgba(204,28,28,.1);color:#ff6b6b;font-weight:700;box-shadow:0 0 20px rgba(204,28,28,.15)}
+.mod .ico{font-size:22px;display:block;margin-bottom:6px}
+.btn{width:100%;padding:14px;border-radius:12px;border:none;font-size:15px;font-weight:700;cursor:pointer;background:linear-gradient(135deg,#cc1c1c,#a01515);color:#fff;font-family:'Inter',sans-serif;margin-bottom:8px;transition:all .2s;box-shadow:0 4px 20px rgba(204,28,28,.3)}
+.btn:hover{transform:translateY(-1px);box-shadow:0 6px 25px rgba(204,28,28,.4)}
+.btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+.result{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:20px;margin-bottom:16px;border-left:3px solid #cc1c1c;display:none}
+.rlbl{font-size:11px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px;margin-top:16px}
 .rlbl:first-child{margin-top:0}
-.rtext{font-size:14px;color:#222;line-height:1.7;white-space:pre-wrap}
-.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.cbtn{padding:7px 14px;border-radius:8px;border:1px solid #ddd;background:#fff;font-size:12px;color:#555;cursor:pointer}
-.err{color:#cc1c1c;font-size:13px;margin-bottom:10px;padding:8px;background:#fff5f5;border-radius:6px;display:none}
-.step{background:#f8f8f8;border-radius:8px;padding:10px;margin-bottom:8px;font-size:13px;line-height:1.7;border-left:3px solid #cc1c1c}
+.rtext{font-size:14px;color:rgba(255,255,255,.9);line-height:1.8;white-space:pre-wrap}
+.btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.cbtn{padding:8px 16px;border-radius:8px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);font-size:12px;color:rgba(255,255,255,.7);cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.cbtn:hover{background:rgba(255,255,255,.1);color:#fff}
+.err{color:#ff6b6b;font-size:13px;margin-bottom:12px;padding:10px 14px;background:rgba(204,28,28,.1);border:1px solid rgba(204,28,28,.3);border-radius:8px;display:none}
+.step{background:rgba(255,255,255,.04);border-radius:10px;padding:12px;margin-bottom:8px;font-size:13px;line-height:1.7;border-left:3px solid #e6a817;color:rgba(255,255,255,.85)}
 .img-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px}
-.img-grid img{width:100%;height:110px;object-fit:cover;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:border-color .15s}
-.img-grid img:hover{border-color:#cc1c1c}
-.img-grid img.sel{border-color:#cc1c1c;box-shadow:0 0 0 2px #cc1c1c}
-.img-full{width:100%;border-radius:10px;margin-top:10px;display:none}
-.img-credit{font-size:11px;color:#aaa;text-align:right;margin-top:4px}
-.img-down{display:block;text-align:center;margin-top:6px;font-size:13px;color:#cc1c1c;font-weight:700;text-decoration:none}
-.img-loading{text-align:center;color:#888;font-size:13px;padding:16px;display:none}
-.foto-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}
-.foto-btn{padding:10px;border-radius:8px;border:none;font-size:13px;font-weight:700;cursor:pointer}
-.foto-galeria{background:#f0f0f0;color:#333}
-.foto-camara{background:#1a7cc9;color:#fff}
+.img-grid img{width:100%;height:110px;object-fit:cover;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:all .2s;opacity:.8}
+.img-grid img:hover{opacity:1;border-color:rgba(204,28,28,.6)}
+.img-grid img.sel{border-color:#cc1c1c;opacity:1;box-shadow:0 0 15px rgba(204,28,28,.3)}
+.img-full{width:100%;border-radius:12px;margin-top:10px;display:none}
+.img-credit{font-size:11px;color:rgba(255,255,255,.3);text-align:right;margin-top:4px}
+.img-down{display:block;text-align:center;margin-top:8px;font-size:13px;color:#e6a817;font-weight:600;text-decoration:none}
+.img-loading{text-align:center;color:rgba(255,255,255,.4);font-size:13px;padding:20px;display:none}
+.foto-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.foto-btn{padding:11px;border-radius:10px;border:none;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
+.foto-galeria{background:rgba(255,255,255,.08);color:rgba(255,255,255,.8);border:1px solid rgba(255,255,255,.15)}
+.foto-galeria:hover{background:rgba(255,255,255,.12)}
+.foto-camara{background:linear-gradient(135deg,#1a7cc9,#0f5a96);color:#fff;box-shadow:0 4px 15px rgba(26,124,201,.3)}
+.tip-box{background:rgba(230,168,23,.08);border:1px solid rgba(230,168,23,.2);border-radius:10px;padding:12px;margin-top:10px;font-size:13px;color:rgba(255,255,255,.8)}
+.tip-box strong{color:#e6a817}
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="header">
-    <div class="logo">S</div>
-    <div>
-      <h1>SocialBot Pro</h1>
-      <p>Robot Community Manager con IA</p>
-    </div>
-  </div>
 
+<div class="hero">
+  <div class="badge">✨ Robot Community Manager con IA</div>
+  <div class="hero-logo">S</div>
+  <h1>SocialBot Pro</h1>
+  <p>Generá contenido profesional para tus redes en segundos</p>
+</div>
+
+<div class="wrap">
   <div class="card">
     <span class="lbl">Red social</span>
     <div class="chips" id="redChips">
-      <button class="chip on" data-red="Instagram">Instagram</button>
-      <button class="chip" data-red="Facebook">Facebook</button>
+      <button class="chip on" data-red="Instagram">📸 Instagram</button>
+      <button class="chip" data-red="Facebook">📘 Facebook</button>
     </div>
 
     <span class="lbl">Qué querés generar</span>
     <div class="mods">
-      <div class="mod on" id="modPost">📝<br>Post</div>
-      <div class="mod" id="modReel">🎬<br>Reel</div>
-      <div class="mod" id="modCanva">🖼️<br>Guía Canva</div>
+      <div class="mod on" id="modPost"><span class="ico">📝</span>Post</div>
+      <div class="mod" id="modReel"><span class="ico">🎬</span>Reel</div>
+      <div class="mod" id="modCanva"><span class="ico">🖼️</span>Guía Canva</div>
     </div>
 
     <span class="lbl">Tipo de contenido</span>
@@ -106,20 +119,19 @@ textarea{height:75px;resize:vertical}
     </div>
 
     <div class="err" id="err"></div>
-    <button class="btn" id="genBtn">Generar contenido</button>
+    <button class="btn" id="genBtn">✨ Generar contenido</button>
   </div>
 
-  <!-- RESULTADO POST -->
   <div class="result" id="resultPost">
     <div class="rlbl">Caption</div><div class="rtext" id="outCaption"></div>
     <div class="rlbl">Hashtags</div><div class="rtext" id="outHash"></div>
-    <div class="rlbl">📸 Imágenes sugeridas — tocá para seleccionar</div>
-    <div class="img-loading" id="imgLoadPost">⏳ Buscando imágenes...</div>
+    <div class="rlbl">📸 Imágenes sugeridas</div>
+    <div class="img-loading" id="imgLoadPost">⏳ Buscando imágenes en Pixabay...</div>
     <div class="img-grid" id="imgGridPost"></div>
     <img id="imgFullPost" class="img-full" alt="Imagen seleccionada">
     <div class="img-credit" id="imgCreditPost"></div>
-    <a id="imgDownPost" class="img-down" style="display:none" download="imagen_post.jpg">⬇️ Descargar imagen seleccionada</a>
-    <div class="rlbl" style="margin-top:14px">📷 O subí tu propia foto</div>
+    <a id="imgDownPost" class="img-down" style="display:none" download="imagen_post.jpg">⬇️ Descargar imagen</a>
+    <div class="rlbl" style="margin-top:16px">📷 O subí tu propia foto</div>
     <div class="foto-btns">
       <button class="foto-btn foto-galeria" onclick="document.getElementById('inputPost').click()">🖼️ Desde galería</button>
       <button class="foto-btn foto-camara" onclick="document.getElementById('inputCamPost').click()">📷 Tomar foto</button>
@@ -131,26 +143,23 @@ textarea{height:75px;resize:vertical}
     <div class="btns">
       <button class="cbtn" onclick="copiarEl('outCaption',this)">Copiar caption</button>
       <button class="cbtn" onclick="copiarEl('outHash',this)">Copiar hashtags</button>
-      <button class="cbtn" onclick="generar()">Regenerar</button>
+      <button class="cbtn" onclick="generar()">🔄 Regenerar</button>
     </div>
   </div>
 
-  <!-- RESULTADO REEL -->
   <div class="result" id="resultReel">
-    <div class="rlbl">Guión del Reel</div>
+    <div class="rlbl">🎬 Guión del Reel</div>
     <div id="storyboard"></div>
     <div class="rlbl">Caption</div><div class="rtext" id="outReelCaption"></div>
     <div class="rlbl">Hashtags</div><div class="rtext" id="outReelHash"></div>
-    <div style="background:#fff8e1;border-radius:8px;padding:10px;margin-top:10px;font-size:13px;color:#7a5500">
-      💡 <strong>Tip CapCut:</strong> <span id="outCapcutTip"></span>
-    </div>
-    <div class="rlbl">📸 Imagen de portada sugerida</div>
+    <div class="tip-box"><strong>💡 Tip CapCut:</strong> <span id="outCapcutTip"></span></div>
+    <div class="rlbl">📸 Imagen de portada</div>
     <div class="img-loading" id="imgLoadReel">⏳ Buscando imágenes...</div>
     <div class="img-grid" id="imgGridReel"></div>
-    <img id="imgFullReel" class="img-full" alt="Portada seleccionada">
+    <img id="imgFullReel" class="img-full" alt="Portada">
     <div class="img-credit" id="imgCreditReel"></div>
-    <a id="imgDownReel" class="img-down" style="display:none" download="portada_reel.jpg">⬇️ Descargar imagen seleccionada</a>
-    <div class="rlbl" style="margin-top:14px">📷 O subí tu propia portada</div>
+    <a id="imgDownReel" class="img-down" style="display:none" download="portada_reel.jpg">⬇️ Descargar imagen</a>
+    <div class="rlbl" style="margin-top:16px">📷 O subí tu propia portada</div>
     <div class="foto-btns">
       <button class="foto-btn foto-galeria" onclick="document.getElementById('inputReel').click()">🖼️ Desde galería</button>
       <button class="foto-btn foto-camara" onclick="document.getElementById('inputCamReel').click()">📷 Tomar foto</button>
@@ -162,24 +171,22 @@ textarea{height:75px;resize:vertical}
     <div class="btns">
       <button class="cbtn" onclick="copiarEl('outReelCaption',this)">Copiar caption</button>
       <button class="cbtn" onclick="copiarEl('outReelHash',this)">Copiar hashtags</button>
-      <button class="cbtn" onclick="generar()">Regenerar</button>
+      <button class="cbtn" onclick="generar()">🔄 Regenerar</button>
     </div>
   </div>
 
-  <!-- RESULTADO CANVA -->
   <div class="result" id="resultCanva">
-    <div class="rlbl">Guía paso a paso — Canva</div>
+    <div class="rlbl">🖼️ Guía paso a paso — Canva</div>
     <div id="canvaSteps"></div>
     <div class="btns">
-      <button class="cbtn" onclick="generar()">Regenerar</button>
+      <button class="cbtn" onclick="generar()">🔄 Regenerar</button>
     </div>
   </div>
 </div>
 
 <script>
-var red='Instagram', modulo='post', tono='Dinámico';
+var red='Instagram',modulo='post',tono='Dinámico';
 var WORKER='https://dawn-flower-2029.lili-kos28.workers.dev';
-
 function $(id){return document.getElementById(id);}
 
 document.querySelectorAll('#redChips .chip').forEach(function(c){
@@ -192,19 +199,15 @@ $('modPost').onclick=function(){selMod('post');};
 $('modReel').onclick=function(){selMod('reel');};
 $('modCanva').onclick=function(){selMod('canva');};
 $('genBtn').onclick=generar;
-
 $('inputPost').onchange=function(e){subirFoto(e,'fotoPost','fotoDownPost');};
 $('inputCamPost').onchange=function(e){subirFoto(e,'fotoPost','fotoDownPost');};
 $('inputReel').onchange=function(e){subirFoto(e,'fotoReel','fotoDownReel');};
 $('inputCamReel').onchange=function(e){subirFoto(e,'fotoReel','fotoDownReel');};
 
 function subirFoto(e,imgId,downId){
-  var file=e.target.files[0]; if(!file)return;
+  var file=e.target.files[0];if(!file)return;
   var reader=new FileReader();
-  reader.onload=function(ev){
-    $(imgId).src=ev.target.result; $(imgId).style.display='block';
-    $(downId).href=ev.target.result; $(downId).style.display='block';
-  };
+  reader.onload=function(ev){$(imgId).src=ev.target.result;$(imgId).style.display='block';$(downId).href=ev.target.result;$(downId).style.display='block';};
   reader.readAsDataURL(file);
 }
 
@@ -215,30 +218,24 @@ function selMod(m){
   $('modCanva').className='mod'+(m==='canva'?' on':'');
 }
 
-function buscarImagenes(query, gridId, loadId, fullId, creditId, downId){
-  $(loadId).style.display='block';
-  $(gridId).innerHTML='';
-  $(fullId).style.display='none';
-  $(downId).style.display='none';
+function buscarImagenes(query,gridId,loadId,fullId,creditId,downId){
+  $(loadId).style.display='block';$(gridId).innerHTML='';$(fullId).style.display='none';$(downId).style.display='none';
   fetch(WORKER+'/images?q='+encodeURIComponent(query))
   .then(function(r){return r.json();})
   .then(function(data){
     $(loadId).style.display='none';
     (data.images||[]).forEach(function(img){
-      var el=document.createElement('img');
-      el.src=img.thumb; el.alt='Imagen';
+      var el=document.createElement('img');el.src=img.thumb;el.alt='Imagen';
       el.onclick=function(){
         document.querySelectorAll('#'+gridId+' img').forEach(function(x){x.classList.remove('sel');});
         el.classList.add('sel');
-        $(fullId).src=img.url; $(fullId).style.display='block';
+        $(fullId).src=img.url;$(fullId).style.display='block';
         $(creditId).textContent='Foto por '+img.user+' en Pixabay';
-        $(downId).href=img.url; $(downId).style.display='block';
+        $(downId).href=img.url;$(downId).style.display='block';
       };
       $(gridId).appendChild(el);
     });
-    if(!data.images||!data.images.length){
-      $(gridId).innerHTML='<p style="font-size:13px;color:#888;grid-column:1/-1">No se encontraron imágenes. Subí tu propia foto.</p>';
-    }
+    if(!data.images||!data.images.length){$(gridId).innerHTML='<p style="font-size:13px;color:rgba(255,255,255,.4);grid-column:1/-1;padding:10px">No se encontraron imágenes. Subí tu propia foto.</p>';}
   })
   .catch(function(){$(loadId).style.display='none';});
 }
@@ -247,78 +244,64 @@ function parseJSON(raw){
   raw=raw.replace(/```json|```/g,'').trim();
   try{return JSON.parse(raw);}catch(e){}
   try{return JSON.parse(raw.replace(/[\u0000-\u001F]/g,' ').replace(/\n/g,' '));}catch(e){}
-  var r={};
-  ['caption','hashtags','capcut_tip','keywords'].forEach(function(f){
-    var m=raw.match(new RegExp('"'+f+'"\\s*:\\s*"([\\s\\S]*?)"(?=\\s*[,}])'));
-    if(m)r[f]=m[1];
-  });
+  var r={};['caption','hashtags','capcut_tip','keywords'].forEach(function(f){var m=raw.match(new RegExp('"'+f+'"\\s*:\\s*"([\\s\\S]*?)"(?=\\s*[,}])'));if(m)r[f]=m[1];});
   return r;
 }
 
 function generar(){
-  var tipo=$('tipo').value;
-  var negocio=$('negocio').value.trim()||'mi negocio';
-  var ciudad=$('ciudad').value.trim()||'Argentina';
+  var tipo=$('tipo').value,negocio=$('negocio').value.trim()||'mi negocio',ciudad=$('ciudad').value.trim()||'Argentina';
   if(!tipo){showErr('Elegí un tipo de contenido primero.');return;}
   hideErr();
-  var producto=$('producto').value.trim();
-  var prompt='';
-
+  var producto=$('producto').value.trim(),prompt='';
   if(modulo==='post'){
     prompt='Sos community manager argentino de "'+negocio+'" en '+ciudad+'. Creá contenido para '+red+'. Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\nResponde SOLO JSON: {"caption":"...con emojis y llamada a la accion en espanol argentino...","hashtags":"#tag1 #tag2 #tag3 #tag4 #tag5","keywords":"2-3 palabras en ingles para buscar imagen"}';
   } else if(modulo==='reel'){
-    prompt='Sos experto en Reels para "'+negocio+'" en '+ciudad+'. Creá guion para '+red+'. Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\nResponde SOLO JSON: {"escenas":[{"numero":1,"duracion":"0-3s","texto_pantalla":"...","visual":"...","audio":"..."},{"numero":2,"duracion":"3-8s","texto_pantalla":"...","visual":"...","audio":"..."},{"numero":3,"duracion":"8-15s","texto_pantalla":"...","visual":"...","audio":"..."}],"caption":"...con emojis...","hashtags":"#tag1 #tag2 #tag3 #tag4 #tag5","capcut_tip":"...consejo para CapCut...","keywords":"2-3 palabras en ingles para imagen de portada"}';
+    prompt='Sos experto en Reels para "'+negocio+'" en '+ciudad+'. Creá guion para '+red+'. Tipo: '+tipo+'. Tono: '+tono+'.'+(producto?' Sobre: '+producto+'.':'')+'\nResponde SOLO JSON: {"escenas":[{"numero":1,"duracion":"0-3s","texto_pantalla":"...","visual":"...","audio":"..."},{"numero":2,"duracion":"3-8s","texto_pantalla":"...","visual":"...","audio":"..."},{"numero":3,"duracion":"8-15s","texto_pantalla":"...","visual":"...","audio":"..."}],"caption":"...con emojis...","hashtags":"#tag1 #tag2 #tag3 #tag4 #tag5","capcut_tip":"...consejo CapCut...","keywords":"2-3 palabras en ingles para imagen"}';
   } else {
     prompt='Guia Canva para "'+negocio+'" ('+red+'). Tipo: '+tipo+'.'+(producto?' Sobre: '+producto+'.':'')+'\nResponde SOLO JSON: {"pasos":[{"numero":1,"titulo":"...","detalle":"..."},{"numero":2,"titulo":"...","detalle":"..."},{"numero":3,"titulo":"...","detalle":"..."},{"numero":4,"titulo":"...","detalle":"..."},{"numero":5,"titulo":"...","detalle":"..."}],"consejo":"..."}';
   }
-
-  var btn=$('genBtn'); btn.disabled=true; btn.textContent='Generando…';
+  var btn=$('genBtn');btn.disabled=true;btn.textContent='✨ Generando…';
   ['resultPost','resultReel','resultCanva'].forEach(function(id){$(id).style.display='none';});
-
   fetch(WORKER,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt})})
   .then(function(r){return r.json();})
   .then(function(data){
     if(data.error){showErr('Error: '+data.error);return;}
     var p=parseJSON(data.result);
     if(modulo==='post'){
-      $('outCaption').textContent=p.caption||'';
-      $('outHash').textContent=p.hashtags||'';
-      $('fotoPost').style.display='none'; $('fotoDownPost').style.display='none';
+      $('outCaption').textContent=p.caption||'';$('outHash').textContent=p.hashtags||'';
+      $('fotoPost').style.display='none';$('fotoDownPost').style.display='none';
       buscarImagenes(p.keywords||(producto||negocio),'imgGridPost','imgLoadPost','imgFullPost','imgCreditPost','imgDownPost');
       $('resultPost').style.display='block';
     } else if(modulo==='reel'){
-      var sb=$('storyboard'); sb.innerHTML='';
+      var sb=$('storyboard');sb.innerHTML='';
       (p.escenas||[]).forEach(function(e){
-        var d=document.createElement('div'); d.className='step';
-        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Escena '+e.numero+' — '+e.duracion+'</strong><br><b>Texto:</b> '+e.texto_pantalla+'<br><b>Visual:</b> '+e.visual+'<br><b>Audio:</b> '+e.audio;
+        var d=document.createElement('div');d.className='step';
+        d.innerHTML='<strong style="color:#e6a817;font-size:11px;text-transform:uppercase">Escena '+e.numero+' — '+e.duracion+'</strong><br><b>Texto:</b> '+e.texto_pantalla+'<br><b>Visual:</b> '+e.visual+'<br><b>Audio:</b> '+e.audio;
         sb.appendChild(d);
       });
-      $('outReelCaption').textContent=p.caption||'';
-      $('outReelHash').textContent=p.hashtags||'';
-      $('outCapcutTip').textContent=p.capcut_tip||'';
-      $('fotoReel').style.display='none'; $('fotoDownReel').style.display='none';
+      $('outReelCaption').textContent=p.caption||'';$('outReelHash').textContent=p.hashtags||'';$('outCapcutTip').textContent=p.capcut_tip||'';
+      $('fotoReel').style.display='none';$('fotoDownReel').style.display='none';
       buscarImagenes(p.keywords||(producto||negocio),'imgGridReel','imgLoadReel','imgFullReel','imgCreditReel','imgDownReel');
       $('resultReel').style.display='block';
     } else {
-      var cs=$('canvaSteps'); cs.innerHTML='';
+      var cs=$('canvaSteps');cs.innerHTML='';
       (p.pasos||[]).forEach(function(paso){
-        var d=document.createElement('div'); d.className='step';
-        d.innerHTML='<strong style="color:#cc1c1c;font-size:11px;text-transform:uppercase">Paso '+paso.numero+': '+paso.titulo+'</strong><br>'+paso.detalle;
+        var d=document.createElement('div');d.className='step';
+        d.innerHTML='<strong style="color:#e6a817;font-size:11px;text-transform:uppercase">Paso '+paso.numero+': '+paso.titulo+'</strong><br>'+paso.detalle;
         cs.appendChild(d);
       });
-      if(p.consejo){var tip=document.createElement('div');tip.style.cssText='background:#fff8e1;border-radius:8px;padding:10px;margin-top:8px;font-size:13px;color:#7a5500';tip.innerHTML='💡 <b>Consejo:</b> '+p.consejo;cs.appendChild(tip);}
+      if(p.consejo){var tip=document.createElement('div');tip.className='tip-box';tip.innerHTML='💡 <strong>Consejo:</strong> '+p.consejo;cs.appendChild(tip);}
       $('resultCanva').style.display='block';
     }
   })
   .catch(function(e){showErr('Error: '+e.message);})
-  .finally(function(){btn.disabled=false;btn.textContent='Generar contenido';});
+  .finally(function(){btn.disabled=false;btn.textContent='✨ Generar contenido';});
 }
-
 function showErr(msg){var e=$('err');e.textContent=msg;e.style.display='block';}
 function hideErr(){$('err').style.display='none';}
 function copiarEl(id,btn){
   navigator.clipboard.writeText($(id).textContent);
-  var orig=btn.textContent; btn.textContent='Copiado!';
+  var orig=btn.textContent;btn.textContent='✓ Copiado!';
   setTimeout(function(){btn.textContent=orig;},1500);
 }
 </script>
