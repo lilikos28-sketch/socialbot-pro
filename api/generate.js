@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
-    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyC6rGwXNaeWcpLKkIEPVxNSMhxgzFTRos0', {
+    const r = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=AIzaSyBYUw66X5s8Ycet4K50HpYicF1cXfVWBLkKkIEPVxNSMhxgzFTRos0', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify(req.body)
