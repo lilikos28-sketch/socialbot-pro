@@ -5,14 +5,25 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
   try {
-    const key = process.env.GEMINI_KEY;
-    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`, {
+    const prompt = req.body?.contents?.[0]?.parts?.[0]?.text || '';
+    const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(req.body)
+      headers: {
+        'content-type': 'application/json',
+        'authorization': 'Bearer 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'
+      },
+      body: JSON.stringify({
+        model: 'llama-3.1-8b-instant',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 1200,
+        temperature: 0.8
+      })
     });
     const data = await r.json();
-    res.status(r.status).json(data);
+    const text = data.choices?.[0]?.message?.content || '';
+    res.status(200).json({
+      candidates: [{ content: { parts: [{ text }] } }]
+    });
   } catch(e) {
     res.status(500).json({ error: e.message });
   }
