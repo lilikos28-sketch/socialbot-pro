@@ -653,9 +653,12 @@ async function doRegister() {
   const pass = document.getElementById('regPass').value;
   document.getElementById('regError').textContent = '';
   if (pass.length < 6) { document.getElementById('regError').textContent = 'La contraseña debe tener al menos 6 caracteres.'; return; }
-  const { error } = await supabaseClient.auth.signUp({ email, password: pass, options: { data: { name } } });
+  const { error } = await supabaseClient.auth.signUp({ email, password: pass, options: { data: { name }, emailRedirectTo: 'https://socialbot-pro.vercel.app' } });
   if (error) { document.getElementById('regError').textContent = error.message; }
-  else { document.getElementById('regError').style.color = 'green'; document.getElementById('regError').textContent = '¡Cuenta creada! Revisá tu email para confirmar.'; }
+  else {
+    document.getElementById('regError').style.color = '#22C55E';
+    document.getElementById('regError').textContent = '¡Cuenta creada! Revisá tu email y confirmá para entrar.';
+  }
 }
 
 async function doLogout() {
@@ -883,9 +886,10 @@ HASHTAGS:
 
 // ── GEMINI API ──
 const GEMINI_KEY = 'AIzaSyCygZirqbVjecNsa0O_UdJ_0kckg2EHe84';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
 async function callAI(prompt) {
-  const res = await fetch(`/api/gemini/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
+  const res = await fetch(`${GEMINI_URL}?key=${GEMINI_KEY}`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
@@ -893,7 +897,10 @@ async function callAI(prompt) {
       generationConfig: { maxOutputTokens: 1200, temperature: 0.8 }
     })
   });
-  if (!res.ok) throw new Error('Gemini API error');
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'Gemini API error');
+  }
   const data = await res.json();
   return data.candidates[0].content.parts[0].text;
 }
@@ -1062,7 +1069,7 @@ Devolvé SOLO este JSON (sin markdown, sin explicaciones):
 
 Si no podés determinar algún campo, dejalo como string vacío "".`;
 
-    const res = await fetch(`/api/gemini/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
+    const res = await fetch(`${GEMINI_URL}?key=${GEMINI_KEY}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
