@@ -889,7 +889,7 @@ const GEMINI_KEY = 'AIzaSyCygZirqbVjecNsa0O_UdJ_0kckg2EHe84';
 const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
 async function callAI(prompt) {
-  const res = await fetch(`${GEMINI_URL}?key=${GEMINI_KEY}`, {
+  const res = await fetch('/api/generate', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
@@ -1069,7 +1069,7 @@ Devolvé SOLO este JSON (sin markdown, sin explicaciones):
 
 Si no podés determinar algún campo, dejalo como string vacío "".`;
 
-    const res = await fetch(`${GEMINI_URL}?key=${GEMINI_KEY}`, {
+    const res = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
