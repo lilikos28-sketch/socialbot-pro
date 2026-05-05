@@ -885,8 +885,8 @@ HASHTAGS:
 }
 
 // ── GEMINI API ──
-const GEMINI_KEY = 'AIzaSyC6rGwXNaeWcpLKkIEPVxNSMhxgzFTRos0';
-const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent';
+const GEMINI_KEY = 'AIzaSyCygZirqbVjecNsa0O_UdJ_0kckg2EHe84';
+const GEMINI_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent';
 
 async function callAI(prompt) {
   const res = await fetch('/api/generate', {
@@ -982,7 +982,7 @@ async function fetchImages(negocio) {
   if (!imgArea) return;
   try {
     const q = encodeURIComponent(negocio + ' ' + (document.getElementById('producto').value || ''));
-    const r = await fetch(`https://pixabay.com/api/?key=TU_PIXABAY_KEY&q=${q}&image_type=photo&per_page=6&safesearch=true&lang=es`);
+    const r = await fetch(`https://pixabay.com/api/?key=55685221-046b93a280740b50a74e20dba&q=${q}&image_type=photo&per_page=6&safesearch=true&lang=es`);
     const data = await r.json();
     if (!data.hits?.length) { imgArea.innerHTML = '<p style="color:var(--muted);font-size:13px;">No se encontraron imágenes. Subí la tuya.</p>'; return; }
     const imgs = data.hits.slice(0,3);
