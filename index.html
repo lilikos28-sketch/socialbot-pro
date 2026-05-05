@@ -885,7 +885,7 @@ HASHTAGS:
 const GEMINI_KEY = 'AIzaSyCygZirqbVjecNsa0O_UdJ_0kckg2EHe84';
 
 async function callAI(prompt) {
-  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
+  const res = await fetch(`/api/gemini/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
@@ -1062,7 +1062,7 @@ Devolvé SOLO este JSON (sin markdown, sin explicaciones):
 
 Si no podés determinar algún campo, dejalo como string vacío "".`;
 
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
+    const res = await fetch(`/api/gemini/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`, {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
