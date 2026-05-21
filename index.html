@@ -1,667 +1,714 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SocialBot Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet"/>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OfertasOnline — Hub Digital</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0B0C14;
-  --bg2: #13141F;
-  --bg3: #1A1B2A;
-  --purple: #6C47FF;
-  --purple-dark: #5535E0;
-  --purple-light: rgba(108,71,255,0.15);
-  --purple-glow: rgba(108,71,255,0.3);
-  --text: #FFFFFF;
-  --text2: #B0B3C6;
-  --text3: #6B6E85;
-  --border: rgba(255,255,255,0.08);
-  --border2: rgba(255,255,255,0.14);
-  --green: #22C55E;
-  --green-bg: rgba(34,197,94,0.12);
-  --red-err: #F87171;
-  --red-bg: rgba(248,113,113,0.1);
-  --amber: #FBBF24;
-  --radius: 16px;
-  --radius-sm: 10px;
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --r:#E8002D;--rl:#FF1A3E;
+  --y:#FFD100;
+  --bg:#0B0B0B;--bg2:#141414;--bg3:#1C1C1C;--bg4:#242424;
+  --bo:#2C2C2C;--bo2:#383838;
+  --tx:#F2F2F2;--tx2:#A0A0A0;--tx3:#606060;
+  --wh:#FFFFFF;
 }
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;overflow-x:hidden}
 
-/* ── TOPBAR ── */
-.topbar {
-  position: sticky; top: 0; z-index: 100;
-  background: rgba(11,12,20,0.85); backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 28px; height: 62px;
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;display:flex;align-items:center;padding:0 2rem;gap:2rem;background:rgba(11,11,11,.92);backdrop-filter:blur(16px);border-bottom:1px solid var(--bo)}
+.nav-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;color:var(--wh);margin-right:auto;display:flex;align-items:center;gap:6px}
+.nav-logo b{color:var(--r)}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--r);animation:blink 2s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.nav-links{display:flex;gap:1.5rem}
+.nav-links a{font-size:13px;color:var(--tx2);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:var(--wh)}
+
+.hero{min-height:100vh;display:grid;place-items:center;text-align:center;padding:5rem 1.5rem 3rem;position:relative;overflow:hidden}
+.hero-glow{position:absolute;top:0;left:50%;transform:translateX(-50%);width:900px;height:500px;background:radial-gradient(ellipse at center top,rgba(232,0,45,.18) 0%,transparent 65%);pointer-events:none}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(var(--bo) 1px,transparent 1px),linear-gradient(90deg,var(--bo) 1px,transparent 1px);background-size:60px 60px;opacity:.25;pointer-events:none}
+.hero-inner{position:relative;z-index:1}
+.hero-tag{display:inline-flex;align-items:center;gap:7px;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--r);border:1px solid rgba(232,0,45,.35);padding:5px 16px;border-radius:30px;margin-bottom:1.75rem}
+.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2.8rem,8vw,5.5rem);font-weight:800;line-height:1.02;letter-spacing:-.04em;color:var(--wh);max-width:850px}
+.hero h1 .acc{color:var(--r)}
+.hero-sub{font-size:1.1rem;color:var(--tx2);max-width:520px;margin:1.25rem auto 0;line-height:1.75;font-weight:300}
+.hero-stats{display:flex;gap:2.5rem;justify-content:center;margin:2.5rem 0;flex-wrap:wrap}
+.hstat{text-align:center}
+.hstat-n{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;color:var(--wh)}
+.hstat-n span{color:var(--r)}
+.hstat-l{font-size:11px;color:var(--tx3);text-transform:uppercase;letter-spacing:.07em;margin-top:2px}
+.hero-cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:7px;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;padding:12px 24px;border-radius:9px;border:none;cursor:pointer;text-decoration:none;transition:all .18s}
+.btn-r{background:var(--r);color:#fff}.btn-r:hover{background:var(--rl);transform:translateY(-1px)}
+.btn-o{background:transparent;color:var(--tx2);border:1px solid var(--bo2)}.btn-o:hover{color:var(--wh);border-color:var(--tx3)}
+
+.section{padding:5rem 1.5rem;max-width:1000px;margin:0 auto}
+.sec-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--r);margin-bottom:.6rem}
+.sec-title{font-family:'Syne',sans-serif;font-size:clamp(1.75rem,4vw,2.4rem);font-weight:700;color:var(--wh);margin-bottom:2rem;line-height:1.2}
+.sec-title b{color:var(--y)}
+
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:var(--bg2);border:1px solid var(--bo);border-radius:14px;padding:1.4rem;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--bo2);transform:translateY(-2px)}
+.card-ic{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:1rem}
+.ic-r{background:rgba(232,0,45,.15);border:1px solid rgba(232,0,45,.25)}
+.ic-y{background:rgba(255,209,0,.12);border:1px solid rgba(255,209,0,.2)}
+.ic-g{background:rgba(34,197,94,.1);border:1px solid rgba(34,197,94,.2)}
+.ic-b{background:rgba(59,130,246,.1);border:1px solid rgba(59,130,246,.2)}
+.ic-p{background:rgba(168,85,247,.1);border:1px solid rgba(168,85,247,.2)}
+.card-name{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;color:var(--wh);margin-bottom:.35rem}
+.card-desc{font-size:12.5px;color:var(--tx2);line-height:1.6}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:.75rem}
+.tag{font-size:10.5px;padding:2px 8px;border-radius:6px;border:1px solid var(--bo);color:var(--tx3)}
+.tag.done{background:rgba(34,197,94,.08);border-color:rgba(34,197,94,.2);color:#4ade80}
+.tag.pend{background:rgba(255,209,0,.06);border-color:rgba(255,209,0,.18);color:#facc15}
+
+.gen-wrap,.ads-wrap,.ht-wrap{background:var(--bg2);border:1px solid var(--bo);border-radius:16px;overflow:hidden}
+.gen-top{padding:1.4rem 1.75rem;border-bottom:1px solid var(--bo);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.gen-top-title{font-family:'Syne',sans-serif;font-size:.95rem;font-weight:700;color:var(--wh)}
+.gen-top-sub{font-size:12px;color:var(--tx3);margin-top:2px}
+.live-badge{font-size:10px;background:rgba(232,0,45,.15);color:var(--r);border:1px solid rgba(232,0,45,.3);padding:3px 10px;border-radius:20px;font-weight:600}
+.gen-body{padding:1.75rem}
+.fl{margin-bottom:1.2rem}
+.fl label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tx2);margin-bottom:.5rem}
+.fi{width:100%;background:var(--bg3);border:1px solid var(--bo);border-radius:8px;padding:10px 13px;font-size:13.5px;color:var(--tx);font-family:'DM Sans',sans-serif;outline:none;transition:border-color .2s}
+.fi:focus{border-color:rgba(232,0,45,.45)}
+.fi::placeholder{color:var(--tx3)}
+.tg{display:flex;gap:7px;flex-wrap:wrap}
+.tb{font-size:12.5px;padding:6px 13px;border-radius:7px;border:1px solid var(--bo);background:transparent;color:var(--tx2);cursor:pointer;transition:all .15s;font-family:'DM Sans',sans-serif}
+.tb.on{background:var(--r);border-color:var(--r);color:#fff;font-weight:500}
+.tb:hover:not(.on){border-color:var(--bo2);color:var(--tx)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.gen-go{width:100%;padding:13px;background:var(--r);color:#fff;border:none;border-radius:9px;font-size:14.5px;font-weight:600;cursor:pointer;font-family:'Syne',sans-serif;transition:background .18s;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:.5rem}
+.gen-go:hover:not(:disabled){background:var(--rl)}
+.gen-go:disabled{opacity:.45;cursor:not-allowed}
+.res{margin-top:1.4rem;background:var(--bg3);border:1px solid var(--bo);border-radius:12px;display:none;overflow:hidden}
+.res.show{display:block}
+.res-head{padding:.8rem 1.2rem;border-bottom:1px solid var(--bo);display:flex;align-items:center;justify-content:space-between}
+.res-lbl{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tx2)}
+.cp-btn{font-size:11.5px;padding:4px 11px;background:transparent;border:1px solid var(--bo);border-radius:6px;color:var(--tx2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.cp-btn:hover{border-color:var(--tx3);color:var(--tx)}
+.cp-btn.ok{border-color:var(--r);color:var(--r)}
+.ldots{display:none;gap:5px;padding:1.25rem;justify-content:center}
+.ldots.show{display:flex}
+.ldots span{width:6px;height:6px;background:var(--r);border-radius:50%;animation:bou .75s infinite}
+.ldots span:nth-child(2){animation-delay:.15s}
+.ldots span:nth-child(3){animation-delay:.3s}
+@keyframes bou{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.res-txt{padding:1.2rem;font-size:13.5px;line-height:1.8;color:var(--tx);white-space:pre-wrap;word-break:break-word}
+
+.ads-top{padding:1.4rem 1.75rem;border-bottom:1px solid var(--bo)}
+.ads-input-row{padding:1.25rem 1.75rem;border-bottom:1px solid var(--bo);display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.ads-cards{padding:1.75rem;display:flex;flex-direction:column;gap:12px}
+.ad-empty{text-align:center;padding:2rem;color:var(--tx3);font-size:13px}
+.ad-card{background:var(--bg3);border:1px solid var(--bo);border-radius:11px;padding:1.2rem 1.2rem 1rem;position:relative}
+.ad-card.best{border-color:rgba(232,0,45,.4);background:rgba(232,0,45,.04)}
+.ad-badge{position:absolute;top:12px;right:12px;font-size:10px;padding:3px 9px;border-radius:20px;font-weight:600}
+.ad-badge.winner{background:var(--r);color:#fff}
+.ad-badge.normal{background:var(--bg4);color:var(--tx2);border:1px solid var(--bo)}
+.ad-enfoque{font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--r);font-weight:600;margin-bottom:.35rem}
+.ad-titulo{font-family:'Syne',sans-serif;font-size:.88rem;font-weight:700;color:var(--wh);margin-bottom:.35rem;padding-right:90px}
+.ad-texto{font-size:12.5px;color:var(--tx2);line-height:1.6;margin-bottom:.75rem}
+.ad-cta-lbl{font-size:11px;color:var(--tx3);margin-bottom:.75rem}
+.ad-cta-lbl b{color:var(--tx2)}
+.ad-metrics{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:.75rem}
+.ad-met{flex:1;min-width:70px}
+.ad-met-lbl{font-size:10px;color:var(--tx3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.ad-met-val{font-size:13px;font-weight:600}
+.ad-bar{height:3px;background:var(--bg4);border-radius:3px;margin-top:3px;overflow:hidden}
+.ad-fill{height:100%;border-radius:3px}
+.ad-cp{font-size:11.5px;padding:5px 13px;background:transparent;border:1px solid var(--bo);border-radius:6px;color:var(--tx2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.ad-cp:hover{border-color:var(--bo2);color:var(--tx)}
+.ad-cp.ok{border-color:var(--r);color:var(--r)}
+
+.ht-list{padding:.75rem 1.75rem;display:flex;flex-direction:column}
+.ht-row{display:grid;grid-template-columns:22px 1fr 52px 80px 46px 52px;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid rgba(44,44,44,.4);cursor:pointer}
+.ht-row:last-child{border-bottom:none}
+.ht-row:hover .ht-tag{color:var(--wh)}
+.ht-n{font-size:10px;color:var(--tx3);font-weight:600;text-align:right}
+.ht-tag{font-size:12.5px;color:var(--tx);font-weight:500;transition:color .15s}
+.ht-vol-lbl{font-size:11px;color:var(--tx3);text-align:right}
+.ht-bar-w{height:3px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.ht-bar-f{height:100%;border-radius:3px}
+.vb{font-size:10px;padding:2px 7px;border-radius:5px;font-weight:600;text-align:center;white-space:nowrap}
+.vb.hi{background:rgba(34,197,94,.12);color:#4ade80}
+.vb.md{background:rgba(255,209,0,.1);color:#facc15}
+.vb.lo{background:rgba(148,163,184,.1);color:#94a3b8}
+.ht-cp{font-size:10.5px;padding:3px 9px;background:transparent;border:1px solid var(--bo);border-radius:5px;color:var(--tx3);cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all .15s}
+.ht-cp:hover{border-color:var(--bo2);color:var(--tx2)}
+.ht-cp.ok{border-color:var(--r);color:var(--r)}
+.ht-footer{padding:1rem 1.75rem;border-top:1px solid var(--bo);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px}
+.ht-combo-btn{font-size:12.5px;padding:7px 16px;background:var(--bg3);border:1px solid var(--bo);border-radius:7px;color:var(--tx2);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.ht-combo-btn:hover{border-color:var(--r);color:var(--wh)}
+.ht-combo-btn.ok{border-color:var(--r);color:var(--r)}
+
+.audit-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.audit-card{background:var(--bg2);border:1px solid var(--bo);border-radius:13px;padding:1.2rem}
+.audit-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.75rem}
+.audit-name{font-size:13px;font-weight:500;color:var(--tx)}
+.audit-score{font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700}
+.audit-bar{height:5px;background:var(--bg4);border-radius:5px;overflow:hidden;margin-bottom:.75rem}
+.audit-fill{height:100%;border-radius:5px}
+.audit-items{font-size:12px;color:var(--tx2);line-height:1.9}
+.audit-items li{list-style:none;display:flex;gap:6px}
+.audit-items li::before{content:'→';color:var(--tx3);flex-shrink:0}
+
+.pend-list{display:flex;flex-direction:column;gap:10px}
+.pend-item{display:flex;align-items:flex-start;gap:14px;background:var(--bg2);border:1px solid var(--bo);border-radius:12px;padding:1.1rem 1.3rem}
+.pend-num{width:26px;height:26px;border-radius:50%;background:var(--bg3);border:1px solid var(--bo2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--tx2);flex-shrink:0;margin-top:1px}
+.pend-name{font-size:14px;font-weight:500;color:var(--wh);margin-bottom:2px}
+.pend-desc{font-size:12.5px;color:var(--tx2);line-height:1.5}
+.prio-chip{font-size:10px;padding:2px 8px;border-radius:5px;font-weight:600;margin-left:7px;vertical-align:middle}
+.prio-a{background:rgba(232,0,45,.12);color:var(--r)}
+.prio-m{background:rgba(255,209,0,.1);color:#facc15}
+
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--bg2);border:1px solid var(--bo2);color:var(--tx);font-size:13px;padding:10px 20px;border-radius:9px;z-index:999;transition:transform .3s;pointer-events:none;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+.offline-notice{display:none;background:rgba(255,209,0,.08);border:1px solid rgba(255,209,0,.2);border-radius:9px;padding:.85rem 1.1rem;font-size:13px;color:#facc15;margin-bottom:1.2rem;line-height:1.6}
+.offline-notice.show{display:block}
+
+.site-footer{border-top:1px solid var(--bo);padding:3rem 1.5rem;text-align:center}
+.ft-logo{font-family:'Syne',sans-serif;font-weight:800;font-size:1.1rem;color:var(--wh);margin-bottom:.5rem}
+.ft-logo b{color:var(--r)}
+.ft-links{display:flex;gap:1.5rem;justify-content:center;flex-wrap:wrap;margin-bottom:1rem}
+.ft-links a{font-size:13px;color:var(--tx3);text-decoration:none;transition:color .2s}
+.ft-links a:hover{color:var(--tx)}
+.ft-copy{font-size:11px;color:var(--tx3)}
+
+.rv{opacity:0;transform:translateY(20px);transition:opacity .55s ease,transform .55s ease}
+.rv.in{opacity:1;transform:translateY(0)}
+.div-line{border:none;border-top:1px solid var(--bo);margin:0}
+
+@media(max-width:640px){
+  nav{padding:0 1rem;gap:.75rem}
+  .nav-links{gap:.75rem}
+  .nav-links a{font-size:11px}
+  .two{grid-template-columns:1fr}
+  .ht-row{grid-template-columns:18px 1fr 38px 56px 34px 42px;gap:4px;font-size:11px}
 }
-.logo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 18px; color: var(--text); display: flex; align-items: center; gap: 10px; }
-.logo-icon { width: 30px; height: 30px; border-radius: 8px; background: var(--purple); display: flex; align-items: center; justify-content: center; font-size: 14px; }
-.topbar-right { display: flex; align-items: center; gap: 10px; }
-.btn-sm { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: 500; padding: 7px 16px; border-radius: 8px; cursor: pointer; border: none; transition: all 0.15s; }
-.btn-outline { background: transparent; border: 1px solid var(--border2); color: var(--text2); }
-.btn-outline:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
-.btn-purple { background: var(--purple); color: white; }
-.btn-purple:hover { background: var(--purple-dark); }
-.btn-ghost { background: transparent; border: none; color: var(--text3); font-size: 13px; cursor: pointer; padding: 6px 10px; }
-.btn-ghost:hover { color: var(--text); }
-
-/* ── AUTH OVERLAY ── */
-.auth-overlay {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center; padding: 20px;
-}
-.auth-card {
-  background: var(--bg2); border: 1px solid var(--border2); border-radius: 20px;
-  width: 100%; max-width: 420px; padding: 40px 36px;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.5); animation: slideUp 0.3s ease;
-}
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.auth-logo { font-family: 'Manrope', sans-serif; font-weight: 800; font-size: 22px; text-align: center; margin-bottom: 6px; }
-.auth-logo span { color: #A78BFA; }
-.auth-sub { text-align: center; color: var(--text3); font-size: 14px; margin-bottom: 28px; }
-.auth-tabs { display: flex; background: var(--bg3); border-radius: 10px; padding: 4px; margin-bottom: 24px; border: 1px solid var(--border); }
-.auth-tab { flex: 1; text-align: center; padding: 8px; font-size: 13px; font-weight: 500; border-radius: 7px; cursor: pointer; transition: all 0.2s; color: var(--text3); }
-.auth-tab.active { background: var(--bg); color: var(--text); border: 1px solid var(--border2); }
-.field { margin-bottom: 16px; }
-.field label { display: block; font-size: 11px; font-weight: 600; color: var(--text3); margin-bottom: 6px; letter-spacing: 0.04em; text-transform: uppercase; }
-.field input { width: 100%; padding: 11px 14px; border: 1px solid var(--border2); border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text); background: var(--bg3); transition: border 0.15s; outline: none; }
-.field input:focus { border-color: var(--purple); }
-.field input::placeholder { color: var(--text3); }
-.btn-auth { width: 100%; padding: 13px; border-radius: 10px; border: none; background: var(--purple); color: white; font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 700; cursor: pointer; transition: background 0.15s; margin-top: 8px; }
-.btn-auth:hover { background: var(--purple-dark); }
-.auth-error { color: var(--red-err); font-size: 13px; margin-top: 8px; text-align: center; min-height: 18px; }
-
-/* ── MAIN LAYOUT ── */
-.main { max-width: 700px; margin: 0 auto; padding: 40px 20px 80px; }
-.hero { text-align: center; margin-bottom: 40px; }
-.hero-tag { display: inline-flex; align-items: center; gap: 6px; background: var(--purple-light); border: 1px solid rgba(108,71,255,0.3); color: #A78BFA; font-size: 12px; font-weight: 600; padding: 5px 14px; border-radius: 20px; margin-bottom: 16px; letter-spacing: 0.04em; }
-.hero h1 { font-family: 'Manrope', sans-serif; font-size: 34px; font-weight: 800; line-height: 1.15; margin-bottom: 10px; }
-.hero h1 em { color: #A78BFA; font-style: normal; }
-.hero p { color: var(--text2); font-size: 15px; }
-
-/* ── FORM CARD ── */
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; margin-bottom: 20px; }
-
-/* ── PILL TOGGLES ── */
-.pill-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 22px; }
-.pill { padding: 7px 16px; border-radius: 100px; border: 1px solid var(--border2); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; background: var(--bg3); color: var(--text2); }
-.pill:hover { border-color: var(--purple); color: #A78BFA; }
-.pill.active { background: var(--purple); border-color: var(--purple); color: white; }
-.pill-label { font-size: 11px; color: var(--text3); font-weight: 600; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.06em; }
-
-/* ── SELECT & INPUT ── */
-.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-@media (max-width: 540px) { .form-row { grid-template-columns: 1fr; } }
-.form-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
-.form-group label { font-size: 11px; font-weight: 600; color: var(--text3); letter-spacing: 0.04em; text-transform: uppercase; }
-.form-group input, .form-group select { padding: 10px 14px; border: 1px solid var(--border2); border-radius: var(--radius-sm); font-family: 'Inter', sans-serif; font-size: 14px; color: var(--text); background: var(--bg3); outline: none; transition: border 0.15s; }
-.form-group input::placeholder { color: var(--text3); }
-.form-group input:focus, .form-group select:focus { border-color: var(--purple); }
-.form-group select { color: var(--text2); }
-.form-group select option { background: var(--bg2); color: var(--text); }
-
-/* ── TONES ── */
-.tone-grid { display: flex; gap: 8px; flex-wrap: wrap; }
-.tone-chip { padding: 6px 14px; border: 1px solid var(--border2); border-radius: 100px; font-size: 12px; font-weight: 500; cursor: pointer; transition: all 0.15s; color: var(--text2); background: var(--bg3); }
-.tone-chip.active { background: var(--bg3); border-color: var(--purple); color: #A78BFA; }
-.tone-chip:hover:not(.active) { border-color: rgba(255,255,255,0.2); color: var(--text); }
-
-/* ── GENERATE BTN ── */
-.btn-generate { width: 100%; padding: 15px; background: var(--purple); color: white; border: none; border-radius: var(--radius-sm); font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 20px; letter-spacing: 0.01em; }
-.btn-generate:hover:not(:disabled) { background: var(--purple-dark); box-shadow: 0 0 28px var(--purple-glow); }
-.btn-generate:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
-.btn-generate .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-/* ── RESULT CARDS ── */
-.result-section { animation: fadeIn 0.4s ease; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-.result-block { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 16px; }
-.result-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
-.result-text { font-size: 14px; line-height: 1.8; color: var(--text2); white-space: pre-wrap; }
-.result-actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
-.btn-copy { padding: 7px 14px; border: 1px solid var(--border2); border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; background: transparent; color: var(--text2); transition: all 0.15s; }
-.btn-copy:hover { border-color: var(--green); color: var(--green); }
-.btn-copy.copied { border-color: var(--green); color: var(--green); background: var(--green-bg); }
-.btn-regen { padding: 7px 14px; border: 1px solid var(--border2); border-radius: 8px; font-size: 12px; font-weight: 500; cursor: pointer; background: transparent; color: var(--text2); transition: all 0.15s; }
-.btn-regen:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
-
-/* ── IMAGES ── */
-.img-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 12px 0; }
-.img-thumb { aspect-ratio: 1; border-radius: 10px; overflow: hidden; border: 2px solid transparent; cursor: pointer; transition: all 0.15s; }
-.img-thumb:hover { border-color: var(--purple); }
-.img-thumb.selected { border-color: var(--purple); box-shadow: 0 0 12px var(--purple-glow); }
-.img-thumb img { width: 100%; height: 100%; object-fit: cover; }
-.brand-logo-preview { width: 80px; height: 80px; object-fit: contain; border-radius: 10px; border: 1px solid var(--border2); background: white; padding: 6px; margin-bottom: 10px; }
-.btn-dl { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; background: var(--bg3); color: var(--text2); border: 1px solid var(--border2); border-radius: 8px; font-size: 12px; font-weight: 500; text-decoration: none; transition: all 0.15s; cursor: pointer; }
-.btn-dl:hover { background: rgba(255,255,255,0.08); color: var(--text); }
-
-/* ── UPLOAD OWN ── */
-.upload-area { border: 1px dashed var(--border2); border-radius: 10px; padding: 16px; text-align: center; margin-top: 10px; background: var(--bg3); }
-.upload-area label { color: var(--text3); font-size: 13px; cursor: pointer; }
-.upload-area label:hover { color: #A78BFA; }
-.upload-preview { max-width: 100%; max-height: 200px; border-radius: 8px; margin-top: 8px; }
-
-/* ── PROFILE DROPDOWN ── */
-.profile-btn { width: 34px; height: 34px; border-radius: 50%; background: var(--purple); color: white; font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; border: none; }
-.dropdown { position: absolute; top: 48px; right: 0; background: var(--bg2); border: 1px solid var(--border2); border-radius: 12px; box-shadow: 0 16px 40px rgba(0,0,0,0.4); min-width: 190px; z-index: 200; overflow: hidden; animation: slideUp 0.15s ease; }
-.dropdown-item { padding: 10px 16px; font-size: 13px; cursor: pointer; color: var(--text2); display: flex; align-items: center; gap: 8px; transition: background 0.1s; }
-.dropdown-item:hover { background: var(--bg3); }
-.dropdown-item.danger { color: var(--red-err); }
-.dropdown-user { padding: 12px 16px; border-bottom: 1px solid var(--border); }
-.dropdown-user small { display: block; font-size: 11px; color: var(--text3); }
-.dropdown-user strong { font-size: 13px; color: var(--text); }
-.profile-wrap { position: relative; }
-
-/* ── URL ANALYZER ── */
-.url-row { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 16px; }
-.url-row .form-group { flex: 1; margin-bottom: 0; }
-.btn-scan { padding: 10px 16px; background: var(--purple-light); color: #A78BFA; border: 1px solid rgba(108,71,255,0.35); border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: all 0.2s; display: flex; align-items: center; gap: 6px; height: 42px; flex-shrink: 0; }
-.btn-scan:hover:not(:disabled) { background: var(--purple); color: white; border-color: var(--purple); }
-.btn-scan:disabled { opacity: 0.4; cursor: not-allowed; }
-.scan-result { background: var(--green-bg); border: 1px solid rgba(34,197,94,0.25); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 16px; font-size: 13px; color: #86EFAC; display: flex; align-items: flex-start; gap: 8px; }
-.scan-result .scan-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
-.scan-result .scan-text { flex: 1; line-height: 1.5; color: #A7F3D0; }
-.scan-result .scan-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
-.scan-chip { background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); border-radius: 20px; padding: 2px 10px; font-size: 11px; color: #86EFAC; font-weight: 500; }
-.scan-error { background: var(--red-bg); border: 1px solid rgba(248,113,113,0.2); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 16px; font-size: 13px; color: var(--red-err); }
-.divider-or { text-align: center; color: var(--text3); font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin: 0 0 16px; position: relative; }
-.divider-or::before, .divider-or::after { content: ''; position: absolute; top: 50%; width: 43%; height: 1px; background: var(--border); }
-.divider-or::before { left: 0; } .divider-or::after { right: 0; }
-
-/* ── MISC ── */
-.hidden { display: none !important; }
-.tip-box { background: rgba(251,191,36,0.08); border: 1px solid rgba(251,191,36,0.2); border-radius: 10px; padding: 12px 14px; font-size: 13px; color: #FDE68A; margin-top: 10px; }
 </style>
 </head>
 <body>
 
-<!-- ═══ TOPBAR ═══ -->
-<nav class="topbar">
-  <div class="logo">
-    <span class="logo-icon">🤖</span> SocialBot Pro
-  </div>
-  <div class="topbar-right" id="topbarRight">
-    <button class="btn-sm btn-outline" onclick="showAuth('login')">Iniciar sesión</button>
-    <button class="btn-sm btn-purple" onclick="showAuth('register')">Registrarse gratis</button>
+<div class="toast" id="toast"></div>
+
+<nav>
+  <div class="nav-logo"><div class="nav-dot"></div> Ofertas<b>Online</b> · Hub</div>
+  <div class="nav-links">
+    <a href="#contenido">Contenido</a>
+    <a href="#anuncios">Anuncios</a>
+    <a href="#hashtags">Hashtags</a>
+    <a href="#auditoria">Auditoría</a>
+    <a href="#pendientes">Pendientes</a>
   </div>
 </nav>
 
-<!-- ═══ AUTH OVERLAY ═══ -->
-<div class="auth-overlay hidden" id="authOverlay">
-  <div class="auth-card">
-    <div class="auth-logo">Social<span>Bot</span> Pro</div>
-    <p class="auth-sub">Community Manager con IA para tu negocio</p>
-    <div class="auth-tabs">
-      <div class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Iniciar sesión</div>
-      <div class="auth-tab" id="tabRegister" onclick="switchTab('register')">Registrarse</div>
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-inner rv">
+    <div class="hero-tag"><div class="nav-dot"></div> Kit Digital Completo · Abr–May 2026</div>
+    <h1>Todo lo creado para<br><span class="acc">OfertasOnline</span><br>en un solo lugar</h1>
+    <p class="hero-sub">Generador de contenido IA, anuncios, hashtags, auditoría y plan de acción. Posadas, Misiones.</p>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-n">12<span>+</span></div><div class="hstat-l">Herramientas</div></div>
+      <div class="hstat"><div class="hstat-n">8<span>+</span></div><div class="hstat-l">Diseños</div></div>
+      <div class="hstat"><div class="hstat-n">3</div><div class="hstat-l">Reels HTML</div></div>
+      <div class="hstat"><div class="hstat-n">6</div><div class="hstat-l">Pasos SEO</div></div>
     </div>
-    <div id="formLogin">
-      <div class="field"><label>Email</label><input type="email" id="loginEmail" placeholder="tu@email.com"/></div>
-      <div class="field"><label>Contraseña</label><input type="password" id="loginPass" placeholder="••••••••"/></div>
-      <button class="btn-auth" onclick="doLogin()">Entrar</button>
-      <p class="auth-error" id="loginError"></p>
+    <div class="hero-cta">
+      <a href="#contenido" class="btn btn-r">✨ Generar contenido</a>
+      <a href="#auditoria" class="btn btn-o">Ver auditoría →</a>
     </div>
-    <div id="formRegister" class="hidden">
-      <div class="field"><label>Nombre</label><input type="text" id="regName" placeholder="Tu nombre"/></div>
-      <div class="field"><label>Email</label><input type="email" id="regEmail" placeholder="tu@email.com"/></div>
-      <div class="field"><label>Contraseña</label><input type="password" id="regPass" placeholder="Mínimo 6 caracteres"/></div>
-      <button class="btn-auth" onclick="doRegister()">Crear cuenta gratis</button>
-      <p class="auth-error" id="regError"></p>
-      <p style="font-size:12px;color:var(--text3);text-align:center;margin-top:12px;">Al registrarte aceptás los términos de uso.</p>
-    </div>
-    <button class="btn-ghost" style="width:100%;margin-top:12px;" onclick="closeAuth()">Continuar sin cuenta →</button>
   </div>
-</div>
+</section>
 
-<!-- ═══ MAIN ═══ -->
-<main class="main">
-  <div class="hero">
-    <div class="hero-tag">✦ Community Manager con IA</div>
-    <h1>Creá contenido para tus redes<br><em>en segundos</em></h1>
-    <p>Captions, Reels, Stories y guías Canva para tu negocio</p>
+<!-- INVENTARIO -->
+<section class="section rv" id="creado">
+  <div class="sec-label">Inventario completo</div>
+  <div class="sec-title">Todo lo que <b>construimos</b></div>
+  <div class="card-grid">
+    <div class="card"><div class="card-ic ic-r">🖼️</div><div class="card-name">Flyers de productos</div><div class="card-desc">PNG y PDF con fondo rojo, foto centrada, precios en blanco/amarillo. Logo en pastilla gris.</div><div class="tags"><span class="tag done">Samsung A26</span><span class="tag done">Xiaomi Redmi 15</span><span class="tag done">Moto G15</span><span class="tag done">Combo Xiaomi</span></div></div>
+    <div class="card"><div class="card-ic ic-y">🎬</div><div class="card-name">Reels animados HTML</div><div class="card-desc">3 slides con branding, teléfono en mano y CTA. Animaciones CSS puras, 15 segundos.</div><div class="tags"><span class="tag done">Fondo rojo</span><span class="tag done">15 seg</span><span class="tag pend">Faltan fotos producto</span></div></div>
+    <div class="card"><div class="card-ic ic-g">📝</div><div class="card-name">Templates de captions</div><div class="card-desc">Posts, Stories y Reels en español argentino para Instagram, Facebook y WhatsApp.</div><div class="tags"><span class="tag done">Instagram</span><span class="tag done">Facebook</span><span class="tag done">WhatsApp</span></div></div>
+    <div class="card"><div class="card-ic ic-b">🤖</div><div class="card-name">Asistente ventas VPS</div><div class="card-desc">Widget Node.js/Express embebible. Responde clientes y redirige a WhatsApp para cerrar ventas.</div><div class="tags"><span class="tag done">Node.js</span><span class="tag done">PM2</span><span class="tag pend">Instalar en VPS</span></div></div>
+    <div class="card"><div class="card-ic ic-p">📊</div><div class="card-name">SocialBot Pro</div><div class="card-desc">Community manager IA para Instagram y Facebook. Deployado en Vercel con generador de contenido.</div><div class="tags"><span class="tag done">Vercel</span><span class="tag done">IA Claude</span><span class="tag pend">API key pendiente</span></div></div>
+    <div class="card"><div class="card-ic ic-r">🛒</div><div class="card-name">Facebook Marketplace</div><div class="card-desc">Título y descripción optimizados con todos los modelos y precios. Listo para publicar.</div><div class="tags"><span class="tag done">11 modelos</span><span class="tag done">CTA WhatsApp</span></div></div>
   </div>
+</section>
 
-  <div class="card">
-    <!-- URL ANALYZER -->
-    <div class="url-row">
-      <div class="form-group">
-        <label>🔗 Pegá el link de tu marca (opcional)</label>
-        <input type="url" id="brandUrl" placeholder="Ej: https://ofertasonline.com.ar" oninput="clearScanResult()"/>
+<hr class="div-line">
+
+<!-- GENERADOR CONTENIDO -->
+<section class="section rv" id="contenido">
+  <div class="sec-label">Herramienta activa</div>
+  <div class="sec-title">Generador de <b>contenido IA</b></div>
+  <div class="gen-wrap">
+    <div class="gen-top">
+      <div><div class="gen-top-title">✨ Creá tu post, reel o story ahora</div><div class="gen-top-sub">Completá los campos y la IA escribe por vos</div></div>
+      <div class="live-badge">● LIVE</div>
+    </div>
+    <div class="gen-body">
+      <div class="offline-notice" id="offlineNotice">
+        ⚠️ Estás abriendo esta página como archivo local. El generador IA necesita estar subido a <strong>Vercel</strong> con la API key configurada. Los hashtags y el copiado sí funcionan.
       </div>
-      <button class="btn-scan" id="btnScan" onclick="scanBrand()">
-        <span id="scanTxt">🔍 Analizar</span>
-      </button>
-    </div>
-    <div id="scanResult" class="hidden"></div>
-    <div class="divider-or">o completá manualmente</div>
-
-    <div class="pill-label">Red social</div>
-    <div class="pill-group">
-      <div class="pill active" data-group="red" data-val="Instagram" onclick="pick(this,'red')">📸 Instagram</div>
-      <div class="pill" data-group="red" data-val="Facebook" onclick="pick(this,'red')">📘 Facebook</div>
-      <div class="pill" data-group="red" data-val="TikTok" onclick="pick(this,'red')">🎵 TikTok</div>
-    </div>
-
-    <div class="pill-label">Qué querés generar</div>
-    <div class="pill-group">
-      <div class="pill active" data-group="tipo" data-val="Post" onclick="pick(this,'tipo')">📝 Post</div>
-      <div class="pill" data-group="tipo" data-val="Reel" onclick="pick(this,'tipo')">🎬 Reel</div>
-      <div class="pill" data-group="tipo" data-val="Guía Canva" onclick="pick(this,'tipo')">🖼️ Guía Canva</div>
-      <div class="pill" data-group="tipo" data-val="Story" onclick="pick(this,'tipo')">⚡ Story</div>
-    </div>
-
-    <div class="form-group">
-      <label>Tipo de contenido</label>
-      <select id="tipoContenido">
-        <option value="">— Elegí uno —</option>
-        <option>Promoción de producto</option>
-        <option>Lanzamiento de producto</option>
-        <option>Oferta del día</option>
-        <option>Entrega en el día</option>
-        <option>Testimonio de cliente</option>
-        <option>Sorteo / concurso</option>
-        <option>Tip o consejo</option>
-        <option>Presentación del negocio</option>
-        <option>Contenido de valor</option>
-        <option>Detrás de escena</option>
-        <option>Pregunta a la audiencia</option>
-      </select>
-    </div>
-
-    <div class="form-row">
-      <div class="form-group">
-        <label>Nombre del negocio</label>
-        <input type="text" id="negocio" placeholder="Ej: OfertasOnline"/>
+      <div class="fl"><label>Red social</label>
+        <div class="tg" id="gRed">
+          <button class="tb on" data-v="Instagram">📸 Instagram</button>
+          <button class="tb" data-v="Facebook">📘 Facebook</button>
+          <button class="tb" data-v="WhatsApp">💬 WhatsApp</button>
+          <button class="tb" data-v="TikTok">🎵 TikTok</button>
+        </div>
       </div>
-      <div class="form-group">
-        <label>Ciudad</label>
-        <input type="text" id="ciudad" placeholder="Ej: Posadas"/>
+      <div class="fl"><label>¿Qué crear?</label>
+        <div class="tg" id="gTipo">
+          <button class="tb on" data-v="Post">📝 Post</button>
+          <button class="tb" data-v="Reel">🎬 Reel</button>
+          <button class="tb" data-v="Story">⚡ Story</button>
+          <button class="tb" data-v="Guía Canva">🖼️ Guía Canva</button>
+        </div>
+      </div>
+      <div class="fl"><label>Tipo de contenido</label>
+        <select class="fi" id="gCont">
+          <option value="">— Elegí uno —</option>
+          <option>Promoción de producto</option>
+          <option>Oferta del día</option>
+          <option>Lanzamiento de producto</option>
+          <option>Entrega en el día</option>
+          <option>Testimonio de cliente</option>
+          <option>Sorteo / concurso</option>
+          <option>Tip o consejo</option>
+          <option>Combo / bundle</option>
+          <option>Detrás de escena</option>
+        </select>
+      </div>
+      <div class="two">
+        <div class="fl"><label>Negocio</label><input class="fi" id="gNeg" type="text" value="OfertasOnline"></div>
+        <div class="fl"><label>Ciudad</label><input class="fi" id="gCiu" type="text" value="Posadas"></div>
+      </div>
+      <div class="fl"><label>Producto o tema (opcional)</label>
+        <input class="fi" id="gProd" type="text" placeholder="ej: Samsung Galaxy A26 5G — $226.000">
+      </div>
+      <div class="fl"><label>Tono</label>
+        <div class="tg" id="gTono">
+          <button class="tb on" data-v="Dinámico y urgente">Dinámico</button>
+          <button class="tb" data-v="Profesional">Profesional</button>
+          <button class="tb" data-v="Cercano y amigable">Cercano</button>
+          <button class="tb" data-v="Divertido">Divertido</button>
+        </div>
+      </div>
+      <button class="gen-go" id="genBtn" onclick="generar()">✨ Generar contenido</button>
+      <div class="res" id="resBox">
+        <div class="res-head">
+          <span class="res-lbl" id="resLbl">Resultado</span>
+          <button class="cp-btn" id="cpBtn" onclick="copiarResultado()">📋 Copiar</button>
+        </div>
+        <div class="ldots" id="genDots"><span></span><span></span><span></span></div>
+        <div class="res-txt" id="resTxt"></div>
       </div>
     </div>
-
-    <div class="form-group">
-      <label>Producto o tema (opcional)</label>
-      <input type="text" id="producto" placeholder="Ej: Samsung Galaxy A26 5G"/>
-    </div>
-
-    <div class="pill-label" style="margin-bottom:8px;">Tono</div>
-    <div class="tone-grid">
-      <div class="tone-chip active" data-tone="Dinámico" onclick="pickTone(this)">Dinámico</div>
-      <div class="tone-chip" data-tone="Profesional" onclick="pickTone(this)">Profesional</div>
-      <div class="tone-chip" data-tone="Cercano" onclick="pickTone(this)">Cercano</div>
-      <div class="tone-chip" data-tone="Urgente" onclick="pickTone(this)">Urgente</div>
-      <div class="tone-chip" data-tone="Informativo" onclick="pickTone(this)">Informativo</div>
-      <div class="tone-chip" data-tone="Divertido" onclick="pickTone(this)">Divertido</div>
-    </div>
-
-    <button class="btn-generate" id="btnGenerar" onclick="generar()">
-      <span id="btnTexto">✨ Generar contenido</span>
-    </button>
   </div>
+</section>
 
-  <div id="resultArea" class="hidden result-section"></div>
-</main>
+<hr class="div-line">
+
+<!-- GENERADOR ANUNCIOS -->
+<section class="section rv" id="anuncios">
+  <div class="sec-label">Meta Ads</div>
+  <div class="sec-title">Generador de <b>anuncios</b></div>
+  <div class="ads-wrap">
+    <div class="ads-top">
+      <div class="gen-top-title">📣 5 enfoques creativos para tus anuncios</div>
+      <div class="gen-top-sub">Ingresá el producto y la IA crea 5 versiones con evaluación de efectividad</div>
+    </div>
+    <div class="ads-input-row">
+      <input class="fi" id="adProd" type="text" placeholder="Producto y precio — ej: Moto G15 · $247.500" style="flex:1;min-width:180px">
+      <button class="btn btn-r" id="adBtn" onclick="generarAnuncios()" style="white-space:nowrap">📣 Generar anuncios</button>
+    </div>
+    <div class="ads-cards" id="adCards">
+      <div class="ad-empty">Ingresá un producto arriba y generá 5 anuncios con IA</div>
+    </div>
+  </div>
+</section>
+
+<hr class="div-line">
+
+<!-- HASHTAGS -->
+<section class="section rv" id="hashtags">
+  <div class="sec-label">Estrategia orgánica</div>
+  <div class="sec-title">Hashtags para <b>OfertasOnline</b></div>
+  <div class="ht-wrap">
+    <div class="ht-list" id="htList"></div>
+    <div class="ht-footer">
+      <span style="font-size:12px;color:var(--tx3)">Clic en cualquier fila para copiar</span>
+      <button class="ht-combo-btn" id="htComboBtn" onclick="copiarTodos()">📋 Copiar los 20 juntos</button>
+    </div>
+  </div>
+</section>
+
+<hr class="div-line">
+
+<!-- AUDITORIA -->
+<section class="section rv" id="auditoria">
+  <div class="sec-label">Estado del negocio</div>
+  <div class="sec-title">Auditoría digital <b>OfertasOnline</b></div>
+  <div class="audit-grid">
+    <div class="audit-card">
+      <div class="audit-head"><span class="audit-name">🌐 Sitio web</span><span class="audit-score" style="color:#ef4444">42</span></div>
+      <div class="audit-bar"><div class="audit-fill" style="width:42%;background:#ef4444"></div></div>
+      <ul class="audit-items"><li>JS rendering — Google no indexa</li><li>Sin meta títulos ni descripciones</li><li>Sin Google Search Console</li><li>No aparece en búsquedas locales</li></ul>
+    </div>
+    <div class="audit-card">
+      <div class="audit-head"><span class="audit-name">📱 Redes sociales</span><span class="audit-score" style="color:#f59e0b">65</span></div>
+      <div class="audit-bar"><div class="audit-fill" style="width:65%;background:#f59e0b"></div></div>
+      <ul class="audit-items"><li>Instagram y Facebook activos</li><li>Contenido irregular</li><li>Sin automatización de publicaciones</li><li>Make.com pendiente de conectar</li></ul>
+    </div>
+    <div class="audit-card">
+      <div class="audit-head"><span class="audit-name">🔍 SEO local</span><span class="audit-score" style="color:#ef4444">28</span></div>
+      <div class="audit-bar"><div class="audit-fill" style="width:28%;background:#ef4444"></div></div>
+      <ul class="audit-items"><li>Sin Google My Business</li><li>Sin keywords de Posadas</li><li>Sin backlinks locales</li><li>Sin schema markup</li></ul>
+    </div>
+    <div class="audit-card">
+      <div class="audit-head"><span class="audit-name">💬 Conversión</span><span class="audit-score" style="color:#22c55e">78</span></div>
+      <div class="audit-bar"><div class="audit-fill" style="width:78%;background:#22c55e"></div></div>
+      <ul class="audit-items"><li>WhatsApp activo canal de ventas</li><li>Entrega en el día como diferencial</li><li>Asistente de ventas VPS listo</li><li>Marketplace en Facebook activo</li></ul>
+    </div>
+  </div>
+</section>
+
+<hr class="div-line">
+
+<!-- PENDIENTES -->
+<section class="section rv" id="pendientes">
+  <div class="sec-label">Próximos pasos</div>
+  <div class="sec-title">Lo que falta <b>implementar</b></div>
+  <div class="pend-list">
+    <div class="pend-item"><div class="pend-num">1</div><div><div class="pend-name">Reel con fotos reales de productos <span class="prio-chip prio-a">Urgente</span></div><div class="pend-desc">El reel HTML está armado. Solo falta subir las fotos de los celulares para integrarlas.</div></div></div>
+    <div class="pend-item"><div class="pend-num">2</div><div><div class="pend-name">Google Search Console + meta tags <span class="prio-chip prio-a">Urgente</span></div><div class="pend-desc">El sitio no aparece en Google. Mayor impacto para ventas orgánicas sin costo.</div></div></div>
+    <div class="pend-item"><div class="pend-num">3</div><div><div class="pend-name">API key en Vercel <span class="prio-chip prio-a">Urgente</span></div><div class="pend-desc">Vercel → Settings → Environment Variables → ANTHROPIC_API_KEY → Redeploy.</div></div></div>
+    <div class="pend-item"><div class="pend-num">4</div><div><div class="pend-name">Conectar Make con Facebook/Instagram <span class="prio-chip prio-m">Importante</span></div><div class="pend-desc">La guía está completa. Solo crear cuenta en make.com y conectar la página de Facebook.</div></div></div>
+    <div class="pend-item"><div class="pend-num">5</div><div><div class="pend-name">Activar asistente de ventas en el VPS <span class="prio-chip prio-m">Importante</span></div><div class="pend-desc">Widget Node.js construido. Instalarlo para que los clientes del sitio consulten 24 hs.</div></div></div>
+    <div class="pend-item"><div class="pend-num">6</div><div><div class="pend-name">Google My Business</div><div class="pend-desc">Crear o reclamar el perfil para aparecer en Google Maps y búsquedas locales de Posadas.</div></div></div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="ft-logo">Ofertas<b>Online</b> · Hub Digital</div>
+  <div class="ft-links">
+    <a href="https://www.ofertasonline.com.ar" target="_blank">ofertasonline.com.ar</a>
+    <a href="https://wa.me/5493765101958" target="_blank">WhatsApp 3765 101958</a>
+    <a href="https://socialbot-pro.vercel.app" target="_blank">SocialBot Pro</a>
+  </div>
+  <div class="ft-copy">Posadas, Misiones · Kit digital creado con Claude IA · 2026</div>
+</footer>
 
 <script>
-// ── CONFIG ──
-const SUPABASE_URL = 'https://masizjjfngudxlpwyotj.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1hc2l6ampmbmd1ZHhscHd5b3RqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5NDgxNzQsImV4cCI6MjA5MzUyNDE3NH0._ZftZI5Or9_svrPfZ0mx5IoNzwoztIXcYOdkMmXaMAY';
-const PIXABAY_KEY = '55685221-046b93a280740b50a74e20dba';
+'use strict';
 
-// ── STATE ──
-let supabaseClient = null;
-let currentUser = null;
-let userProfile = null;
-let selectedRed = 'Instagram';
-let selectedTipo = 'Post';
-let selectedTone = 'Dinámico';
-let dropdownOpen = false;
-let brandLogoUrl = null;
-let brandDomain = null;
+// ── TOAST ────────────────────────────────────────────────────────────────
+function mostrarToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(() => t.classList.remove('show'), 3000);
+}
 
-// ── INIT SUPABASE ──
-function initSupabase() {
-  if (typeof supabase !== 'undefined') {
-    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-    checkSession();
+// ── CLIPBOARD (funciona en HTTP y HTTPS) ─────────────────────────────────
+function copiar(texto, onOk) {
+  const exec = () => {
+    const ta = document.createElement('textarea');
+    ta.value = texto;
+    ta.style.cssText = 'position:fixed;left:-9999px;top:-9999px;opacity:0';
+    document.body.appendChild(ta);
+    ta.focus(); ta.select();
+    let ok = false;
+    try { ok = document.execCommand('copy'); } catch(_) {}
+    document.body.removeChild(ta);
+    if (ok) onOk(); else mostrarToast('No se pudo copiar automáticamente');
+  };
+  if (navigator.clipboard && location.protocol === 'https:') {
+    navigator.clipboard.writeText(texto).then(onOk).catch(exec);
+  } else {
+    exec();
   }
 }
 
-async function checkSession() {
-  if (!supabaseClient) return;
-  const { data: { session } } = await supabaseClient.auth.getSession();
-  if (session) { currentUser = session.user; renderLoggedIn(); }
-  supabaseClient.auth.onAuthStateChange((_event, session) => {
-    if (session) { currentUser = session.user; renderLoggedIn(); }
-    else { currentUser = null; renderLoggedOut(); }
+// Feedback genérico en un botón (preserva innerHTML)
+function btnFeedback(btn, msg) {
+  const prev = btn.innerHTML;
+  btn.innerHTML = msg;
+  btn.classList.add('ok');
+  btn.disabled = true;
+  setTimeout(() => { btn.innerHTML = prev; btn.classList.remove('ok'); btn.disabled = false; }, 2000);
+}
+
+// ── TOGGLE GROUPS ────────────────────────────────────────────────────────
+document.querySelectorAll('.tg').forEach(g => {
+  g.querySelectorAll('.tb').forEach(b => {
+    b.addEventListener('click', () => {
+      g.querySelectorAll('.tb').forEach(x => x.classList.remove('on'));
+      b.classList.add('on');
+    });
   });
+});
+function ga(id) {
+  const el = document.querySelector('#' + id + ' .tb.on');
+  return el ? el.dataset.v : '';
 }
 
-// ── AUTH UI ──
-function showAuth(tab) { document.getElementById('authOverlay').classList.remove('hidden'); switchTab(tab); }
-function closeAuth() { document.getElementById('authOverlay').classList.add('hidden'); }
-function switchTab(tab) {
-  document.getElementById('tabLogin').classList.toggle('active', tab==='login');
-  document.getElementById('tabRegister').classList.toggle('active', tab==='register');
-  document.getElementById('formLogin').classList.toggle('hidden', tab!=='login');
-  document.getElementById('formRegister').classList.toggle('hidden', tab!=='register');
-}
-async function doLogin() {
-  if (!supabaseClient) return;
-  const email = document.getElementById('loginEmail').value;
-  const pass = document.getElementById('loginPass').value;
-  document.getElementById('loginError').textContent = '';
-  const { error } = await supabaseClient.auth.signInWithPassword({ email, password: pass });
-  if (error) { document.getElementById('loginError').textContent = 'Email o contraseña incorrectos.'; }
-  else { closeAuth(); }
-}
-async function doRegister() {
-  if (!supabaseClient) return;
-  const name = document.getElementById('regName').value;
-  const email = document.getElementById('regEmail').value;
-  const pass = document.getElementById('regPass').value;
-  document.getElementById('regError').textContent = '';
-  if (pass.length < 6) { document.getElementById('regError').textContent = 'Mínimo 6 caracteres.'; return; }
-  const { error } = await supabaseClient.auth.signUp({ email, password: pass, options: { data: { name }, emailRedirectTo: 'https://socialbot-pro.vercel.app' } });
-  if (error) { document.getElementById('regError').textContent = error.message; }
-  else { document.getElementById('regError').style.color = '#22C55E'; document.getElementById('regError').textContent = '¡Cuenta creada! Revisá tu email.'; }
-}
-async function doLogout() {
-  if (supabaseClient) await supabaseClient.auth.signOut();
-  currentUser = null; renderLoggedOut(); toggleDropdown(false);
-}
-function renderLoggedIn() {
-  const name = currentUser?.email?.split('@')[0] || 'U';
-  const initials = name.slice(0,2).toUpperCase();
-  document.getElementById('topbarRight').innerHTML = `
-    <div class="profile-wrap">
-      <button class="profile-btn" onclick="toggleDropdown()" id="profileBtn">${initials}</button>
-      <div class="dropdown hidden" id="dropdown">
-        <div class="dropdown-user"><strong>${name}</strong><small>${currentUser?.email}</small></div>
-        <div class="dropdown-item danger" onclick="doLogout()">Cerrar sesión</div>
-      </div>
-    </div>`;
-}
-function renderLoggedOut() {
-  document.getElementById('topbarRight').innerHTML = `
-    <button class="btn-sm btn-outline" onclick="showAuth('login')">Iniciar sesión</button>
-    <button class="btn-sm btn-purple" onclick="showAuth('register')">Registrarse gratis</button>`;
-}
-function toggleDropdown(force) {
-  dropdownOpen = force !== undefined ? force : !dropdownOpen;
-  const dd = document.getElementById('dropdown');
-  if (dd) dd.classList.toggle('hidden', !dropdownOpen);
-}
-document.addEventListener('click', (e) => { if (!e.target.closest('.profile-wrap')) toggleDropdown(false); });
+// ── DETECCIÓN LOCAL ──────────────────────────────────────────────────────
+const esLocal = location.protocol === 'file:' || !location.hostname;
+if (esLocal) document.getElementById('offlineNotice').classList.add('show');
 
-// ── FORM LOGIC ──
-function pick(el, group) {
-  document.querySelectorAll(`[data-group="${group}"]`).forEach(p => p.classList.remove('active'));
-  el.classList.add('active');
-  if (group === 'red') selectedRed = el.dataset.val;
-  if (group === 'tipo') selectedTipo = el.dataset.val;
-}
-function pickTone(el) {
-  document.querySelectorAll('.tone-chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active'); selectedTone = el.dataset.tone;
-}
-
-// ── CALL AI (Groq via /api/generate) ──
-async function callAI(prompt) {
-  const res = await fetch('/api/generate', {
+// ── API ──────────────────────────────────────────────────────────────────
+async function llamarIA(userPrompt, maxTokens) {
+  if (esLocal) throw new Error('Subí la página a Vercel y configurá ANTHROPIC_API_KEY para usar la IA');
+  const resp = await fetch('/api/generate', {
     method: 'POST',
-    headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ prompt })
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-6',
+      max_tokens: maxTokens || 1000,
+      messages: [{ role: 'user', content: userPrompt }]
+    })
   });
-  if (!res.ok) throw new Error('API error');
-  const data = await res.json();
-  return data.text;
-}
-
-// ── SCAN BRAND ──
-async function scanBrand() {
-  const url = document.getElementById('brandUrl').value.trim();
-  if (!url) { alert('Pegá el link de tu marca primero.'); return; }
-
-  const btn = document.getElementById('btnScan');
-  const txt = document.getElementById('scanTxt');
-  btn.disabled = true;
-  txt.innerHTML = '<span class="spinner"></span>';
-
-  const resultDiv = document.getElementById('scanResult');
-  resultDiv.className = 'hidden';
-  resultDiv.innerHTML = '';
-
-  try {
-    // Extraer dominio para el logo
-    const domain = new URL(url.startsWith('http') ? url : 'https://' + url).hostname;
-    brandDomain = domain;
-    brandLogoUrl = `https://logo.clearbit.com/${domain}`;
-
-    const prompt = `Analizá este sitio web de negocio y extraé información. URL: ${url}
-
-Devolvé SOLO este JSON sin markdown:
-{"nombre":"nombre del negocio","ciudad":"ciudad o región","rubro":"tipo de negocio","productos":"principales productos (máx 60 chars)","tono":"uno de: Dinámico|Profesional|Cercano|Urgente|Informativo|Divertido","descripcion":"descripción breve (máx 80 chars)"}`;
-
-    const text = await callAI(prompt);
-    const raw = text.replace(/```json|```/g, '').trim();
-    const info = JSON.parse(raw);
-
-    if (info.nombre) document.getElementById('negocio').value = info.nombre;
-    if (info.ciudad) document.getElementById('ciudad').value = info.ciudad;
-    if (info.productos) document.getElementById('producto').value = info.productos;
-    if (info.tono) {
-      document.querySelectorAll('.tone-chip').forEach(c => {
-        if (c.dataset.tone === info.tono) {
-          document.querySelectorAll('.tone-chip').forEach(x => x.classList.remove('active'));
-          c.classList.add('active'); selectedTone = info.tono;
-        }
-      });
-    }
-
-    const chips = [
-      info.rubro && `<span class="scan-chip">📦 ${info.rubro}</span>`,
-      info.ciudad && `<span class="scan-chip">📍 ${info.ciudad}</span>`,
-      info.tono && `<span class="scan-chip">🎯 ${info.tono}</span>`,
-    ].filter(Boolean).join('');
-
-    resultDiv.className = 'scan-result';
-    resultDiv.innerHTML = `
-      <span class="scan-icon">✅</span>
-      <div class="scan-text">
-        <img src="${brandLogoUrl}" class="brand-logo-preview" onerror="this.style.display='none'" />
-        <strong>${info.nombre || 'Marca detectada'}</strong> — ${info.descripcion || ''}
-        <div class="scan-chips">${chips}</div>
-      </div>`;
-
-  } catch(e) {
-    resultDiv.className = 'scan-error';
-    resultDiv.innerHTML = '⚠️ No se pudo analizar el sitio. Completá los campos manualmente.';
-    brandLogoUrl = null; brandDomain = null;
-  } finally {
-    btn.disabled = false;
-    txt.innerHTML = '🔍 Analizar';
-    resultDiv.classList.remove('hidden');
+  if (!resp.ok) {
+    const err = await resp.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'Error del servidor (' + resp.status + ')');
   }
+  const data = await resp.json();
+  if (data.error) throw new Error(data.error.message || 'Error de API');
+  const text = (data.content || []).find(b => b.type === 'text');
+  if (!text) throw new Error('La IA no devolvió texto');
+  return text.text;
 }
 
-function clearScanResult() {
-  const r = document.getElementById('scanResult');
-  if (r) { r.className = 'hidden'; r.innerHTML = ''; }
-  brandLogoUrl = null; brandDomain = null;
+// Extrae el primer JSON array o object del texto (robusto ante texto extra)
+function extraerJSON(raw) {
+  // Buscar desde el primer '[' o '{'
+  const startArr = raw.indexOf('[');
+  const startObj = raw.indexOf('{');
+  let start = -1;
+  if (startArr === -1) start = startObj;
+  else if (startObj === -1) start = startArr;
+  else start = Math.min(startArr, startObj);
+  if (start === -1) throw new Error('No se encontró JSON en la respuesta');
+  const slice = raw.slice(start);
+  // Encontrar el cierre correspondiente
+  const open = slice[0], close = open === '[' ? ']' : '}';
+  let depth = 0, inStr = false, esc = false;
+  for (let i = 0; i < slice.length; i++) {
+    const ch = slice[i];
+    if (esc) { esc = false; continue; }
+    if (ch === '\\' && inStr) { esc = true; continue; }
+    if (ch === '"') { inStr = !inStr; continue; }
+    if (inStr) continue;
+    if (ch === open) depth++;
+    else if (ch === close) { depth--; if (depth === 0) return JSON.parse(slice.slice(0, i + 1)); }
+  }
+  throw new Error('JSON incompleto en la respuesta de la IA');
 }
 
-// ── GENERATE ──
+// ── GENERADOR CONTENIDO ──────────────────────────────────────────────────
 async function generar() {
-  const negocio = document.getElementById('negocio').value.trim();
-  const ciudad = document.getElementById('ciudad').value.trim();
-  const producto = document.getElementById('producto').value.trim();
-  const tipoContenido = document.getElementById('tipoContenido').value;
+  const red  = ga('gRed');
+  const tipo = ga('gTipo');
+  const tono = ga('gTono');
+  const cont = document.getElementById('gCont').value;
+  const neg  = document.getElementById('gNeg').value.trim();
+  const ciu  = document.getElementById('gCiu').value.trim();
+  const prod = document.getElementById('gProd').value.trim();
 
-  if (!negocio || !tipoContenido) { alert('Completá el nombre del negocio y el tipo de contenido.'); return; }
+  if (!neg)  { mostrarToast('Completá el nombre del negocio'); return; }
+  if (!cont) { mostrarToast('Elegí el tipo de contenido'); return; }
 
-  const btn = document.getElementById('btnGenerar');
-  const txt = document.getElementById('btnTexto');
+  const btn  = document.getElementById('genBtn');
+  const dots = document.getElementById('genDots');
+  const txt  = document.getElementById('resTxt');
+  const box  = document.getElementById('resBox');
+
   btn.disabled = true;
-  txt.innerHTML = '<span class="spinner"></span> Generando...';
-  document.getElementById('resultArea').classList.add('hidden');
+  btn.innerHTML = 'Generando...';
+  box.classList.add('show');
+  dots.classList.add('show');
+  txt.textContent = '';
+  document.getElementById('resLbl').textContent = tipo + ' para ' + red;
+
+  const prompt =
+    'Sos experto en marketing digital para negocios argentinos.\n' +
+    'Creá un ' + tipo + ' para ' + red + '.\n' +
+    'Negocio: ' + neg + ' | Ciudad: ' + ciu + ' | Tipo: ' + cont + ' | Tono: ' + tono +
+    (prod ? ' | Producto: ' + prod : '') + '\n' +
+    'Reglas: español argentino (vos, che). Siempre mencioná entrega el mismo día en Posadas. ' +
+    'Usá emoji apropiados. Incluí 10-15 hashtags al final. ' +
+    'WhatsApp: 3765 101958 | Web: www.ofertasonline.com.ar. ' +
+    'Si es Reel: estructura Gancho / Desarrollo / Cierre / CTA. ' +
+    'Escribí SOLO el contenido listo para publicar, sin explicaciones adicionales.';
 
   try {
-    const prompt = buildPrompt(negocio, ciudad, producto, tipoContenido);
-    const result = await callAI(prompt);
-    await showResult(result, negocio, producto);
-  } catch(e) {
-    alert('Error al generar. Verificá tu conexión.');
-    console.error(e);
+    txt.textContent = await llamarIA(prompt, 1000);
+  } catch (e) {
+    txt.textContent = '❌ ' + e.message;
   } finally {
+    dots.classList.remove('show');
     btn.disabled = false;
-    txt.innerHTML = '✨ Generar contenido';
+    btn.innerHTML = '✨ Generar contenido';
   }
 }
 
-function buildPrompt(negocio, ciudad, producto, tipo) {
-  const base = `Sos un Community Manager experto en redes sociales para negocios latinoamericanos. Generás contenido auténtico, en español rioplatense (argentino), con emojis estratégicos y hashtags relevantes.
-
-Negocio: ${negocio}
-Ciudad: ${ciudad || 'Argentina'}
-${producto ? `Producto/Tema: ${producto}` : ''}
-Red social: ${selectedRed}
-Tipo de post: ${selectedTipo}
-Tipo de contenido: ${tipo}
-Tono: ${selectedTone}`;
-
-  if (selectedTipo === 'Post') return base + `\n\nGenerá:\nCAPTION:\n[caption 150-200 palabras con emojis y llamado a la acción]\n\nHASHTAGS:\n[15-20 hashtags]`;
-  if (selectedTipo === 'Reel') return base + `\n\nGenerá:\nGUION:\n[guion 30-45 seg con escenas]\n\nCAPTION:\n[caption]\n\nHASHTAGS:\n[hashtags]\n\nTIP_CAPCUT:\n[tip de edición]`;
-  if (selectedTipo === 'Guía Canva') return base + `\n\nGenerá:\nTITULO_DISENO:\n[título]\n\nPASOS:\n[6-8 pasos]\n\nCOLORES:\n[paleta]\n\nFUENTES:\n[fuentes]\n\nELEMENTOS:\n[elementos]\n\nCAPTION:\n[caption]`;
-  if (selectedTipo === 'Story') return base + `\n\nGenerá:\nTEXTO_STORY:\n[máx 15 palabras]\n\nSTICKERS:\n[3 stickers]\n\nCAPTION:\n[caption]\n\nHASHTAGS:\n[5 hashtags]`;
-  return base;
+// Botón Copiar del resultado
+function copiarResultado() {
+  const texto = document.getElementById('resTxt').textContent.trim();
+  if (!texto || texto.startsWith('❌')) { mostrarToast('No hay contenido para copiar'); return; }
+  const btn = document.getElementById('cpBtn');
+  copiar(texto, () => btnFeedback(btn, '✓ Copiado'));
 }
 
-// ── SHOW RESULT ──
-async function showResult(text, negocio, producto) {
-  const area = document.getElementById('resultArea');
-  area.innerHTML = '';
+// ── GENERADOR ANUNCIOS ───────────────────────────────────────────────────
+let ADS = [];
 
-  if (selectedTipo === 'Post') {
-    const { caption, hashtags } = parsePost(text);
-    area.innerHTML = renderBlock('📝 Caption', caption, 'caption') + renderBlock('🏷️ Hashtags', hashtags, 'hashtags');
-  } else if (selectedTipo === 'Reel') {
-    const parts = parseReel(text);
-    area.innerHTML = renderBlock('🎬 Guión del Reel', parts.guion, 'guion') + renderBlock('📝 Caption', parts.caption, 'caption') + renderBlock('🏷️ Hashtags', parts.hashtags, 'hashtags') + renderTip(parts.tip);
-  } else if (selectedTipo === 'Guía Canva') {
-    area.innerHTML = renderBlock('🎨 Guía Canva', text, 'canva_guia');
-  } else if (selectedTipo === 'Story') {
-    const parts = parseStory(text);
-    area.innerHTML = renderBlock('⚡ Texto de Story', parts.texto, 'story_texto') + renderBlock('🎯 Stickers', parts.stickers, 'stickers') + renderBlock('📝 Caption', parts.caption, 'caption') + renderBlock('🏷️ Hashtags', parts.hashtags, 'hashtags');
-  }
+async function generarAnuncios() {
+  const prod = document.getElementById('adProd').value.trim();
+  if (!prod) { mostrarToast('Ingresá el producto primero'); return; }
 
-  // Agregar sección de imágenes
-  area.innerHTML += `<div class="result-block">
-    <div class="result-label">📸 Imágenes para tu post</div>
-    ${brandLogoUrl ? `<div style="margin-bottom:10px;"><p style="font-size:12px;color:var(--text3);margin-bottom:6px;">Logo de tu marca:</p><img src="${brandLogoUrl}" class="brand-logo-preview" onerror="this.parentElement.style.display='none'"/></div>` : ''}
-    <div id="imgArea"><p style="color:var(--text3);font-size:13px;">⏳ Buscando imágenes...</p></div>
-    <div class="upload-area">
-      <label>📷 O subí tu propia foto <input type="file" accept="image/*" style="display:none" onchange="previewUpload(this)"/></label>
-      <img id="uploadPreview" class="upload-preview hidden"/>
-    </div>
-  </div>`;
+  const btn   = document.getElementById('adBtn');
+  const cards = document.getElementById('adCards');
 
-  area.classList.remove('hidden');
-  area.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  btn.disabled = true;
+  btn.innerHTML = 'Generando...';
+  cards.innerHTML =
+    '<div style="display:flex;gap:6px;padding:2.5rem;justify-content:center">' +
+    '<span style="width:7px;height:7px;background:var(--r);border-radius:50%;display:inline-block;animation:bou .75s infinite"></span>' +
+    '<span style="width:7px;height:7px;background:var(--r);border-radius:50%;display:inline-block;animation:bou .75s .15s infinite"></span>' +
+    '<span style="width:7px;height:7px;background:var(--r);border-radius:50%;display:inline-block;animation:bou .75s .3s infinite"></span>' +
+    '</div>';
 
-  // Buscar imágenes relacionadas al producto
-  fetchImages(producto || negocio);
-}
+  const prompt =
+    'Generá exactamente 5 anuncios para Meta Ads sobre: ' + prod + '.\n' +
+    'Tienda: OfertasOnline, Posadas, Misiones. WhatsApp: 3765 101958.\n' +
+    'Un anuncio por enfoque: Problema, Beneficio, Prueba social, Oferta directa, Curiosidad.\n' +
+    'Respondé ÚNICAMENTE con un JSON array válido, sin texto antes ni después, sin backticks:\n' +
+    '[{"enfoque":"...","titulo":"...","texto":"...","cta":"...","gancho":85,"marca":80,"stop":88}]\n' +
+    'Reglas: titulo máx 40 chars, texto 2-3 oraciones en español argentino, ' +
+    'cta es el llamado a la acción corto, gancho/marca/stop son números 0-100. ' +
+    'No uses comillas dobles dentro de los valores de texto; usá comillas simples si necesitás.';
 
-function renderBlock(label, content, id) {
-  return `<div class="result-block">
-    <div class="result-label">${label}</div>
-    <div class="result-text" id="txt_${id}">${escHtml(content || '')}</div>
-    <div class="result-actions">
-      <button class="btn-copy" id="btn_${id}" onclick="copyText('${id}')">📋 Copiar</button>
-      <button class="btn-regen" onclick="generar()">🔄 Regenerar</button>
-    </div>
-  </div>`;
-}
-
-function renderTip(tip) {
-  if (!tip) return '';
-  return `<div class="tip-box">💡 <strong>Tip CapCut:</strong> ${escHtml(tip)}</div>`;
-}
-
-function previewUpload(input) {
-  const file = input.files[0]; if (!file) return;
-  const url = URL.createObjectURL(file);
-  const img = document.getElementById('uploadPreview');
-  img.src = url; img.classList.remove('hidden');
-}
-
-// ── PIXABAY IMAGES ──
-async function fetchImages(query) {
-  const imgArea = document.getElementById('imgArea');
-  if (!imgArea) return;
   try {
-    const q = encodeURIComponent(query);
-    const r = await fetch(`https://pixabay.com/api/?key=${PIXABAY_KEY}&q=${q}&image_type=photo&per_page=6&safesearch=true&lang=es`);
-    const data = await r.json();
-    if (!data.hits?.length) {
-      imgArea.innerHTML = '<p style="color:var(--text3);font-size:13px;">No se encontraron imágenes. Subí la tuya.</p>';
-      return;
-    }
-    const imgs = data.hits.slice(0,3);
-    imgArea.innerHTML = `<div class="img-grid">${imgs.map((img,i)=>`
-      <div class="img-thumb ${i===0?'selected':''}" onclick="selectImg(this,'${img.webformatURL}')">
-        <img src="${img.previewURL}" loading="lazy"/>
-      </div>`).join('')}</div>
-      <a class="btn-dl" href="${imgs[0].webformatURL}" download="imagen.jpg" target="_blank" id="dlSelected">⬇️ Descargar imagen</a>`;
-  } catch {
-    imgArea.innerHTML = '<p style="color:var(--text3);font-size:13px;">No se pudieron cargar imágenes.</p>';
+    const raw = await llamarIA(prompt, 1500);
+    ADS = extraerJSON(raw);
+    if (!Array.isArray(ADS) || ADS.length === 0) throw new Error('La IA no generó anuncios válidos');
+
+    const maxG = Math.max(...ADS.map(a => Number(a.gancho) || 0));
+    function col(v) { return v >= 80 ? '#22c55e' : v >= 60 ? '#f59e0b' : '#94a3b8'; }
+
+    cards.innerHTML = ADS.map((ad, i) => {
+      const g = Number(ad.gancho) || 0, m = Number(ad.marca) || 0, s = Number(ad.stop) || 0;
+      const esBest = g === maxG;
+      return '<div class="ad-card' + (esBest ? ' best' : '') + '">' +
+        '<span class="ad-badge ' + (esBest ? 'winner' : 'normal') + '">' + (esBest ? '⭐ Mejor gancho' : ad.enfoque) + '</span>' +
+        '<div class="ad-enfoque">' + (ad.enfoque || '') + '</div>' +
+        '<div class="ad-titulo">' + (ad.titulo || '') + '</div>' +
+        '<div class="ad-texto">' + (ad.texto || '') + '</div>' +
+        '<div class="ad-cta-lbl">👉 CTA: <b>' + (ad.cta || '') + '</b></div>' +
+        '<div class="ad-metrics">' +
+          '<div class="ad-met"><div class="ad-met-lbl">Gancho</div><div class="ad-met-val" style="color:' + col(g) + '">' + g + '%</div><div class="ad-bar"><div class="ad-fill" style="width:' + g + '%;background:' + col(g) + '"></div></div></div>' +
+          '<div class="ad-met"><div class="ad-met-lbl">Marca</div><div class="ad-met-val" style="color:' + col(m) + '">' + m + '%</div><div class="ad-bar"><div class="ad-fill" style="width:' + m + '%;background:' + col(m) + '"></div></div></div>' +
+          '<div class="ad-met"><div class="ad-met-lbl">Stop rate</div><div class="ad-met-val" style="color:' + col(s) + '">' + s + '%</div><div class="ad-bar"><div class="ad-fill" style="width:' + s + '%;background:' + col(s) + '"></div></div></div>' +
+        '</div>' +
+        '<button class="ad-cp" data-i="' + i + '" onclick="copiarAnuncio(this)">📋 Copiar anuncio</button>' +
+        '</div>';
+    }).join('');
+
+  } catch (e) {
+    ADS = [];
+    cards.innerHTML = '<div style="padding:1.5rem;color:#ef4444;font-size:13px">❌ ' + e.message + '</div>';
   }
+  btn.disabled = false;
+  btn.innerHTML = '📣 Generar anuncios';
 }
 
-function selectImg(el, url) {
-  document.querySelectorAll('.img-thumb').forEach(t => t.classList.remove('selected'));
-  el.classList.add('selected');
-  const dl = document.getElementById('dlSelected');
-  if (dl) dl.href = url;
+function copiarAnuncio(btn) {
+  const i = parseInt(btn.dataset.i, 10);
+  const ad = ADS[i];
+  if (!ad) { mostrarToast('Error: anuncio no encontrado'); return; }
+  const texto = '📌 ' + ad.titulo + '\n\n' + ad.texto + '\n\n👉 ' + ad.cta;
+  copiar(texto, () => btnFeedback(btn, '✓ Copiado'));
 }
 
-// ── PARSE HELPERS ──
-function parsePost(text) {
-  const captionMatch = text.match(/CAPTION:\s*([\s\S]*?)(?=HASHTAGS:|$)/i);
-  const hashMatch = text.match(/HASHTAGS:\s*([\s\S]*?)$/i);
-  return { caption: captionMatch?.[1]?.trim() || text, hashtags: hashMatch?.[1]?.trim() || '' };
-}
-function parseReel(text) {
-  const get = (key, next) => { const re = new RegExp(`${key}:\\s*([\\s\\S]*?)(?=${next ? next + ':|$' : '$'})`, 'i'); return text.match(re)?.[1]?.trim() || ''; };
-  return { guion: get('GUION','CAPTION'), caption: get('CAPTION','HASHTAGS'), hashtags: get('HASHTAGS','TIP_CAPCUT'), tip: get('TIP_CAPCUT', '') };
-}
-function parseStory(text) {
-  const get = (key, next) => { const re = new RegExp(`${key}:\\s*([\\s\\S]*?)(?=${next ? next + ':|$' : '$'})`, 'i'); return text.match(re)?.[1]?.trim() || ''; };
-  return { texto: get('TEXTO_STORY','STICKERS'), stickers: get('STICKERS','CAPTION'), caption: get('CAPTION','HASHTAGS'), hashtags: get('HASHTAGS','') };
-}
+// ── HASHTAGS ─────────────────────────────────────────────────────────────
+var HTS = [
+  {tag:'#EntregaElMismoDia',est:'850K',pct:88,vol:'hi'},
+  {tag:'#OfertasOnline',est:'2.1M',pct:96,vol:'hi'},
+  {tag:'#SmartphoneArgentina',est:'1.4M',pct:90,vol:'hi'},
+  {tag:'#CelularNuevo',est:'3.1M',pct:97,vol:'hi'},
+  {tag:'#SamsungGalaxy',est:'5.2M',pct:100,vol:'hi'},
+  {tag:'#XiaomiArgentina',est:'920K',pct:82,vol:'hi'},
+  {tag:'#TecnologiaArgentina',est:'2.4M',pct:95,vol:'hi'},
+  {tag:'#Misiones',est:'1.8M',pct:92,vol:'hi'},
+  {tag:'#CompraOnlineArgentina',est:'1.1M',pct:86,vol:'hi'},
+  {tag:'#OfertasTech',est:'780K',pct:80,vol:'hi'},
+  {tag:'#MotorolaArgentina',est:'680K',pct:74,vol:'md'},
+  {tag:'#GarantiaOficial',est:'340K',pct:62,vol:'md'},
+  {tag:'#CelularBarato',est:'480K',pct:68,vol:'md'},
+  {tag:'#TiendaDigital',est:'560K',pct:70,vol:'md'},
+  {tag:'#OfertasMoviles',est:'290K',pct:58,vol:'md'},
+  {tag:'#PosadasMisiones',est:'95K',pct:60,vol:'md'},
+  {tag:'#CelularesPosadas',est:'45K',pct:52,vol:'lo'},
+  {tag:'#TecnologiaPosadas',est:'38K',pct:46,vol:'lo'},
+  {tag:'#PosadasCompra',est:'22K',pct:35,vol:'lo'},
+  {tag:'#SmartphonePosadas',est:'18K',pct:30,vol:'lo'}
+];
 
-// ── COPY ──
-function copyText(id) {
-  const el = document.getElementById('txt_' + id);
-  const btn = document.getElementById('btn_' + id);
-  if (!el) return;
-  navigator.clipboard.writeText(el.textContent).then(() => {
-    btn.textContent = '✓ Copiado!'; btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = '📋 Copiar'; btn.classList.remove('copied'); }, 2000);
+function colV(v) { return v==='hi'?'#22c55e':v==='md'?'#facc15':'#94a3b8'; }
+
+(function renderHT() {
+  var list = document.getElementById('htList');
+  list.innerHTML = HTS.map(function(h, i) {
+    return '<div class="ht-row" data-i="' + i + '">' +
+      '<span class="ht-n">' + (i+1) + '</span>' +
+      '<span class="ht-tag">' + h.tag + '</span>' +
+      '<span class="ht-vol-lbl">' + h.est + '</span>' +
+      '<div class="ht-bar-w"><div class="ht-bar-f" style="width:' + h.pct + '%;background:' + colV(h.vol) + '"></div></div>' +
+      '<span class="vb ' + h.vol + '">' + (h.vol==='hi'?'Alto':h.vol==='md'?'Medio':'Nicho') + '</span>' +
+      '<button class="ht-cp" id="hcp' + i + '">copiar</button>' +
+      '</div>';
+  }).join('');
+
+  // Event delegation — un solo listener, sin onclick inline
+  list.addEventListener('click', function(e) {
+    var row = e.target.closest('.ht-row');
+    if (!row) return;
+    var i = parseInt(row.dataset.i, 10);
+    var h = HTS[i];
+    var cpBtn = document.getElementById('hcp' + i);
+    copiar(h.tag, function() {
+      var prev = cpBtn.innerHTML;
+      cpBtn.innerHTML = '✓';
+      cpBtn.classList.add('ok');
+      setTimeout(function() { cpBtn.innerHTML = prev; cpBtn.classList.remove('ok'); }, 1500);
+    });
+  });
+})();
+
+function copiarTodos() {
+  var txt = HTS.map(function(h) { return h.tag; }).join(' ');
+  var btn = document.getElementById('htComboBtn');
+  copiar(txt, function() {
+    btnFeedback(btn, '✓ Copiados los 20');
+    mostrarToast('✓ 20 hashtags copiados al portapapeles');
   });
 }
 
-function escHtml(t) { return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-
-window.addEventListener('load', () => { initSupabase(); });
+// ── SCROLL REVEAL ────────────────────────────────────────────────────────
+var obs = new IntersectionObserver(function(es) {
+  es.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('in'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.rv').forEach(function(el) { obs.observe(el); });
 </script>
 </body>
 </html>
