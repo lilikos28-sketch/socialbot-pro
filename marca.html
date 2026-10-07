@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SocialBot Pro — Contenido para tu marca</title>
+<meta name="description" content="Pegá el link de tu página y SocialBot Pro toma tu logo y tus colores para crear posts, historias y textos listos para publicar. Gratis.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=Barlow+Condensed:wght@700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ac:#E8002D;            /* color de la marca activa (cambia solo) */
+  --ac-tx:#fff;
+  --bg:#0B0B0B;--bg2:#141414;--bg3:#1C1C1C;--bo:#2C2C2C;--bo2:#3a3a3a;
+  --tx:#F2F2F2;--tx2:#A8A8A8;--tx3:#6c6c6c;--ok:#22c55e;--warn:#facc15;
+}
+html{scroll-behavior:smooth}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;line-height:1.5}
+a{color:inherit}
+nav{position:sticky;top:0;z-index:50;height:56px;display:flex;align-items:center;gap:12px;padding:0 20px;background:rgba(11,11,11,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--bo)}
+.logo-app{font-family:'Syne',sans-serif;font-weight:800;font-size:1rem;display:flex;align-items:center;gap:8px;margin-right:auto}
+.logo-app i{width:9px;height:9px;border-radius:50%;background:var(--ac);display:inline-block}
+.marcas{display:flex;gap:8px;align-items:center}
+.marcas select{max-width:180px}
+header.hero{padding:48px 20px 24px;text-align:center;max-width:860px;margin:0 auto}
+header.hero h1{font-family:'Syne',sans-serif;font-size:clamp(2rem,6vw,3.4rem);line-height:1.05;letter-spacing:-.03em}
+header.hero h1 b{color:var(--ac)}
+header.hero p{color:var(--tx2);margin-top:12px;font-size:1.05rem}
+.url-row{display:flex;gap:8px;max-width:640px;margin:22px auto 0}
+.url-row input{flex:1;font-size:16px;padding:14px 16px}
+main{max-width:1180px;margin:0 auto;padding:12px 20px 60px;display:grid;gap:22px}
+.panel{background:var(--bg2);border:1px solid var(--bo);border-radius:16px;overflow:hidden}
+.panel-h{padding:16px 20px;border-bottom:1px solid var(--bo);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.panel-h h2{font-family:'Syne',sans-serif;font-size:1.05rem}
+.paso{width:26px;height:26px;border-radius:50%;background:var(--ac);color:var(--ac-tx);font-weight:700;display:grid;place-items:center;font-size:13px;flex-shrink:0}
+.panel-b{padding:20px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.kit{display:grid;grid-template-columns:200px 1fr;gap:20px}
+@media (max-width:780px){.kit,.grid2,.grid3{grid-template-columns:1fr}}
+label.f{display:grid;gap:6px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx2)}
+label.f small{text-transform:none;letter-spacing:0;font-weight:400;color:var(--tx3)}
+.fi{width:100%;background:var(--bg3);border:1px solid var(--bo);border-radius:9px;padding:10px 12px;font:inherit;font-size:14.5px;color:var(--tx);outline:none}
+.fi:focus{border-color:var(--ac)}
+textarea.fi{resize:vertical;min-height:70px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;font:inherit;font-weight:700;font-size:14.5px;padding:12px 20px;border-radius:10px;border:1px solid var(--bo2);background:transparent;color:var(--tx);cursor:pointer;transition:filter .15s,transform .15s;text-decoration:none}
+.btn:hover:not(:disabled){filter:brightness(1.12)}
+.btn:disabled{opacity:.5;cursor:wait}
+.btn-ac{background:var(--ac);border-color:var(--ac);color:var(--ac-tx)}
+.btn-sm{padding:7px 12px;font-size:13px;font-weight:600}
+.btn-full{width:100%}
+.logo-box{background:#fff;border-radius:14px;aspect-ratio:1;display:grid;place-items:center;overflow:hidden;border:1px solid var(--bo)}
+.logo-box img{max-width:86%;max-height:86%;object-fit:contain}
+.logo-box span{color:#888;font-size:13px;text-align:center;padding:10px}
+.logo-act{display:grid;gap:8px;margin-top:10px}
+.colores{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.colores input[type=color]{width:48px;height:40px;border:1px solid var(--bo);border-radius:9px;background:var(--bg3);padding:3px;cursor:pointer}
+.sug{display:flex;gap:6px;flex-wrap:wrap}
+.sug button{width:26px;height:26px;border-radius:50%;border:2px solid var(--bo2);cursor:pointer}
+.avisos{display:grid;gap:6px;margin-bottom:14px}
+.aviso{font-size:13px;background:rgba(250,204,21,.08);border:1px solid rgba(250,204,21,.25);color:#fde68a;padding:8px 12px;border-radius:9px}
+.tg{display:flex;gap:7px;flex-wrap:wrap}
+.tb{font:inherit;font-size:13px;padding:7px 13px;border-radius:8px;border:1px solid var(--bo);background:transparent;color:var(--tx2);cursor:pointer}
+.tb.on{background:var(--ac);border-color:var(--ac);color:var(--ac-tx);font-weight:700}
+.fotos{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.fotos button{flex:0 0 auto;width:72px;height:72px;border-radius:10px;border:3px solid transparent;background:#fff center/cover no-repeat;cursor:pointer}
+.fotos button.on{border-color:var(--ac)}
+.fotos .quitar{background:var(--bg3);color:var(--tx2);font-size:12px;border:1px dashed var(--bo2)}
+.crear{display:grid;grid-template-columns:minmax(300px,420px) 1fr;gap:22px;align-items:start}
+@media (max-width:900px){.crear{grid-template-columns:1fr}}
+.vista{position:sticky;top:72px;display:grid;gap:12px;justify-items:center}
+.vista canvas{width:auto;max-width:100%;max-height:70vh;border-radius:12px;box-shadow:0 14px 40px rgba(0,0,0,.5);background:var(--bg3)}
+.acciones{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.estado{font-size:13.5px;color:var(--tx2);min-height:20px;text-align:center}
+.estado.err{color:#fca5a5;font-weight:600}
+.texto-res{background:var(--bg3);border:1px solid var(--bo);border-radius:12px;width:100%}
+.texto-res .h{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;border-bottom:1px solid var(--bo);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx2)}
+.texto-res pre{white-space:pre-wrap;word-break:break-word;font:inherit;font-size:14px;padding:14px;line-height:1.7}
+.oculto{display:none!important}
+.puntos{display:inline-flex;gap:4px}.puntos i{width:6px;height:6px;border-radius:50%;background:var(--ac);animation:b .7s infinite}.puntos i:nth-child(2){animation-delay:.12s}.puntos i:nth-child(3){animation-delay:.24s}
+@keyframes b{50%{transform:translateY(-5px)}}
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(120px);background:var(--bg3);border:1px solid var(--bo2);padding:10px 18px;border-radius:10px;font-size:14px;transition:transform .25s;z-index:99}
+.toast.show{transform:translateX(-50%) translateY(0)}
+footer{text-align:center;color:var(--tx3);font-size:12.5px;padding:30px 20px;border-top:1px solid var(--bo)}
+:focus-visible{outline:3px solid var(--warn);outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="toast" id="toast" role="status"></div>
+
+<nav>
+  <div class="logo-app"><i></i> SocialBot Pro</div>
+  <div class="marcas">
+    <select class="fi" id="selMarca" aria-label="Marca activa"></select>
+    <button class="btn btn-sm" id="btnNueva" type="button">+ Nueva marca</button>
+  </div>
+</nav>
+
+<header class="hero">
+  <h1>Pegá el link de tu página<br>y creamos <b>tu contenido</b></h1>
+  <p>Tomamos tu logo, tus colores y tus datos para armar posts, historias y textos listos para Instagram, Facebook, TikTok y WhatsApp. Gratis.</p>
+  <form class="url-row" id="formUrl">
+    <input class="fi" id="url" type="text" inputmode="url" placeholder="www.tumarca.com" aria-label="Dirección de tu página web" autocomplete="url">
+    <button class="btn btn-ac" id="btnAnalizar" type="submit">Analizar</button>
+  </form>
+  <p class="estado" id="estadoUrl" aria-live="polite"></p>
+</header>
+
+<main>
+  <!-- PASO 1: KIT DE MARCA -->
+  <section class="panel" id="panelKit" aria-labelledby="t1">
+    <div class="panel-h"><div class="paso">1</div><h2 id="t1">Tu marca</h2><span style="color:var(--tx3);font-size:13px">Revisá y corregí lo que haga falta. Se guarda en este navegador.</span></div>
+    <div class="panel-b">
+      <div class="avisos" id="avisos"></div>
+      <div class="kit">
+        <div>
+          <div class="logo-box" id="logoBox"><span>Sin logo todavía</span></div>
+          <div class="logo-act">
+            <label class="btn btn-sm" style="cursor:pointer">⬆️ Subir logo<input type="file" id="logoFile" accept="image/*" class="oculto"></label>
+          </div>
+        </div>
+        <div style="display:grid;gap:14px">
+          <div class="grid2">
+            <label class="f">Nombre de la marca<input class="fi" id="kNombre" type="text" placeholder="Mi Marca"></label>
+            <label class="f">Rubro <small>qué vendés o hacés</small><input class="fi" id="kRubro" type="text" placeholder="ej: panadería artesanal, celulares, estética"></label>
+          </div>
+          <label class="f">Descripción<textarea class="fi" id="kDesc" rows="2" placeholder="Una o dos frases sobre el negocio"></textarea></label>
+          <div class="grid3">
+            <label class="f">Ciudad / zona<input class="fi" id="kCiudad" type="text" placeholder="ej: Posadas, Misiones"></label>
+            <label class="f">WhatsApp<input class="fi" id="kWa" type="text" inputmode="tel" placeholder="ej: 3765 101958"></label>
+            <label class="f">Web<input class="fi" id="kWeb" type="text" placeholder="tumarca.com"></label>
+          </div>
+          <div class="grid2">
+            <label class="f">Instagram<input class="fi" id="kIg" type="text" placeholder="@tumarca"></label>
+            <label class="f">Diferencial <small>lo que te hace elegir</small><input class="fi" id="kDif" type="text" placeholder="ej: envío el mismo día, 12 cuotas, hecho a mano"></label>
+          </div>
+          <div>
+            <div class="f" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx2);margin-bottom:6px">Colores</div>
+            <div class="colores">
+              <input type="color" id="kC1" value="#E8002D" aria-label="Color principal">
+              <input type="color" id="kC2" value="#FFD100" aria-label="Color de acento">
+              <span style="color:var(--tx3);font-size:13px">Sugeridos:</span>
+              <div class="sug" id="sug"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASO 2: CREAR -->
+  <section class="panel" aria-labelledby="t2">
+    <div class="panel-h"><div class="paso">2</div><h2 id="t2">Creá tu contenido</h2></div>
+    <div class="panel-b crear">
+      <form id="formCrear" style="display:grid;gap:16px" autocomplete="off">
+        <div class="f"><span class="f" style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx2)">Red social</span>
+          <div class="tg" id="gRed" style="margin-top:6px">
+            <button type="button" class="tb on" data-v="Instagram">📸 Instagram</button>
+            <button type="button" class="tb" data-v="Facebook">📘 Facebook</button>
+            <button type="button" class="tb" data-v="TikTok">🎵 TikTok</button>
+            <button type="button" class="tb" data-v="WhatsApp">💬 WhatsApp</button>
+          </div>
+        </div>
+        <div class="f"><span style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx2)">Formato</span>
+          <div class="tg" id="gFormato" style="margin-top:6px">
+            <button type="button" class="tb on" data-v="post">Post 1:1</button>
+            <button type="button" class="tb" data-v="vertical">Post 4:5</button>
+            <button type="button" class="tb" data-v="story">Historia / Reel 9:16</button>
+          </div>
+        </div>
+        <label class="f">Objetivo
+          <select class="fi" id="cObjetivo">
+            <option>Promocionar un producto</option>
+            <option>Oferta o descuento</option>
+            <option>Lanzamiento / novedad</option>
+            <option>Fecha especial (Día de la Madre, Navidad, etc.)</option>
+            <option>Sorteo o concurso</option>
+            <option>Presentar la marca</option>
+            <option>Testimonio de cliente</option>
+            <option>Consejo útil para clientes</option>
+          </select>
+        </label>
+        <label class="f">Producto o tema <small>opcional</small><input class="fi" id="cProd" type="text" placeholder="ej: Torta de chocolate para 12 personas"></label>
+        <div class="grid2">
+          <label class="f">Precio <small>opcional, se escribe tal cual</small><input class="fi" id="cPrecio" type="text" placeholder="$25.000"></label>
+          <label class="f">Tono
+            <select class="fi" id="cTono"><option>Dinámico y vendedor</option><option>Cercano y amigable</option><option>Profesional</option><option>Divertido, con humor</option><option>Elegante</option></select>
+          </label>
+        </div>
+        <div>
+          <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--tx2);margin-bottom:6px">Foto del producto <small style="text-transform:none;font-weight:400;color:var(--tx3)">de tu página o subila</small></div>
+          <div class="fotos" id="fotos"></div>
+          <label class="btn btn-sm" style="cursor:pointer;margin-top:8px">⬆️ Subir foto<input type="file" id="fotoFile" accept="image/*" class="oculto"></label>
+        </div>
+        <label class="f">Fondo
+          <select class="fi" id="cFondo">
+            <option value="auto">✨ Automático según el producto</option>
+            <option value="estudio">Estudio limpio</option>
+            <option value="marmol">Mármol elegante</option>
+            <option value="madera">Madera cálida</option>
+            <option value="flores">Flores</option>
+            <option value="regalo">Regalo / fecha especial</option>
+            <option value="tech">Tecnología</option>
+            <option value="fiesta">Fiesta</option>
+            <option value="color">Solo los colores de la marca (sin IA)</option>
+          </select>
+        </label>
+        <button class="btn btn-ac btn-full" id="btnCrear" type="submit">✨ Crear contenido</button>
+        <p class="estado" id="estado" aria-live="polite"></p>
+      </form>
+
+      <div class="vista">
+        <canvas id="lienzo" width="1080" height="1080" aria-label="Vista previa de la imagen"></canvas>
+        <div class="acciones">
+          <button class="btn btn-sm" id="btnOtroFondo" type="button">🔄 Otro fondo</button>
+          <button class="btn btn-sm btn-ac" id="btnBajar" type="button">⬇️ Descargar imagen</button>
+        </div>
+        <div class="grid2" style="width:100%">
+          <label class="f">Título en la imagen<input class="fi" id="iTitulo" type="text"></label>
+          <label class="f">Frase de abajo<input class="fi" id="iSub" type="text"></label>
+        </div>
+        <div class="texto-res oculto" id="cajaTexto">
+          <div class="h"><span id="lblTexto">Texto para publicar</span><button class="btn btn-sm" id="btnCopiar" type="button">📋 Copiar</button></div>
+          <pre id="texto"></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>SocialBot Pro · Contenido para marcas con IA · Hecho en Posadas, Misiones</footer>
+
+<script>
+'use strict';
+const $ = id => document.getElementById(id);
+const IMAGENES = 'https://socialbot-imagenes.lili-kos28.workers.dev/imagen';
+const CONDENSADA = '"Barlow Condensed","Arial Narrow",Arial,sans-serif';
+const lienzo = $('lienzo'), ctx = lienzo.getContext('2d');
+
+// ---------- utilidades ----------
+function toast(m) { const t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(t._i); t._i = setTimeout(() => t.classList.remove('show'), 2800); }
+function estado(el, txt, err) { el.innerHTML = ''; if (txt === '…') { el.innerHTML = '<span class="puntos"><i></i><i></i><i></i></span>'; } else el.textContent = txt || ''; el.className = 'estado' + (err ? ' err' : ''); }
+const guardarLS = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (_) { toast('No se pudo guardar (memoria del navegador llena)'); } };
+const leerLS = (k, d) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (_) { return d; } };
+function cargarImagen(src) { return new Promise((ok, mal) => { const i = new Image(); i.crossOrigin = 'anonymous'; i.onload = () => ok(i); i.onerror = () => mal(new Error('No se pudo cargar la imagen')); i.src = src; }); }
+function archivoADataURL(f) { return new Promise((ok, mal) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = mal; r.readAsDataURL(f); }); }
+function hexARgb(h) { return [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16)); }
+function luminancia(h) { const [r, g, b] = hexARgb(h).map(v => { v /= 255; return v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }); return .2126 * r + .7152 * g + .0722 * b; }
+const textoSobre = h => luminancia(h) > .45 ? '#111111' : '#FFFFFF';
+function oscurecer(h, f) { return '#' + hexARgb(h).map(v => Math.round(v * (1 - f)).toString(16).padStart(2, '0')).join(''); }
+function limpiarWeb(u) { return String(u || '').replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, ''); }
+function grupo(id) { const b = document.querySelector('#' + id + ' .tb.on'); return b ? b.dataset.v : ''; }
+document.querySelectorAll('.tg').forEach(g => g.addEventListener('click', e => {
+  const b = e.target.closest('.tb'); if (!b) return;
+  g.querySelectorAll('.tb').forEach(x => x.classList.remove('on')); b.classList.add('on');
+  if (g.id === 'gFormato') dibujar();
+}));
+
+// Color más presente y saturado de un logo (para sugerir el color de la marca).
+function colorDelLogo(img) {
+  try {
+    const c = document.createElement('canvas'), n = 64; c.width = n; c.height = n;
+    const x = c.getContext('2d'); x.drawImage(img, 0, 0, n, n);
+    const d = x.getImageData(0, 0, n, n).data, cubos = new Map();
+    for (let i = 0; i < d.length; i += 4) {
+      const [r, g, b, a] = [d[i], d[i + 1], d[i + 2], d[i + 3]];
+      if (a < 128) continue;
+      const mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 510, s = mx === mn ? 0 : (mx - mn) / (255 - Math.abs(mx + mn - 255));
+      if (s < .3 || l < .12 || l > .92) continue;
+      const k = (r >> 4) + ',' + (g >> 4) + ',' + (b >> 4);
+      const v = cubos.get(k) || { n: 0, r: 0, g: 0, b: 0 }; v.n++; v.r += r; v.g += g; v.b += b; cubos.set(k, v);
+    }
+    const lista = [...cubos.values()].sort((a, b) => b.n - a.n).slice(0, 3);
+    return lista.map(v => '#' + [v.r / v.n, v.g / v.n, v.b / v.n].map(c => Math.round(c).toString(16).padStart(2, '0')).join(''));
+  } catch (_) { return []; }
+}
+
+// ---------- marcas guardadas ----------
+let marcas = leerLS('sbp_marcas', []);
+let actual = leerLS('sbp_actual', null);
+let marca = marcas.find(m => m.id === actual) || null;
+let logoImg = null;
+
+function marcaVacia() { return { id: 'm' + Date.now(), nombre: '', rubro: '', desc: '', ciudad: '', wa: '', web: '', ig: '', dif: '', c1: '#E8002D', c2: '#FFD100', logo: null, fotos: [], sug: [] }; }
+function pintarSelector() {
+  const s = $('selMarca'); s.textContent = '';
+  if (!marcas.length) { const o = document.createElement('option'); o.textContent = 'Sin marcas'; s.append(o); s.disabled = true; return; }
+  s.disabled = false;
+  marcas.forEach(m => { const o = document.createElement('option'); o.value = m.id; o.textContent = m.nombre || 'Sin nombre'; if (marca && m.id === marca.id) o.selected = true; s.append(o); });
+}
+function aplicarColores() {
+  const c1 = $('kC1').value, c2 = $('kC2').value;
+  document.documentElement.style.setProperty('--ac', c1);
+  document.documentElement.style.setProperty('--ac-tx', textoSobre(c1));
+}
+async function cargarMarca(m) {
+  marca = m; guardarLS('sbp_actual', m ? m.id : null);
+  const v = m || marcaVacia();
+  $('kNombre').value = v.nombre; $('kRubro').value = v.rubro; $('kDesc').value = v.desc; $('kCiudad').value = v.ciudad;
+  $('kWa').value = v.wa; $('kWeb').value = v.web; $('kIg').value = v.ig; $('kDif').value = v.dif;
+  $('kC1').value = v.c1; $('kC2').value = v.c2; aplicarColores();
+  pintarSugeridos(v.sug || []);
+  logoImg = null; pintarLogo(v.logo);
+  if (v.logo) { try { logoImg = await cargarImagen(v.logo); } catch (_) {} }
+  pintarFotos(v.fotos || []);
+  pintarSelector(); dibujar();
+}
+function guardarMarca() {
+  if (!marca) { marca = marcaVacia(); marcas.push(marca); }
+  Object.assign(marca, { nombre: $('kNombre').value.trim(), rubro: $('kRubro').value.trim(), desc: $('kDesc').value.trim(), ciudad: $('kCiudad').value.trim(), wa: $('kWa').value.trim(), web: $('kWeb').value.trim(), ig: $('kIg').value.trim(), dif: $('kDif').value.trim(), c1: $('kC1').value, c2: $('kC2').value });
+  guardarLS('sbp_marcas', marcas); guardarLS('sbp_actual', marca.id); pintarSelector();
+}
+function pintarLogo(src) {
+  const b = $('logoBox'); b.textContent = '';
+  if (src) { const i = document.createElement('img'); i.src = src; i.alt = 'Logo de la marca'; b.append(i); }
+  else { const s = document.createElement('span'); s.textContent = 'Sin logo todavía. Subilo con el botón de abajo.'; b.append(s); }
+}
+function pintarSugeridos(lista) {
+  const s = $('sug'); s.textContent = '';
+  [...new Set(lista)].slice(0, 6).forEach(c => {
+    const b = document.createElement('button'); b.type = 'button'; b.style.background = c; b.title = c; b.setAttribute('aria-label', 'Usar color ' + c);
+    b.onclick = e => { if (e.shiftKey) $('kC2').value = c; else $('kC1').value = c; aplicarColores(); guardarMarca(); dibujar(); };
+    b.oncontextmenu = e => { e.preventDefault(); $('kC2').value = c; aplicarColores(); guardarMarca(); dibujar(); };
+    s.append(b);
+  });
+  if (lista.length) s.title = 'Clic: color principal · Clic derecho: color de acento';
+}
+
+// ---------- paso 1: analizar la web ----------
+$('formUrl').addEventListener('submit', async e => {
+  e.preventDefault();
+  const url = $('url').value.trim(); if (!url) { $('url').focus(); return; }
+  const btn = $('btnAnalizar'); btn.disabled = true; estado($('estadoUrl'), '…');
+  try {
+    const r = await fetch('/api/brand?url=' + encodeURIComponent(url));
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(d.error || 'No se pudo analizar la página.');
+    // Si ya existe una marca con ese dominio, la actualizamos.
+    let m = marcas.find(x => limpiarWeb(x.web) === limpiarWeb(d.dominio)) || marcaVacia();
+    if (!marcas.includes(m)) marcas.push(m);
+    let sug = d.colores || [];
+    if (d.logo) { try { const im = await cargarImagen(d.logo); sug = [...colorDelLogo(im), ...sug]; } catch (_) {} }
+    Object.assign(m, {
+      nombre: d.nombre || m.nombre, desc: d.descripcion || m.desc, ciudad: d.ciudad || m.ciudad,
+      web: limpiarWeb(d.url || d.dominio), wa: (d.contacto && (d.contacto.whatsapp || d.contacto.telefono)) || m.wa,
+      ig: d.contacto && d.contacto.redes && d.contacto.redes.instagram ? '@' + d.contacto.redes.instagram.replace(/\/$/, '').split('/').pop() : m.ig,
+      logo: d.logo || m.logo, fotos: d.fotos || [], sug,
+    });
+    if (sug[0]) m.c1 = sug[0];
+    if (sug[1]) m.c2 = sug.find(c => c !== m.c1 && Math.abs(luminancia(c) - luminancia(m.c1)) > .15) || m.c2;
+    guardarLS('sbp_marcas', marcas);
+    await cargarMarca(m);
+    const av = $('avisos'); av.textContent = '';
+    (d.avisos || []).forEach(t => { const p = document.createElement('div'); p.className = 'aviso'; p.textContent = '⚠️ ' + t; av.append(p); });
+    if (!m.rubro) { $('kRubro').focus(); toast('Escribí el rubro: ayuda a que el contenido salga mejor'); }
+    estado($('estadoUrl'), '✓ Listo. Revisá tu marca abajo.');
+    $('panelKit').scrollIntoView({ behavior: 'smooth' });
+  } catch (err) {
+    estado($('estadoUrl'), err instanceof TypeError ? 'No hay conexión con el servidor.' : err.message, true);
+  } finally { btn.disabled = false; }
+});
+
+['kNombre', 'kRubro', 'kDesc', 'kCiudad', 'kWa', 'kWeb', 'kIg', 'kDif'].forEach(id => $(id).addEventListener('change', () => { guardarMarca(); dibujar(); }));
+['kC1', 'kC2'].forEach(id => $(id).addEventListener('input', () => { aplicarColores(); dibujar(); }));
+['kC1', 'kC2'].forEach(id => $(id).addEventListener('change', guardarMarca));
+$('logoFile').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  const src = await archivoADataURL(f);
+  if (!marca) guardarMarca();
+  marca.logo = src; logoImg = await cargarImagen(src); pintarLogo(src);
+  const sug = colorDelLogo(logoImg); marca.sug = [...sug, ...(marca.sug || [])]; pintarSugeridos(marca.sug);
+  guardarLS('sbp_marcas', marcas); dibujar();
+});
+$('selMarca').addEventListener('change', e => cargarMarca(marcas.find(m => m.id === e.target.value)));
+$('btnNueva').addEventListener('click', () => { cargarMarca(null); $('avisos').textContent = ''; $('url').value = ''; $('url').focus(); });
+
+// ---------- fotos del producto ----------
+let fotoImg = null, fotoSel = null;
+function pintarFotos(lista) {
+  const c = $('fotos'); c.textContent = '';
+  const q = document.createElement('button'); q.type = 'button'; q.className = 'quitar' + (fotoSel === null ? ' on' : ''); q.textContent = 'Sin foto';
+  q.onclick = () => { fotoSel = null; fotoImg = null; pintarFotos(lista); dibujar(); };
+  c.append(q);
+  lista.forEach(u => {
+    const b = document.createElement('button'); b.type = 'button';
+    const src = u.startsWith('data:') ? u : '/api/img?u=' + encodeURIComponent(u);
+    b.style.backgroundImage = `url("${src}")`; b.setAttribute('aria-label', 'Usar esta foto');
+    if (fotoSel === u) b.className = 'on';
+    b.onclick = async () => {
+      try { fotoImg = recortarFondoBlanco(await cargarImagen(src)); fotoSel = u; pintarFotos(lista); dibujar(); }
+      catch (_) { toast('No se pudo usar esa foto'); }
+    };
+    c.append(b);
+  });
+}
+$('fotoFile').addEventListener('change', async e => {
+  const f = e.target.files[0]; if (!f) return;
+  const src = await archivoADataURL(f);
+  if (!marca) guardarMarca();
+  marca.fotos = [src, ...(marca.fotos || []).filter(x => !x.startsWith('data:'))].slice(0, 12);
+  try { guardarLS('sbp_marcas', marcas); } catch (_) {}
+  fotoImg = recortarFondoBlanco(await cargarImagen(src)); fotoSel = src; pintarFotos(marca.fotos); dibujar();
+});
+// Quita el fondo blanco que toca los bordes (fotos de catálogo).
+function recortarFondoBlanco(img) {
+  const W = img.naturalWidth || img.width, H = img.naturalHeight || img.height;
+  if (W * H > 4e6) return img;
+  const c = document.createElement('canvas'); c.width = W; c.height = H;
+  const x = c.getContext('2d'); x.drawImage(img, 0, 0);
+  let datos; try { datos = x.getImageData(0, 0, W, H); } catch (_) { return img; }
+  const d = datos.data, visto = new Uint8Array(W * H), pila = [];
+  const claro = i => d[i * 4 + 3] < 20 || (d[i * 4] > 238 && d[i * 4 + 1] > 238 && d[i * 4 + 2] > 238);
+  for (let px = 0; px < W; px++) pila.push(px, (H - 1) * W + px);
+  for (let py = 0; py < H; py++) pila.push(py * W, py * W + W - 1);
+  let n = 0;
+  while (pila.length) {
+    const i = pila.pop(); if (visto[i]) continue; visto[i] = 1; if (!claro(i)) continue;
+    d[i * 4 + 3] = 0; n++;
+    const px = i % W, py = (i - px) / W;
+    if (px > 0) pila.push(i - 1); if (px < W - 1) pila.push(i + 1); if (py > 0) pila.push(i - W); if (py < H - 1) pila.push(i + W);
+  }
+  if (n < W * H * .05) return img;
+  x.putImageData(datos, 0, 0); return c;
+}
+
+// ---------- IA de texto ----------
+async function pedirIA(prompt, max) {
+  const r = await fetch('/api/generate', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ max_tokens: max || 900, messages: [{ role: 'user', content: prompt }] }) });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok || d.error) throw new Error((d.error && d.error.message) || 'La IA no respondió (' + r.status + ')');
+  const t = (d.content || []).find(b => b.type === 'text'); if (!t) throw new Error('La IA no devolvió texto');
+  return t.text;
+}
+function extraerJSON(raw) {
+  const i = raw.indexOf('{'); if (i < 0) throw new Error('Respuesta sin JSON');
+  let prof = 0, enStr = false, esc = false;
+  for (let k = i; k < raw.length; k++) {
+    const ch = raw[k];
+    if (esc) { esc = false; continue; } if (ch === '\\' && enStr) { esc = true; continue; }
+    if (ch === '"') { enStr = !enStr; continue; } if (enStr) continue;
+    if (ch === '{') prof++; else if (ch === '}' && --prof === 0) return JSON.parse(raw.slice(i, k + 1));
+  }
+  throw new Error('JSON incompleto');
+}
+
+// ---------- fondos con IA (gratis, Cloudflare Workers AI) ----------
+const FONDOS = {
+  estudio: 'clean seamless photo studio backdrop with a subtle floor reflection, soft diffused lighting',
+  marmol: 'elegant white marble surface with subtle gold veins, soft daylight, luxury product photography',
+  madera: 'rustic warm wooden table top, blurred cozy room behind, golden hour light',
+  flores: 'soft pastel flower bouquets on both sides of an empty table, warm morning sunlight',
+  regalo: 'gift boxes with ribbons at the sides, festive bokeh lights, warm celebration mood',
+  tech: 'futuristic technology background with glowing lines and light particles, depth, blurred',
+  fiesta: 'party background with confetti, balloons and colorful bokeh lights, celebration',
+};
+let fondoImg = null, ultimoPromptFondo = '';
+async function crearFondo(descripcion) {
+  const prompt = `Empty background photograph: ${descripcion}. Color palette inspired by ${$('kC1').value} and ${$('kC2').value}. The middle of the frame is completely empty and uncluttered. Sharp focus, professional photography, plain scenery only. No text, no letters, no logos, no watermark, no people.`;
+  ultimoPromptFondo = descripcion;
+  const r = await fetch(IMAGENES, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ prompt }) });
+  const d = await r.json().catch(() => ({}));
+  if (!r.ok || !d.image) throw new Error(d.error || 'El generador de fondos no respondió');
+  fondoImg = await cargarImagen('data:image/jpeg;base64,' + d.image);
+}
+
+// ---------- dibujo de la pieza ----------
+const FORMATOS = { post: [1080, 1080], vertical: [1080, 1350], story: [1080, 1920] };
+function redondeado(x, y, w, h, r) { ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r); ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath(); }
+function cubrir(img, x, y, w, h) { const e = Math.max(w / img.width, h / img.height), iw = img.width * e, ih = img.height * e; ctx.drawImage(img, x + (w - iw) / 2, y + (h - ih) / 2, iw, ih); }
+function lineas(txt, ancho, max) {
+  const p = String(txt).split(/\s+/).filter(Boolean), out = []; let a = '';
+  for (const w of p) { const t = a ? a + ' ' + w : w; if (ctx.measureText(t).width > ancho && a) { out.push(a); a = w; } else a = t; }
+  if (a) out.push(a);
+  if (out.length > max) { out.length = max; out[max - 1] = out[max - 1].replace(/\s*\S*$/, '') + '…'; }
+  return out;
+}
+function ajustar(txt, peso, fam, base, ancho, min) { let t = base; ctx.font = `${peso} ${t}px ${fam}`; while (t > min && ctx.measureText(txt).width > ancho) { t -= 2; ctx.font = `${peso} ${t}px ${fam}`; } return t; }
+
+function dibujar() {
+  const [W, H] = FORMATOS[grupo('gFormato')] || FORMATOS.post;
+  if (lienzo.width !== W || lienzo.height !== H) { lienzo.width = W; lienzo.height = H; }
+  const c1 = $('kC1').value, c2 = $('kC2').value, t1 = textoSobre(c1), t2 = textoSobre(c2);
+  const m = 56, esStory = H > 1500;
+  ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic'; ctx.globalAlpha = 1;
+
+  // fondo
+  if (fondoImg) cubrir(fondoImg, 0, 0, W, H);
+  else { const g = ctx.createLinearGradient(0, 0, W, H); g.addColorStop(0, c1); g.addColorStop(1, oscurecer(c1, .45)); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); }
+
+  // zona de texto inferior con el color de la marca
+  const altoTexto = esStory ? H * .36 : H * .38, yTexto = H - altoTexto;
+  // foto del producto
+  if (fotoImg) {
+    const arriba = m + 150, abajo = yTexto - 10, altoMax = abajo - arriba, anchoMax = W * .72;
+    const e = Math.min(altoMax / fotoImg.height, anchoMax / fotoImg.width), fw = fotoImg.width * e, fh = fotoImg.height * e;
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,.35)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 18;
+    ctx.drawImage(fotoImg, (W - fw) / 2, arriba + (altoMax - fh) / 2, fw, fh); ctx.restore();
+  }
+  ctx.fillStyle = c1;
+  ctx.beginPath(); ctx.moveTo(0, yTexto + 40); ctx.lineTo(W, yTexto - 30); ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath(); ctx.fill();
+  ctx.fillStyle = c2;
+  ctx.beginPath(); ctx.moveTo(0, yTexto + 40); ctx.lineTo(W, yTexto - 30); ctx.lineTo(W, yTexto - 20); ctx.lineTo(0, yTexto + 50); ctx.closePath(); ctx.fill();
+
+  // logo en tarjeta blanca
+  const lh = esStory ? 130 : 108;
+  if (logoImg) {
+    const lw = Math.min(lh * (logoImg.width / logoImg.height), W * .45), pad = 14;
+    ctx.fillStyle = '#fff'; redondeado(m - pad, m - pad, lw + pad * 2, lh + pad * 2, 20); ctx.fill();
+    ctx.drawImage(logoImg, m, m, lw, lh);
+  } else {
+    const nom = $('kNombre').value.trim() || 'Tu marca';
+    const t = ajustar(nom, 800, CONDENSADA, 64, W * .5, 28); const tw = ctx.measureText(nom).width;
+    ctx.fillStyle = '#fff'; redondeado(m - 14, m - 14, tw + 28, t * 1.3 + 28, 18); ctx.fill();
+    ctx.fillStyle = c1; ctx.textBaseline = 'top'; ctx.fillText(nom, m, m + t * .12);
+  }
+
+  // precio (etiqueta inclinada)
+  const precio = $('cPrecio').value.trim();
+  if (precio) {
+    const t = ajustar(precio, 800, CONDENSADA, esStory ? 120 : 96, W * .45, 40);
+    const pw = ctx.measureText(precio).width + 56, ph = t * 1.2;
+    ctx.save(); ctx.translate(W - m - pw / 2, yTexto - ph * .35); ctx.rotate(-.045);
+    ctx.fillStyle = oscurecer(c2, .35); ctx.fillRect(-pw / 2 + 8, -ph / 2 + 10, pw, ph);
+    ctx.fillStyle = c2; ctx.fillRect(-pw / 2, -ph / 2, pw, ph);
+    ctx.fillStyle = t2; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillText(precio, 0, t * .05);
+    ctx.restore();
+  }
+
+  // título y frase
+  const anchoT = W - m * 2;
+  let y = yTexto + (esStory ? 110 : 90);
+  ctx.fillStyle = t1; ctx.textAlign = 'center'; ctx.textBaseline = 'top';
+  const titulo = $('iTitulo').value.trim() || $('cProd').value.trim() || $('kNombre').value.trim() || 'Tu título acá';
+  ctx.font = `800 ${esStory ? 104 : 86}px ${CONDENSADA}`;
+  const ls = lineas(titulo.toUpperCase(), anchoT, 2), tamT = esStory ? 104 : 86;
+  ls.forEach((l, i) => ctx.fillText(l, W / 2, y + i * tamT * .98)); y += ls.length * tamT * .98 + 12;
+  const sub = $('iSub').value.trim();
+  if (sub) { ctx.font = `600 ${esStory ? 42 : 36}px "DM Sans",Arial,sans-serif`; ctx.globalAlpha = .92; lineas(sub, anchoT, 2).forEach((l, i) => ctx.fillText(l, W / 2, y + i * (esStory ? 54 : 46))); ctx.globalAlpha = 1; }
+
+  // pie con contacto
+  const partes = [];
+  if ($('kWeb').value.trim()) partes.push(limpiarWeb($('kWeb').value));
+  if ($('kWa').value.trim()) partes.push('WhatsApp ' + $('kWa').value.trim());
+  else if ($('kIg').value.trim()) partes.push($('kIg').value.trim());
+  if (partes.length) {
+    const ph = esStory ? 84 : 72; ctx.fillStyle = oscurecer(c1, .35); ctx.fillRect(0, H - ph, W, ph);
+    const txt = partes.join('   |   '); ajustar(txt, 600, '"DM Sans",Arial,sans-serif', esStory ? 32 : 28, W - m * 2, 16);
+    ctx.fillStyle = textoSobre(oscurecer(c1, .35)); ctx.textBaseline = 'middle'; ctx.fillText(txt, W / 2, H - ph / 2);
+  }
+  ctx.textAlign = 'left';
+}
+['iTitulo', 'iSub', 'cPrecio', 'cProd'].forEach(id => $(id).addEventListener('input', dibujar));
+
+// ---------- paso 2: crear todo ----------
+function contextoMarca() {
+  const k = id => $(id).value.trim();
+  return [
+    'Marca: ' + (k('kNombre') || 'sin nombre'),
+    k('kRubro') && 'Rubro: ' + k('kRubro'),
+    k('kDesc') && 'Descripción: ' + k('kDesc'),
+    k('kCiudad') && 'Ciudad/zona: ' + k('kCiudad'),
+    k('kDif') && 'Diferencial: ' + k('kDif'),
+    k('kWa') && 'WhatsApp: ' + k('kWa'),
+    k('kWeb') && 'Web: ' + limpiarWeb(k('kWeb')),
+    k('kIg') && 'Instagram: ' + k('kIg'),
+  ].filter(Boolean).join('\n');
+}
+async function crear(e) {
+  if (e) e.preventDefault();
+  guardarMarca();
+  if (!$('kNombre').value.trim()) { toast('Primero completá el nombre de tu marca (paso 1)'); $('kNombre').focus(); return; }
+  const btn = $('btnCrear'); btn.disabled = true; estado($('estado'), 'Escribiendo los textos…');
+  const red = grupo('gRed'), formato = grupo('gFormato'), obj = $('cObjetivo').value, prod = $('cProd').value.trim(), precio = $('cPrecio').value.trim(), tono = $('cTono').value;
+  const pieza = formato === 'story' ? (red === 'TikTok' || red === 'Instagram' ? 'historia o reel vertical' : 'historia') : 'publicación';
+  const prompt =
+`Sos community manager experto en redes para negocios de Argentina. Escribí en español rioplatense (vos), natural y sin exagerar.
+DATOS DE LA MARCA:
+${contextoMarca()}
+
+PEDIDO: ${pieza} para ${red}. Objetivo: ${obj}.${prod ? ' Producto o tema: ' + prod + '.' : ''}${precio ? ' Precio: ' + precio + '.' : ''} Tono: ${tono}.
+
+Respondé SOLO un JSON válido con estas claves:
+{"titulo":"frase gancho para la imagen, máximo 6 palabras","frase":"frase corta para debajo del título, máximo 10 palabras","texto":"el texto completo para publicar, con emojis, llamado a la acción con los datos de contacto que existan, y 8 a 14 hashtags al final (incluí la ciudad si hay)","fondo":"descripción EN INGLÉS de un fondo fotográfico vacío que combine con el producto y el rubro, sin personas ni texto, máximo 25 palabras"}
+No inventes datos de contacto, precios ni promociones que no estén arriba.`;
+  let datos;
+  try {
+    datos = extraerJSON(await pedirIA(prompt, 1100));
+  } catch (err) {
+    estado($('estado'), 'No se pudieron escribir los textos: ' + err.message, true); btn.disabled = false; return;
+  }
+  $('iTitulo').value = datos.titulo || ''; $('iSub').value = datos.frase || '';
+  $('texto').textContent = datos.texto || ''; $('lblTexto').textContent = 'Texto para ' + red; $('cajaTexto').classList.remove('oculto');
+  dibujar();
+
+  const elegido = $('cFondo').value;
+  if (elegido === 'color') { fondoImg = null; dibujar(); estado($('estado'), '✓ Listo. Descargá la imagen y copiá el texto.'); btn.disabled = false; return; }
+  estado($('estado'), 'Creando el fondo con IA (unos segundos)…');
+  try {
+    await crearFondo(elegido === 'auto' ? (datos.fondo || FONDOS.estudio) : FONDOS[elegido]);
+    dibujar(); estado($('estado'), '✓ Listo. Descargá la imagen y copiá el texto.');
+  } catch (err) {
+    fondoImg = null; dibujar();
+    estado($('estado'), 'Los textos están listos. El fondo con IA no se pudo crear (' + err.message + '), usé los colores de la marca.', true);
+  } finally { btn.disabled = false; }
+}
+$('formCrear').addEventListener('submit', crear);
+$('btnOtroFondo').addEventListener('click', async () => {
+  const b = $('btnOtroFondo'); b.disabled = true; estado($('estado'), 'Creando otro fondo…');
+  const elegido = $('cFondo').value;
+  try {
+    if (elegido === 'color') { fondoImg = null; dibujar(); estado($('estado'), ''); return; }
+    await crearFondo(elegido === 'auto' ? (ultimoPromptFondo || FONDOS.estudio) : FONDOS[elegido]);
+    dibujar(); estado($('estado'), '✓ Fondo nuevo.');
+  } catch (err) { estado($('estado'), err.message, true); } finally { b.disabled = false; }
+});
+$('btnBajar').addEventListener('click', () => {
+  const nombre = (($('kNombre').value || 'marca') + '-' + ($('iTitulo').value || grupo('gFormato'))).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  const a = document.createElement('a'); a.download = nombre + '.png';
+  try { a.href = lienzo.toDataURL('image/png'); a.click(); } catch (_) { toast('No se pudo descargar: probá con otra foto'); }
+});
+$('btnCopiar').addEventListener('click', () => {
+  const t = $('texto').textContent; if (!t) return;
+  const listo = () => toast('✓ Texto copiado');
+  if (navigator.clipboard) navigator.clipboard.writeText(t).then(listo).catch(() => toast('Seleccioná el texto y copialo a mano'));
+});
+
+// ---------- inicio ----------
+(async () => {
+  try { await Promise.all([document.fonts.load('800 80px "Barlow Condensed"'), document.fonts.load('600 30px "DM Sans"')]); } catch (_) {}
+  await cargarMarca(marca);
+  const p = new URLSearchParams(location.search).get('url');
+  if (p) { $('url').value = p; $('formUrl').requestSubmit(); }
+})();
+</script>
+</body>
+</html>
