@@ -84,6 +84,11 @@ textarea.fi{resize:vertical;min-height:70px}
 footer{text-align:center;color:var(--tx3);font-size:12.5px;padding:30px 20px;border-top:1px solid var(--bo)}
 :focus-visible{outline:3px solid var(--warn);outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+.publicar{width:100%;border:2px dashed var(--ac,#E8002D);border-radius:14px;padding:14px;display:grid;gap:10px}
+.publicar .pub-h{font-weight:800;font-size:16px}
+.pub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media (max-width:560px){.pub-grid{grid-template-columns:1fr}}
+.pub-ayuda{font-size:13px;opacity:.8;margin:0}
 </style>
 </head>
 <body>
@@ -223,6 +228,16 @@ footer{text-align:center;color:var(--tx3);font-size:12.5px;padding:30px 20px;bor
         <div class="texto-res oculto" id="cajaTexto">
           <div class="h"><span id="lblTexto">Texto para publicar</span><button class="btn btn-sm" id="btnCopiar" type="button">📋 Copiar</button></div>
           <pre id="texto"></pre>
+        </div>
+        <div class="publicar oculto" id="cajaPublicar">
+          <div class="pub-h">📲 Publicar</div>
+          <button class="btn btn-ac btn-full" id="btnCompartir" type="button">📲 Publicar desde el celu (Instagram, Facebook, TikTok, WhatsApp)</button>
+          <div class="pub-grid" id="pubCompu">
+            <button class="btn btn-sm" type="button" data-pub="meta">📘📸 Facebook + Instagram</button>
+            <button class="btn btn-sm" type="button" data-pub="tiktok">🎵 TikTok</button>
+            <button class="btn btn-sm" type="button" data-pub="wa">💬 WhatsApp</button>
+          </div>
+          <p class="pub-ayuda" id="pubAyuda">El texto se copia solo. Cuando se abra la red, pegalo (mantené apretado → Pegar).</p>
         </div>
       </div>
     </div>
@@ -590,21 +605,77 @@ No inventes datos de contacto, precios ni promociones que no estén arriba.`;
     estado($('estado'), 'No se pudieron escribir los textos: ' + err.message, true); btn.disabled = false; return;
   }
   $('iTitulo').value = datos.titulo || ''; $('iSub').value = datos.frase || '';
-  $('texto').textContent = datos.texto || ''; $('lblTexto').textContent = 'Texto para ' + red; $('cajaTexto').classList.remove('oculto');
+  $('texto').textContent = datos.texto || ''; $('lblTexto').textContent = 'Texto para ' + red; $('cajaTexto').classList.remove('oculto'); $('cajaPublicar').classList.remove('oculto');
   dibujar();
 
   const elegido = $('cFondo').value;
-  if (elegido === 'color') { fondoImg = null; dibujar(); estado($('estado'), '✓ Listo. Descargá la imagen y copiá el texto.'); btn.disabled = false; return; }
+  if (elegido === 'color') { fondoImg = null; dibujar(); estado($('estado'), '✓ Listo. Ahora tocá 📲 Publicar, abajo de la imagen.'); btn.disabled = false; return; }
   estado($('estado'), 'Creando el fondo con IA (unos segundos)…');
   try {
     await crearFondo(elegido === 'auto' ? (datos.fondo || FONDOS.estudio) : FONDOS[elegido]);
-    dibujar(); estado($('estado'), '✓ Listo. Descargá la imagen y copiá el texto.');
+    dibujar(); estado($('estado'), '✓ Listo. Ahora tocá 📲 Publicar, abajo de la imagen.');
   } catch (err) {
     fondoImg = null; dibujar();
     estado($('estado'), 'Los textos están listos. El fondo con IA no se pudo crear (' + err.message + '), usé los colores de la marca.', true);
   } finally { btn.disabled = false; }
 }
 $('formCrear').addEventListener('submit', crear);
+
+// ---------- publicar ----------
+function nombreArchivo() {
+  return (($('kNombre').value || 'marca') + '-' + ($('iTitulo').value || grupo('gFormato'))).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'contenido';
+}
+function imagenComoArchivo() {
+  return new Promise((ok, mal) => {
+    try { lienzo.toBlob(b => b ? ok(new File([b], nombreArchivo() + '.png', { type: 'image/png' })) : mal(new Error('sin imagen')), 'image/png'); }
+    catch (e) { mal(e); }
+  });
+}
+async function copiarTexto() {
+  const t = $('texto').textContent || '';
+  if (!t) return false;
+  try { await navigator.clipboard.writeText(t); return true; } catch (_) { return false; }
+}
+function bajarImagen(archivo) {
+  const a = document.createElement('a'); a.download = archivo.name; a.href = URL.createObjectURL(archivo); a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+const puedeCompartirArchivos = (() => {
+  try { return !!(navigator.canShare && navigator.canShare({ files: [new File(['x'], 'x.png', { type: 'image/png' })] })); } catch (_) { return false; }
+})();
+if (!puedeCompartirArchivos) {
+  $('btnCompartir').classList.add('oculto');
+  $('pubAyuda').textContent = 'En la compu: tocá la red, se descarga la imagen y se copia el texto. En la página que se abre, subí la imagen y pegá el texto (Ctrl+V). Desde el celu tenés un botón que publica directo.';
+}
+$('btnCompartir').addEventListener('click', async () => {
+  const b = $('btnCompartir'); b.disabled = true;
+  try {
+    const archivo = await imagenComoArchivo();
+    const copiado = await copiarTexto();
+    // Instagram y TikTok ignoran el texto que viene con la imagen: por eso lo copiamos antes.
+    await navigator.share({ files: [archivo], text: $('texto').textContent || '', title: $('kNombre').value || 'SocialBot Pro' });
+    toast(copiado ? '✓ Texto copiado: pegalo en la publicación' : '✓ Listo');
+  } catch (e) {
+    if (e && e.name !== 'AbortError') toast('No se pudo compartir: usá Descargar imagen y Copiar');
+  } finally { b.disabled = false; }
+});
+document.querySelectorAll('[data-pub]').forEach(b => b.addEventListener('click', async () => {
+  const destino = b.dataset.pub;
+  let archivo;
+  try { archivo = await imagenComoArchivo(); } catch (_) { toast('No se pudo preparar la imagen: probá con otra foto'); return; }
+  const copiado = await copiarTexto();
+  if (destino === 'wa') {
+    // WhatsApp: el texto va en el link; la imagen se adjunta a mano (o desde el celu, con el botón grande).
+    bajarImagen(archivo);
+    window.open('https://wa.me/?text=' + encodeURIComponent($('texto').textContent || ''), '_blank', 'noopener');
+    toast('Imagen descargada: adjuntala en el chat 📎');
+    return;
+  }
+  bajarImagen(archivo);
+  const url = destino === 'meta' ? 'https://business.facebook.com/latest/composer' : 'https://www.tiktok.com/tiktokstudio/upload';
+  window.open(url, '_blank', 'noopener');
+  toast((copiado ? '✓ Texto copiado · ' : '') + 'Imagen descargada: subila y pegá el texto');
+}));
 $('btnOtroFondo').addEventListener('click', async () => {
   const b = $('btnOtroFondo'); b.disabled = true; estado($('estado'), 'Creando otro fondo…');
   const elegido = $('cFondo').value;
